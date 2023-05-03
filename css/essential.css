@@ -1,0 +1,15 @@
+body {
+    font-family: "Baskerville", sans-serif;
+}
+
+a, a:hover {
+    text-decoration: none;
+}
+
+h1, h2, h3 {
+    font-family: "Playfair Display", sans-serif;
+}
+
+ul, li {
+    list-style: none;
+}

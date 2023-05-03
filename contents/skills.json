@@ -1,0 +1,51 @@
+[
+  {
+    "name": {
+      "es": "Composición",
+      "en": "Writing"
+    },
+    "value": "85"
+  },
+  {
+    "name": {
+      "es": "Edición de partituras",
+      "en": "Score editing"
+    },
+    "value": "95"
+  },
+  {
+    "name": {
+      "es": "Orquestación",
+      "en": "Orchestration"
+    },
+    "value": "90"
+  },
+  {
+    "name": {
+      "es": "Audio digital y electrónica",
+      "en": "DAW and electronics"
+    },
+    "value": "65"
+  },
+  {
+    "name": {
+      "es": "Guitarra eléctrica",
+      "en": "Electric guitar"
+    },
+    "value": "85"
+  },
+  {
+    "name": {
+      "es": "Guitarra clásica",
+      "en": "Classical guitar"
+    },
+    "value": "80"
+  },
+  {
+    "name": {
+      "es": "Piano",
+      "en": "Piano"
+    },
+    "value": "45"
+  }
+]

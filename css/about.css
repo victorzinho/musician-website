@@ -1,0 +1,53 @@
+#about-summary .content {
+    color: #fff;
+    font-size: 1.25em;
+}
+
+#skills .skill-container {
+    height: 4em;
+    display: block;
+    background: none;
+}
+
+#skills .skill-container span {
+    padding: 10px 0;
+    margin: 0;
+    text-transform: uppercase;
+    display: block;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    color: #fff;
+}
+
+#skills .progress-bar {
+    width: 1px;
+    height: 10px;
+    transition: 0.9s;
+    background-color: #1135c4;
+}
+
+#influences .icon-box, #interests .icon-box {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background: #333;
+    transition: ease-in-out 0.3s;
+}
+
+#influences .icon-box i, #interests .icon-box i {
+    font-size: 2em;
+    padding-right: 10px;
+    line-height: 1em;
+}
+
+#influences .icon-box h3, #interests .icon-box h3 {
+    margin: 0;
+    padding: 0;
+    font-size: 0.9em;
+    letter-spacing: 0.1em;
+    color: #fff;
+}
+
+#influences .icon-box:hover, #interests .icon-box:hover {
+    background: #222;
+}

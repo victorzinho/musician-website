@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta charset="utf-8"/>
+    <meta name="description" content="Victorzinho's music portfolio">
+    <title>Víctor González</title>
+    <link href="../images/favicon.ico" rel="icon">
+    <link href='https://fonts.googleapis.com/css?family=Playfair Display' rel='stylesheet'>
+    <style>
+        section {
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="langSelection">
+    <% if (htmlWebpackPlugin.options.templateParameters.lang === 'es') { %>
+        <span class="selected">ES</span>
+    <% } else { %>
+        <a href="/es/">ES</a>
+    <% } %>
+    <span>|</span>
+    <% if (htmlWebpackPlugin.options.templateParameters.lang === 'en') { %>
+        <span class="selected">EN</span>
+    <% } else { %>
+        <a href="/en/">EN</a>
+    <% } %>
+</div>
+
+<header id="home">
+    <div class="container">
+        <h1>Víctor González</h1>
+        <h2><%= i18n.headers.tagline %></h2>
+        <nav id="navbar" class="navbar">
+            <ul>
+                <li><a class="nav-link active" href="#home"><img src="../images/favicon.ico" alt=""></a></li>
+                <li><a class="nav-link" href="#portfolio"><%= i18n.headers.myWork %></a></li>
+                <li><a class="nav-link" href="#about"><%= i18n.headers.me %></a></li>
+                <li><a class="nav-link" href="#contact"><%= i18n.headers.contact %></a></li>
+            </ul>
+            <i class="fi fi-br-menu-burger" id="navbar-mobile-toggle"></i>
+        </nav>
+    </div>
+</header>
+
+<section id="about">
+    <div id="about-summary" class="container">
+        <h2><%= i18n.headers.aboutMe %></h2>
+        <div class="row mt-4">
+            <div class="col-lg-4" data-aos="fade-right">
+                <img src="https://avatars.githubusercontent.com/u/1035219?v=4" class="img-fluid" alt="">
+            </div>
+            <div class="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-left">
+                <h3><%= i18n.headers.myDefinition %></h3>
+                <%= i18n.aboutMe %>
+            </div>
+        </div>
+    </div>
+
+    <div id="skills" class="container">
+        <h2><%= i18n.headers.skills %></h2>
+        <div class="row">
+            <% _.forEach(htmlWebpackPlugin.options.templateParameters.i18n.skills, function(skill) { %>
+                <div class="col-lg-6 skill-container">
+                    <span><%= skill.name %></span>
+                    <div class="progress-bar" role="progressbar" aria-valuenow="<%= skill.value %>"></div>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+    <div id="influences" class="container">
+        <h2><%= i18n.headers.influences %></h2>
+        <div class="row mt-4">
+            <% _.forEach(htmlWebpackPlugin.options.templateParameters.i18n.influences, function(influence) { %>
+                <div class="col-lg-3 col-md-4 mt-4 mt-md-2">
+                    <div class="icon-box"><h3><%= influence %></h3></div>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+    <div id="interests" class="container">
+        <h2><%= i18n.headers.interests %></h2>
+        <div class="row mt-4">
+            <% _.forEach(htmlWebpackPlugin.options.templateParameters.i18n.interests, function(interest) { %>
+                <div class="col-lg-4 col-md-4 mt-4">
+                    <div class="icon-box">
+                        <%= interest.icon %>
+                        <h3><%= interest.name %></h3>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+</section>
+
+<section id="portfolio">
+    <div class="container">
+        <h2><%= i18n.headers.scores %></h2>
+        <div class="row">
+            <div class="col-lg-12 d-flex justify-content-center">
+                <ul id="portfolio-filters">
+                    <li data-filter="*" class="filter-active"><%= i18n.headers.filterAll %></li>
+                    <% _.forEach(htmlWebpackPlugin.options.templateParameters.i18n.scores.filters, function(filter) { %>
+                        <li data-filter=".filter-<%= filter.type %>"><%= filter.name %></li>
+                    <% }) %>
+                </ul>
+            </div>
+        </div>
+        <div id="portfolio-item-container" class="row portfolio-container"></div>
+    </div>
+    <div class="container">
+        <h2><%= i18n.headers.otherStuff %></h2>
+    </div>
+</section>
+
+<section id="contact">
+    <div class="container">
+        <h2><%= i18n.headers.contact %></h2>
+        <div class="row mt-4">
+            <div class="col">
+                <div class="info-box">
+                    <i class="fi fi-ss-envelope"></i>
+                    <h3><%= i18n.headers.emailMe %></h3>
+                    <p>victorzinho@gmail.com</p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="info-box">
+                    <i class="fi fi-ss-share"></i>
+                    <h3><%= i18n.headers.social %></h3>
+                    <div class="social">
+                        <a href="https://www.youtube.com/channel/UC6KODVnrAB8VzHAoAXxt_mQ" target="_blank"><i
+                                class="fi fi-brands-youtube"></i></a>
+                        <a href="https://soundcloud.com/victorzinho" target="_blank"><i
+                                class="fi fi-brands-soundcloud"></i></a>
+                        <a href="https://www.linkedin.com/in/vicgonco/" target="_blank"><i
+                                class="fi fi-brands-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

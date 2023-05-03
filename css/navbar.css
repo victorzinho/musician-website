@@ -1,0 +1,93 @@
+.navbar {
+    margin-top: 40px;
+}
+
+.navbar ul {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+.navbar li {
+    position: relative;
+}
+
+.navbar li + li {
+    margin-left: 20px;
+}
+
+.navbar a,
+.navbar a:focus {
+    letter-spacing: 0.075em;
+    text-transform: uppercase;
+    color: #ccc;
+    text-underline-offset: 8px;
+    text-decoration: underline 2px transparent;
+    transition: all 0.3s;
+}
+
+.navbar a.active, .navbar a:hover {
+    color: #fff;
+    text-decoration: underline 2px #d58512;
+}
+
+.navbar a i,
+.navbar a:focus i {
+    font-size: 12px;
+    line-height: 0;
+    margin-left: 5px;
+}
+
+#navbar-mobile-toggle {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 2em;
+    height: 2em;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 2em;
+    cursor: pointer;
+}
+
+.navbar .bxs-music {
+    font-size: 1.5em !important;
+}
+
+@media (max-width: 992px) {
+    #navbar-mobile-toggle {
+        display: flex;
+    }
+
+    .navbar {
+        position: fixed;
+        padding: 0;
+        margin-top: 0;
+        top: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.9);
+        z-index: 9999;
+    }
+
+    .navbar ul {
+        opacity: 0;
+        padding: 30px;
+        overflow-y: auto;
+        border: 2px solid #bbb;
+        display: none;
+    }
+
+    .navbar ul.enabled {
+        opacity: 1;
+        display: block;
+    }
+
+    .navbar li {
+        margin: 0 !important;
+        padding: 10px 20px;
+    }
+}
+
