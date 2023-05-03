@@ -22,7 +22,7 @@ filters.forEach(filter => filter.addEventListener('click', event => {
 }));
 
 function lang () {
-  return window.location.pathname.replaceAll('/', '');
+  return window.location.pathname.split('/').filter(x => x).at(-1);
 }
 
 function i18n (path) {
@@ -85,7 +85,7 @@ export function addPortfolioElement (scoreDescriptor) {
   let newItem = document.createElement('div');
   newItem.className = 'mt-4 col-lg-3 col-md-3 portfolio-item filter-' + scoreDescriptor.type;
   newItem.innerHTML = `
-  <img src="../images/pfbg.jpg" class="img-fluid" alt="">
+  <img src="../images/pf_bg.webp" class="img-fluid" alt="">
   <div class="portfolio-info">
     <h3>${scoreDescriptor.name}</h3>
     <div class="portfolio-buttons">
