@@ -9,3 +9,5 @@ import { addPortfolioElement } from './portfolio';
 import './styles';
 
 scores.forEach(addPortfolioElement);
+
+document.querySelector('header').style.opacity = '1';

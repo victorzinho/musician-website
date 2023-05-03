@@ -1,5 +1,40 @@
+body::before {
+    content: "";
+    position: fixed;
+    background-size: cover;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    z-index: -1;
+    background: #151515;
+    /*background: url("../images/bg.jpg") no-repeat fixed top right;*/
+}
+
+.langSelection {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 99999;
+    padding: 10px;
+    background: #151515;
+}
+
+.langSelection a, .langSelection span {
+    color: #bbb;
+    text-decoration: none !important;
+}
+
+.langSelection span {
+    font-size: 1.2em;
+}
+
+.langSelection span.selected {
+    color: #d58512;
+}
+
 body {
-    font-family: "Baskerville", sans-serif;
+    font-family: "Baskerville", sans-serif !important;
 }
 
 a, a:hover {
@@ -7,9 +42,9 @@ a, a:hover {
 }
 
 h1, h2, h3 {
-    font-family: "Playfair Display", sans-serif;
+    font-family: "Playfair Display", sans-serif !important;;
 }
 
 ul, li {
-    list-style: none;
+    list-style: none !important;;
 }

@@ -9,26 +9,22 @@
     <title>Víctor González</title>
     <link href="../images/favicon.ico" rel="icon">
     <link href='https://fonts.googleapis.com/css?family=Playfair Display' rel='preload' as='font'>
-    <style>
-        section {
-            opacity: 0;
-        }
-    </style>
+    <link href='../css/essential.css' rel='stylesheet'>
 </head>
 
 <body>
 
 <div class="langSelection">
     <% if (htmlWebpackPlugin.options.templateParameters.lang === 'es') { %>
-        <span class="selected">ES</span>
+    <span class="selected">ES</span>
     <% } else { %>
-        <a href="../es/">ES</a>
+    <a href="../es/">ES</a>
     <% } %>
     <span>|</span>
     <% if (htmlWebpackPlugin.options.templateParameters.lang === 'en') { %>
-        <span class="selected">EN</span>
+    <span class="selected">EN</span>
     <% } else { %>
-        <a href="../en/">EN</a>
+    <a href="../en/">EN</a>
     <% } %>
 </div>
 
@@ -66,10 +62,10 @@
         <h2><%= i18n.headers.skills %></h2>
         <div class="row">
             <% _.forEach(htmlWebpackPlugin.options.templateParameters.i18n.skills, function(skill) { %>
-                <div class="col-lg-6 skill-container">
-                    <span><%= skill.name %></span>
-                    <div class="progress-bar" role="progressbar" aria-valuenow="<%= skill.value %>"></div>
-                </div>
+            <div class="col-lg-6 skill-container">
+                <span><%= skill.name %></span>
+                <div class="progress-bar" role="progressbar" aria-valuenow="<%= skill.value %>"></div>
+            </div>
             <% }) %>
         </div>
     </div>
@@ -77,9 +73,9 @@
         <h2><%= i18n.headers.influences %></h2>
         <div class="row mt-4">
             <% _.forEach(htmlWebpackPlugin.options.templateParameters.i18n.influences, function(influence) { %>
-                <div class="col-lg-3 col-md-4 mt-4 mt-md-2">
-                    <div class="icon-box"><h3><%= influence %></h3></div>
-                </div>
+            <div class="col-lg-3 col-md-4 mt-4 mt-md-2">
+                <div class="icon-box"><h3><%= influence %></h3></div>
+            </div>
             <% }) %>
         </div>
     </div>
@@ -87,12 +83,12 @@
         <h2><%= i18n.headers.interests %></h2>
         <div class="row mt-4">
             <% _.forEach(htmlWebpackPlugin.options.templateParameters.i18n.interests, function(interest) { %>
-                <div class="col-lg-4 col-md-4 mt-4">
-                    <div class="icon-box">
-                        <%= interest.icon %>
-                        <h3><%= interest.name %></h3>
-                    </div>
+            <div class="col-lg-4 col-md-4 mt-4">
+                <div class="icon-box">
+                    <%= interest.icon %>
+                    <h3><%= interest.name %></h3>
                 </div>
+            </div>
             <% }) %>
         </div>
     </div>
@@ -106,7 +102,7 @@
                 <ul id="portfolio-filters">
                     <li data-filter="*" class="filter-active"><%= i18n.headers.filterAll %></li>
                     <% _.forEach(htmlWebpackPlugin.options.templateParameters.i18n.scores.filters, function(filter) { %>
-                        <li data-filter=".filter-<%= filter.type %>"><%= filter.name %></li>
+                    <li data-filter=".filter-<%= filter.type %>"><%= filter.name %></li>
                     <% }) %>
                 </ul>
             </div>

@@ -18,6 +18,7 @@
 
 #contact .social a > i.fi, #contact .info-box p {
     line-height: 45px;
+    text-decoration: none;
 }
 
 #contact .info-box h3 {
