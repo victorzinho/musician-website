@@ -8,7 +8,7 @@
     <meta name="description" content="Victorzinho's music portfolio">
     <title>Víctor González</title>
     <link href="../images/favicon.ico" rel="icon">
-    <link href='https://fonts.googleapis.com/css?family=Playfair Display' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Playfair Display' rel='preload' as='font'>
     <style>
         section {
             opacity: 0;
@@ -22,13 +22,13 @@
     <% if (htmlWebpackPlugin.options.templateParameters.lang === 'es') { %>
         <span class="selected">ES</span>
     <% } else { %>
-        <a href="/es/">ES</a>
+        <a href="../es/">ES</a>
     <% } %>
     <span>|</span>
     <% if (htmlWebpackPlugin.options.templateParameters.lang === 'en') { %>
         <span class="selected">EN</span>
     <% } else { %>
-        <a href="/en/">EN</a>
+        <a href="../en/">EN</a>
     <% } %>
 </div>
 
@@ -43,7 +43,7 @@
                 <li><a class="nav-link" href="#about"><%= i18n.headers.me %></a></li>
                 <li><a class="nav-link" href="#contact"><%= i18n.headers.contact %></a></li>
             </ul>
-            <i class="fi fi-br-menu-burger" id="navbar-mobile-toggle"></i>
+            <i class="fi fi-ss-menu-burger" id="navbar-mobile-toggle"></i>
         </nav>
     </div>
 </header>
@@ -53,7 +53,7 @@
         <h2><%= i18n.headers.aboutMe %></h2>
         <div class="row mt-4">
             <div class="col-lg-4" data-aos="fade-right">
-                <img src="https://avatars.githubusercontent.com/u/1035219?v=4" class="img-fluid" alt="">
+                <img src="../images/me.webp" class="img-fluid" alt="">
             </div>
             <div class="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-left">
                 <h3><%= i18n.headers.myDefinition %></h3>
