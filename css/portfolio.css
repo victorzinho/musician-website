@@ -97,6 +97,7 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
 
 .music-info .swal2-html-container {
     text-align: left;
+    margin-right: 50px;
 }
 
 .music-info h3 {

@@ -17,6 +17,10 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
+      template: 'index_redirect.html',
+      filename: 'index.html'
+    }),
+    new HtmlWebpackPlugin({
       template: 'index.html',
       filename: 'es/index.html',
       templateParameters: { i18n: i18n.es, lang: 'es' }
@@ -33,13 +37,16 @@ module.exports = {
     }),
     new CopyPlugin({
       patterns: [
-        { from: 'images', to: 'images' }
+        { from: 'images', to: 'images' },
+        { from: 'css/essential.css', to: 'css/essential.css' },
+        { from: '.github', to: '.github' }
       ]
     })
   ],
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js'
+    filename: 'bundle.js',
+    clean: true
   },
   module: {
     rules: [

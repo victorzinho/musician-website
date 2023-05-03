@@ -33,7 +33,6 @@
   "scripts": {
     "lint": "eslint src",
     "build": "webpack --config webpack.prod.js",
-    "serve": "webpack serve --open --config webpack.dev.js",
-    "deploy": "gh-pages -d dist"
+    "serve": "webpack serve --open --config webpack.dev.js"
   }
 }

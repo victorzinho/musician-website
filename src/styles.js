@@ -1,5 +1,3 @@
-import '../css/main.css';
-import '../css/essential.css';
 import '../css/common.css';
 import '../css/header.css';
 import '../css/navbar.css';
