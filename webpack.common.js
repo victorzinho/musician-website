@@ -2,6 +2,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
 
 const i18n = require('./src/i18n');
@@ -37,11 +38,10 @@ module.exports = {
     }),
     new CopyPlugin({
       patterns: [
-        { from: 'images', to: 'images' },
-        { from: 'css/essential.css', to: 'css/essential.css' },
-        { from: '.github', to: '.github' }
+        { from: 'images', to: 'images' }
       ]
-    })
+    }),
+    new MiniCssExtractPlugin()
   ],
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -56,7 +56,7 @@ module.exports = {
       }, {
         test: /\.css$/i,
         use: [
-          'style-loader',
+          MiniCssExtractPlugin.loader,
           'css-loader'
         ]
       }

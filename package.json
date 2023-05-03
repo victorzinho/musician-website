@@ -16,6 +16,7 @@
   "devDependencies": {
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.3",
+    "css-minimizer-webpack-plugin": "^5.0.0",
     "eslint": "^8.39.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.27.5",
@@ -23,6 +24,7 @@
     "eslint-plugin-promise": "^5.2.0",
     "gh-pages": "^5.0.0",
     "html-webpack-plugin": "^5.5.1",
+    "mini-css-extract-plugin": "^2.7.5",
     "style-loader": "^3.3.2",
     "webpack": "^5.77.0",
     "webpack-bundle-analyzer": "^4.8.0",
