@@ -1,0 +1,32 @@
+[
+  {
+    "es": "Navegar",
+    "en": "Sailing",
+    "icon": "<img src=\"../images/sailboat.svg\" style=\"height: 2em; margin-right: 10px;\" alt=\"\">"
+  },
+  {
+    "es": "Mapas",
+    "en": "Maps",
+    "icon": "<i class=\"fi fi-ss-map\" style=\"color: #8861d0;\"></i>"
+  },
+  {
+    "es": "Teatro",
+    "en": "Theater",
+    "icon": "<img src=\"../images/theater-masks.svg\" style=\"height: 2em; margin-right: 10px;\" alt=\"\">"
+  },
+  {
+    "es": "Surfear",
+    "en": "Surfing",
+    "icon": "<i class=\"fi fi-ss-surfing\" style=\"color: #465ebe;\"></i>"
+  },
+  {
+    "es": "Amigos",
+    "en": "Friends",
+    "icon": "<i class=\"fi fi-ss-beer\" style=\"color: #d58512;\"></i>"
+  },
+  {
+    "es": "Software",
+    "en": "Software",
+    "icon": "<i class=\"fi fi-ss-terminal\" style=\"color: #8861d0;\"></i>"
+  }
+]

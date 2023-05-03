@@ -1,0 +1,11 @@
+import '../css/main.css';
+import '../css/essential.css';
+import '../css/common.css';
+import '../css/header.css';
+import '../css/navbar.css';
+import '../css/sections.css';
+import '../css/portfolio.css';
+import '../css/contact.css';
+import '../css/about.css';
+import '@flaticon/flaticon-uicons/css/solid/straight.css';
+import '@flaticon/flaticon-uicons/css/brands/all.css';

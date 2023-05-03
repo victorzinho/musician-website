@@ -1,0 +1,47 @@
+#contact .info-box {
+    padding: 20px;
+    background: #333;
+}
+
+#contact .info-box > i.fi {
+    font-size: 1.5em;
+    color: #1135c4;
+    border-radius: 50%;
+    margin: 0 20px 0 0;
+    float: left;
+    background: #ddd;
+    padding: 0.5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#contact .social a > i.fi, #contact .info-box p {
+    line-height: 45px;
+}
+
+#contact .info-box h3 {
+    font-size: 1.25em;
+    color: #ddd;
+}
+
+#contact .info-box p {
+    color: #fff;
+    font-family: "Baskerville", sans-serif;
+    font-size: 18px;
+    margin: 0;
+}
+
+#contact .social a > i.fi {
+    font-size: 2em;
+}
+
+#contact .info-box .social a {
+    color: #fff;
+    margin-right: 12px;
+    transition: 0.3s;
+}
+
+#contact .info-box .social a:hover {
+    color: #d58512;
+}

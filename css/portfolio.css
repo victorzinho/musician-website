@@ -1,0 +1,108 @@
+#portfolio-filters li {
+    cursor: pointer;
+    display: inline-block;
+    padding: 10px 16px;
+    font-size: 1em;
+    text-transform: uppercase;
+    color: #fff;
+    background: #333;
+    margin: 10px 5px;
+    transition: all 0.3s ease-in-out;
+    border-radius: 5px;
+}
+
+#portfolio-filters li:hover,
+#portfolio-filters li.filter-active {
+    background: #1135c4;
+}
+
+.portfolio-info {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transition: all ease-in-out 0.3s;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.portfolio-buttons a, .portfolio-buttons div {
+    margin: 0 2px;
+    font-size: 28px;
+    display: inline-block;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.portfolio-info h3, .portfolio-buttons a, .portfolio-buttons div {
+    color: #000;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+}
+
+.portfolio-info h3 {
+    max-width: 85%;
+    text-align: center;
+}
+
+.portfolio-buttons a:hover, .portfolio-buttons div:hover {
+    color: #1135c4;
+}
+
+.portfolio-item img {
+    border: 2px solid transparent;
+}
+
+.portfolio-item:hover img {
+    border: 2px solid #d58512 !important;
+}
+
+.portfolio-info:hover::after {
+    bottom: 15px;
+    right: 15px;
+}
+
+.music-player.swal2-popup {
+    width: unset !important;
+    max-width: 75vw;
+    background-color: #222;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.music-player .swal2-html-container {
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+}
+
+body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
+    overflow: auto !important;
+}
+
+.music-player .swal2-html-container {
+    background: white url(../images/loading.gif) no-repeat center center;
+}
+
+.music-info.swal2-popup {
+    background-color: #333;
+    color: white;
+    width: unset;
+    max-width: 60em;
+    min-width: 40vw;
+}
+
+.music-info .swal2-html-container {
+    text-align: left;
+}
+
+.music-info h3 {
+    margin-bottom: 20px;
+}
+.music-info span {
+    color: #d58512;
+    letter-spacing: 0.05em;
+}
