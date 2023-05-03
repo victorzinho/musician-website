@@ -1,3 +1,19 @@
+body {
+    font-family: "Baskerville", sans-serif;
+}
+
+a, a:hover {
+    text-decoration: none;
+}
+
+h1, h2, h3 {
+    font-family: "Playfair Display", sans-serif;
+}
+
+ul, li {
+    list-style: none;
+}
+
 body::before {
     content: "";
     position: fixed;
@@ -11,18 +27,19 @@ body::before {
     /*background: url("../images/bg.jpg") no-repeat fixed top right;*/
 }
 
+/** Language selection **/
 .langSelection {
     position: fixed;
     bottom: 0;
     left: 0;
-    z-index: 99999;
+    z-index: 9999;
     padding: 10px;
     background: #151515;
 }
 
-.langSelection a, .langSelection span {
+.langSelection a, .langSelection a:hover, .langSelection span {
     color: #bbb;
-    text-decoration: none !important;
+    text-decoration: none;
 }
 
 .langSelection span {
@@ -31,20 +48,4 @@ body::before {
 
 .langSelection span.selected {
     color: #d58512;
-}
-
-body {
-    font-family: "Baskerville", sans-serif !important;
-}
-
-a, a:hover {
-    text-decoration: none;
-}
-
-h1, h2, h3 {
-    font-family: "Playfair Display", sans-serif !important;;
-}
-
-ul, li {
-    list-style: none !important;;
 }
