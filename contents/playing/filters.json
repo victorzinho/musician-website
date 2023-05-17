@@ -1,0 +1,12 @@
+[
+  {
+    "type": "electric-guitar",
+    "es": "Guitarra eléctrica",
+    "en": "Electric guitar"
+  },
+  {
+    "type": "classical-guitar",
+    "es": "Guitarra clásica",
+    "en": "Classical guitar"
+  }
+]

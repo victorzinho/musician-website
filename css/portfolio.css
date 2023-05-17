@@ -1,4 +1,4 @@
-#portfolio-filters li {
+.portfolio-filters li {
     cursor: pointer;
     display: inline-block;
     padding: 10px 16px;
@@ -11,8 +11,8 @@
     border-radius: 5px;
 }
 
-#portfolio-filters li:hover,
-#portfolio-filters li.filter-active {
+.portfolio-filters li:hover,
+.portfolio-filters li.filter-active {
     background: #1135c4;
 }
 
@@ -48,6 +48,10 @@
     text-align: center;
 }
 
+#portfolio-playing-container .portfolio-info h3 {
+    font-size: 1.5em;
+}
+
 .portfolio-buttons a:hover, .portfolio-buttons div:hover {
     color: #1135c4;
 }
@@ -63,6 +67,10 @@
 .portfolio-info:hover::after {
     bottom: 15px;
     right: 15px;
+}
+
+#portfolio-playing-container .portfolio-item {
+    cursor: pointer;
 }
 
 .music-player.swal2-popup {
@@ -85,6 +93,8 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
 
 .music-player .swal2-html-container {
     background: white url(../images/loading.gif) no-repeat center center;
+    width: 64vw;
+    height: 36.25vw;
 }
 
 .music-info.swal2-popup {
@@ -103,7 +113,13 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
 .music-info h3 {
     margin-bottom: 20px;
 }
+
 .music-info span {
     color: #d58512;
     letter-spacing: 0.05em;
+}
+
+.music-player iframe {
+    width: 100%;
+    height: 100%;
 }
