@@ -8,7 +8,8 @@ const interests = require('../contents/interests.json');
 const aboutMeEs = require('../contents/aboutMe.es');
 const aboutMeEn = require('../contents/aboutMe.en');
 
-const scoreFilters = require('../contents/scores/filters.json');
+const compositionFilters = require('../contents/compositions/filters.json');
+const playingFilters = require('../contents/playing/filters.json');
 
 module.exports = {
   es: {
@@ -17,8 +18,11 @@ module.exports = {
     influences,
     interests: interests.map(interest => ({ name: interest.es, icon: interest.icon })),
     aboutMe: aboutMeEs,
-    scores: {
-      filters: scoreFilters.map(filter => ({ type: filter.type, name: filter.es }))
+    compositions: {
+      filters: compositionFilters.map(filter => ({ type: filter.type, name: filter.es }))
+    },
+    playing: {
+      filters: playingFilters.map(filter => ({ type: filter.type, name: filter.es }))
     }
   },
   en: {
@@ -27,8 +31,11 @@ module.exports = {
     influences,
     interests: interests.map(interest => ({ name: interest.en, icon: interest.icon })),
     aboutMe: aboutMeEn,
-    scores: {
-      filters: scoreFilters.map(filter => ({ type: filter.type, name: filter.en }))
+    compositions: {
+      filters: compositionFilters.map(filter => ({ type: filter.type, name: filter.en }))
+    },
+    playing: {
+      filters: playingFilters.map(filter => ({ type: filter.type, name: filter.en }))
     }
   }
 };
