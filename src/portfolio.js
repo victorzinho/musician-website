@@ -74,10 +74,16 @@ function getInfoHtml (scoreDescriptor) {
 
 function player (button, scoreDescriptor) {
   if (!button || !scoreDescriptor.playUrl) return;
-  popup(button, CSS_CLASS_MUSIC_PLAYER, () => scoreDescriptor.playUrl.includes('soundcloud')
-    ? `<iframe width="100%" height="300" allow="autoplay"
-         src="https://w.soundcloud.com/player/?url=${scoreDescriptor.playUrl}&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>`
-    : `<iframe src="${scoreDescriptor.playUrl}?autoplay=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`);
+  let htmlGetter;
+  if (scoreDescriptor.playUrl.includes('soundcloud')) {
+    htmlGetter = () => `<iframe width="100%" height="300" allow="autoplay"
+         src="https://w.soundcloud.com/player/?url=${scoreDescriptor.playUrl}&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>`;
+  } else if (scoreDescriptor.playUrl.includes('youtube')) {
+    htmlGetter = () => `<iframe src="${scoreDescriptor.playUrl}?autoplay=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+  } else if (scoreDescriptor.playUrl.includes('facebook')) {
+    htmlGetter = () => `<iframe src="https://www.facebook.com/v2.3/plugins/video.php?href=${scoreDescriptor.playUrl}" allowFullScreen></iframe>`;
+  }
+  popup(button, CSS_CLASS_MUSIC_PLAYER, htmlGetter);
 }
 
 function info (button, scoreDescriptor) {

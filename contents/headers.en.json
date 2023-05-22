@@ -15,5 +15,7 @@
   "otherStuff": "Other stuff",
   "duration": "Duration",
   "year": "Year",
-  "instrumentation": "Instrumentation"
+  "instrumentation": "Instrumentation",
+  "published_under": "All scores published under",
+  "published_otherwise": "unless otherwise stated"
 }
