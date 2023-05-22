@@ -38,7 +38,9 @@ module.exports = {
     }),
     new CopyPlugin({
       patterns: [
-        { from: 'images', to: 'images' }
+        { from: 'images', to: 'images' },
+        { from: 'contents/scores', to: 'scores' },
+        { from: 'contents/audio', to: 'audio' }
       ]
     }),
     new MiniCssExtractPlugin()

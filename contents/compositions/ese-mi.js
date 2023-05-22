@@ -3,19 +3,18 @@ export default {
   year: 2022,
   type: 'small',
   duration: '~7\' 30\'\'',
-  instrumentation: 'Fretless electric guitar and electronics',
-  playUrl: '',
-  scoreUrl: '',
-  descriptionHtml: `
-  <p>Officiis eligendi itaque labore et dolorum mollitia officiis optio vero. Quisquam sunt adipisci
-                    omnis et ut. Nulla accusantium dolor incidunt officia tempore. Et eius omnis.
-                    Cupiditate ut dicta maxime officiis quidem quia. Sed et consectetur qui quia repellendus itaque
-                    neque. Aliquid amet quidem ut quaerat cupiditate. Ab et eum qui repellendus omnis culpa magni
-                    laudantium dolores.</p>
-  <p>Officiis eligendi itaque labore et dolorum mollitia officiis optio vero. Quisquam sunt adipisci
-                    omnis et ut. Nulla accusantium dolor incidunt officia tempore. Et eius omnis.
-                    Cupiditate ut dicta maxime officiis quidem quia. Sed et consectetur qui quia repellendus itaque
-                    neque. Aliquid amet quidem ut quaerat cupiditate. Ab et eum qui repellendus omnis culpa magni
-                    laudantium dolores.</p>
-  `
+  instrumentation: {
+    en: 'Fretless electric guitar and electronics',
+    es: 'Guitarra eléctrica sin trastes y electrónica'
+  },
+  playUrl: 'https://www.youtube.com/embed/q6tZGH8PJuI',
+  scoreUrl: '../scores/Ese Mi parece un Mi bemol.pdf',
+  descriptionHtml: {
+    es: `Descarga el audio con solo la electrónica  
+        <a download="Ese Mi parece un Mi bemol (electronics only)"
+            href="../audio/Ese Mi parece un Mi bemol (electronics only).mp3">aquí</a>.`,
+    en: `Download audio with only electronics from 
+        <a download="Ese Mi parece un Mi bemol (electronics only)"
+            href="../audio/Ese Mi parece un Mi bemol (electronics only).mp3">here</a>.`
+  }
 };

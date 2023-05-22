@@ -15,6 +15,7 @@
   "otherStuff": "Otras cositas",
   "duration": "Duración",
   "year": "Año",
-  "instrumentation": "Instrumentación"
-
+  "instrumentation": "Instrumentación",
+  "published_under": "Todas las partituras están publicadas bajo",
+  "published_otherwise": "salvo que se indique lo contrario"
 }

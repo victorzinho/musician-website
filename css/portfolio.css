@@ -123,3 +123,12 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
     width: 100%;
     height: 100%;
 }
+
+.cc-copyright {
+    color: #ddd;
+    padding-top: 20px;
+}
+
+.cc-copyright img {
+    height: 1.5em;
+}
