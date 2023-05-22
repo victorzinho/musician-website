@@ -1,5 +1,5 @@
 import BrassInvent from './compositions/brass-invent';
-// import TheManWhoCriedGod from './compositions/pending/the-man-who-cried-god';
+import TheManWhoCriedGod from './compositions/the-man-who-cried-god';
 // import SaxMachine from './compositions/pending/sax-machine';
 // import UnLimited from './compositions/pending/un-limited';
 // import Yield from './compositions/pending/yield';
@@ -18,8 +18,8 @@ export default [
   EseMi,
   GravitationalKook,
   AnchoEsElMar,
-  BrassInvent
-  // TheManWhoCriedGod,
+  BrassInvent,
+  TheManWhoCriedGod
   // UnLimited,
   // DifferentTunes,
   // LikeADropOfWater,

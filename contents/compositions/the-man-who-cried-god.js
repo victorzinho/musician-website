@@ -8,7 +8,7 @@ export default {
     en: 'Mixed choir'
   },
   playUrl: '',
-  scoreUrl: '',
+  scoreUrl: '../scores/The man who cried God.pdf',
   descriptionHtml: {
     es: `
     `,
