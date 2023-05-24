@@ -1,3 +1,4 @@
+import TurbulenceInCircles from './compositions/turbulence-in-circles';
 import BrassInvent from './compositions/brass-invent';
 import TheManWhoCriedGod from './compositions/the-man-who-cried-god';
 // import SaxMachine from './compositions/pending/sax-machine';
@@ -14,6 +15,7 @@ import GravitationalKook from './compositions/gravitational-kook';
 import AnchoEsElMar from './compositions/ancho-es-el-mar';
 
 export default [
+  TurbulenceInCircles,
   // WeFadeAway,
   EseMi,
   GravitationalKook,

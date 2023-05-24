@@ -1,5 +1,10 @@
 [
   {
+    "type": "orchestra",
+    "en": "Orchestra",
+    "es": "Orquesta"
+  },
+  {
     "type": "ensemble",
     "en": "Ensemble",
     "es": "Ensemble"
