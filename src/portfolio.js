@@ -95,7 +95,7 @@ function info (button, scoreDescriptor) {
 
 function addElement (id, scoreDescriptor, fallbackImage, buttons) {
   let newItem = document.createElement('div');
-  newItem.className = 'mt-4 col-lg-3 col-md-3 portfolio-item filter-' + scoreDescriptor.type;
+  newItem.className = 'mt-4 col-xl-3 col-lg-4 col-md-6 portfolio-item filter-' + scoreDescriptor.type;
   newItem.innerHTML = `
   <img src="${scoreDescriptor.image || fallbackImage}" class="img-fluid" alt="">
   <div class="portfolio-info">
