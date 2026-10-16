@@ -1,0 +1,19 @@
+# Media aside, the rest is the CV's.
+position: 3
+name: Desluthiers
+about: { en: Les Luthiers tribute group, es: Grupo de homenaje a Les Luthiers }
+role: { en: Stage and technical coordination; occasional guitar, es: Coordinación técnica y de escenario; guitarra ocasional }
+start: 2012
+end: 2017
+highlights:
+  - en: Lights and microphones; the link between the group and the venue's engineer
+    es: Luces y micrófonos; el enlace entre el grupo y el técnico de la sala
+media:
+  - photo: ./photo-1.jpg
+    caption: { en: "Conservatorio de Torrent, 2013", es: "Conservatorio de Torrent, 2013" }
+  - photo: ./photo-2.jpg
+    caption: { en: "Ubik Café, 2012", es: "Ubik Café, 2012" }
+  - photo: ./photo-3.jpg
+    caption: { en: "Sala Carolina, 2013", es: "Sala Carolina, 2013" }
+  - photo: ./photo-4.jpg
+    caption: { en: "Final bow", es: "Saludo final" }

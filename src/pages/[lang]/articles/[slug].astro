@@ -1,0 +1,187 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getEntry, render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import AccentList from '../../../components/AccentList.astro';
+import BackLink from '../../../components/BackLink.astro';
+import RoleChips from '../../../components/RoleChips.astro';
+import { articles } from '../../../articles';
+import type { Article } from 'schema-dts';
+import { codas, languages, locales, localize, strings, type Lang } from '../../../i18n';
+import { person } from '../../../structured-data';
+
+export const getStaticPaths = (async () => {
+  const all = await articles();
+  return languages.flatMap((lang) => all.map((article) => ({ params: { lang, slug: article.id }, props: { article } })));
+}) satisfies GetStaticPaths;
+
+const lang = Astro.currentLocale as Lang;
+const t = strings[lang];
+const { article } = Astro.props;
+const { title, description, date, roles: sections } = article.data;
+const { Content } = await render((await getEntry('articleTexts', `${article.id}/${lang}`))!);
+const structured: Article = {
+  '@type': 'Article',
+  headline: title[lang],
+  description: description[lang],
+  url: Astro.url.href,
+  datePublished: date.toISOString().slice(0, 10),
+  inLanguage: locales[lang],
+  author: person,
+  image: new URL(`/og-${lang}.jpg`, Astro.site).href,
+};
+const published = date.toLocaleDateString(lang, { dateStyle: 'long', timeZone: 'UTC' });
+---
+
+<Base lang={lang} title={title[lang]} description={description[lang]} coda={codas.articles} published={date}
+  structuredData={[structured]}
+>
+  <article>
+    <header>
+      <BackLink href={localize(lang, '/articles/')} text={t.nav.articles} above />
+      <h1>{title[lang]}</h1>
+      <p class="date">
+        <time datetime={date.toISOString().slice(0, 10)}>{published}</time>
+        <RoleChips roles={sections} lang={lang} />
+      </p>
+      <p class="lead">{description[lang]}</p>
+    </header>
+    <hr class="rule" />
+    <div class="prose">
+      <Content components={{ ul: AccentList }} />
+    </div>
+    <hr class="rule" />
+    <footer class="closing">
+      <p>
+        <RoleChips roles={sections} lang={lang} />
+      </p>
+      <p>
+        {t.contact.closing.text} <a href={localize(lang, '/contact/')}>{t.contact.closing.link} →</a>
+      </p>
+    </footer>
+  </article>
+</Base>
+
+<style>
+  /* A plain article header, flush left: back link, title, date, then the description as the lead. */
+  header {
+    padding-top: 1rem;
+  }
+  h1 {
+    margin: 0 0 0.5rem;
+    font-size: clamp(1.6rem, 5vw, 2rem);
+    line-height: 1.15;
+    color: var(--color-blue);
+  }
+  /* The date, then the sections as chips. */
+  .date {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4rem 0.75rem;
+    margin: 0;
+  }
+  .date time {
+    font-family: var(--font-heading);
+    font-style: italic;
+    color: var(--color-muted);
+  }
+  /* The body size, like the openings on other pages; the text below is a step smaller. */
+  .lead {
+    margin: 1.25rem 0 0;
+  }
+  .closing p {
+    margin: 0 0 0.75rem;
+  }
+  .closing p:last-child {
+    margin-bottom: 0;
+  }
+  /* Long-form text: the bio's size, Playfair headings, rules and tables in the site's quiet lines. */
+  article {
+    --measure: 34rem;
+  }
+  .prose {
+    font-size: 1rem;
+  }
+  .prose :global(h2) {
+    margin: 2.25rem 0 0.75rem;
+    font-size: 1.3rem;
+  }
+  .prose :global(h3) {
+    margin: 1.75rem 0 0.5rem;
+    font-size: 1.1rem;
+  }
+  .prose :global(p),
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin: 0 0 1rem;
+  }
+  /* Numbers in Playfair and the accent colour, like the bullets. */
+  .prose :global(ol) {
+    padding: 0;
+    list-style: none;
+    counter-reset: item;
+  }
+  .prose :global(ol > li) {
+    position: relative;
+    padding-left: 1.6rem;
+    counter-increment: item;
+  }
+  .prose :global(ol > li + li) {
+    margin-top: 0.25rem;
+  }
+  .prose :global(ol > li)::before {
+    content: counter(item) '.';
+    position: absolute;
+    left: 0;
+    font-family: var(--font-heading);
+    color: var(--color-accent-text);
+  }
+  .prose :global(blockquote) {
+    margin: 1.5rem 0;
+    padding-left: 0.9rem;
+    border-left: 2px solid var(--color-accent-mark);
+    font-style: italic;
+    color: var(--color-muted);
+  }
+  .prose :global(blockquote p:last-child) {
+    margin-bottom: 0;
+  }
+  .prose :global(pre) {
+    margin: 1.5rem 0;
+  }
+  .prose :global(table) {
+    width: 100%;
+    margin: 1.5rem 0;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  .prose :global(th),
+  .prose :global(td) {
+    padding: 0.45rem 0.6rem;
+    border-bottom: 1px solid var(--color-rule);
+    text-align: left;
+  }
+  .prose :global(th) {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .prose :global(.player) {
+    margin-block: 1.5rem;
+  }
+  .prose :global(hr) {
+    height: 1px;
+    background: var(--color-rule);
+  }
+  /* A centred column at a comfortable line length; figures, code and tables use the full width, centred under it. */
+  header,
+  hr,
+  .closing,
+  .prose > :global(:not(figure, pre, table)) {
+    max-width: var(--measure);
+    margin-inline: auto;
+  }
+</style>

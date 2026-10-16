@@ -1,0 +1,30 @@
+---
+import { localize, strings, type Lang } from '../i18n';
+import { roles as paths, type Role } from '../site';
+
+interface Props {
+  roles: Role[];
+  lang: Lang;
+}
+
+const { roles, lang } = Astro.props;
+---
+
+<span class="chips">
+  {
+    roles.map((role) => (
+      <a class="chip" href={localize(lang, paths[role])}>
+        {strings[lang].nav.roles[role]}
+      </a>
+    ))
+  }
+</span>
+
+<style>
+  .chips {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    vertical-align: 0.1em;
+  }
+</style>

@@ -1,0 +1,27 @@
+title: Kissed by God
+year: 2024
+forces:
+  en: Piano, video and electronics
+  es: Piano, vídeo y electrónica
+duration: 7
+license: CC-BY-SA-4.0
+premiere:
+  date: "2024-06"
+  venue: Auditorio de Rafelbunyol
+recordings:
+  - url: https://www.youtube.com/watch?v=O06FQ8ONp9s
+    kind: studio
+    title:
+      en: Video and electronics
+      es: Vídeo y electrónica
+    description:
+      en: "2024"
+      es: "2024"
+  - file: excerpt.mp3
+    kind: studio
+    title:
+      en: Excerpt
+      es: Fragmento
+    description:
+      en: Video and electronics · 2024
+      es: Vídeo y electrónica · 2024

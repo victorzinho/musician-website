@@ -1,0 +1,32 @@
+title: Ese Mi parece un Mi♭
+year: 2022
+forces:
+  en: Fretless electric guitar and electronics
+  es: Guitarra eléctrica sin trastes y electrónica
+duration: 8
+license: CC-BY-SA-4.0
+recordings:
+  - url: https://www.youtube.com/watch?v=q6tZGH8PJuI
+    kind: studio
+    title:
+      en: Studio performance
+      es: Grabación de estudio
+    description:
+      en: "2022"
+      es: "2022"
+  - file: excerpt.mp3
+    kind: studio
+    title:
+      en: Excerpt
+      es: Fragmento
+    description:
+      en: Studio performance · 2022
+      es: Grabación de estudio · 2022
+  - file: excerpt.mp3
+    kind: studio
+    excerpt: true
+resources:
+  - file: electronics.mp3
+    name:
+      en: Electronics only
+      es: Solo electrónica

@@ -1,0 +1,73 @@
+---
+import { getEntry } from 'astro:content';
+import { strings, type Lang } from '../i18n';
+
+interface Props {
+  id: string;
+  lang: Lang;
+}
+
+const { id, lang } = Astro.props;
+const quote = await getEntry('quotes', id);
+if (!quote) throw new Error(`quote ${id} not found`);
+const { text, translations, name, role } = quote.data;
+const original = quote.data.lang === lang;
+const shown = original ? text : translations[lang];
+if (!shown) throw new Error(`quote ${id}: no ${lang} translation`);
+---
+
+<figure class="quote">
+  <blockquote lang={original ? quote.data.lang : lang}>
+    <p>{shown}</p>
+  </blockquote>
+  <figcaption>
+    — {name}, {role[lang]}
+    {!original && <span class="translated">{strings[lang].quote.translatedFrom[quote.data.lang]}</span>}
+  </figcaption>
+</figure>
+
+<style>
+  /* A side note in someone else's voice: muted and smaller, terracotta rule and quote marks, attribution in blue. */
+  .quote {
+    margin: 0;
+    padding: 0.1rem 0 0.1rem 0.9rem;
+    border-left: 2px solid var(--color-accent-mark);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--color-muted);
+  }
+  /* Large curly marks in every language, as decoration; line-height 0 keeps them from pushing their lines apart. */
+  blockquote {
+    quotes: '“' '”';
+  }
+  p::before,
+  p::after {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    line-height: 0;
+    vertical-align: -0.4em;
+    color: var(--color-accent-mark);
+  }
+  p::before {
+    content: open-quote;
+    margin-right: 0.2rem;
+  }
+  p::after {
+    content: close-quote;
+    margin-left: 0.2rem;
+  }
+  blockquote,
+  p {
+    margin: 0;
+  }
+  figcaption {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--color-blue);
+  }
+  .translated {
+    display: block;
+    font-style: italic;
+    color: var(--color-muted);
+  }
+</style>

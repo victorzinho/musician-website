@@ -1,0 +1,123 @@
+---
+import { strings, type Lang } from '../i18n';
+
+interface Props {
+  src: string;
+  /** "Excerpt", or "Mockup" when the audio comes from one. */
+  label: string;
+  title: string;
+  lang: Lang;
+}
+
+const { src, label, title, lang } = Astro.props;
+const t = strings[lang].player;
+---
+
+<span class="chip excerpt" data-title={title} data-play={t.playExcerpt} data-pause={t.pause}>
+  <button class="toggle" type="button" aria-label={`${t.playExcerpt}: ${title}`}>
+    <svg class="icon-play" viewBox="0 0 24 24" width="10" height="10" aria-hidden="true">
+      <path d="M6 4v16l14-8z" fill="currentColor"></path>
+    </svg>
+    <svg class="icon-pause" viewBox="0 0 24 24" width="10" height="10" aria-hidden="true">
+      <path d="M6 4h4.5v16H6zM13.5 4H18v16h-4.5z" fill="currentColor"></path>
+    </svg>
+    {label}
+  </button>
+  <button class="restart" type="button" aria-label={`${t.restart}: ${title}`} hidden>
+    <svg viewBox="0 0 24 24" width="10" height="10" aria-hidden="true">
+      <path d="M5 12a7 7 0 1 0 2.05-4.95M5 4v4h4" fill="none" stroke="currentColor" stroke-width="2.4"></path>
+    </svg>
+  </button>
+  <audio preload="none" src={src}></audio>
+</span>
+
+<script>
+  import { exclusive } from '../player';
+
+  for (const chip of document.querySelectorAll<HTMLElement>('.excerpt')) {
+    const audio = chip.querySelector('audio')!;
+    const toggle = chip.querySelector<HTMLButtonElement>('.toggle')!;
+    const restart = chip.querySelector<HTMLButtonElement>('.restart')!;
+    const { title, play, pause } = chip.dataset;
+
+    const pauseOthers = exclusive(() => audio.pause());
+    const start = () => {
+      pauseOthers();
+      audio.play().catch(() => {});
+    };
+    const render = () => {
+      const playing = !audio.paused;
+      chip.classList.toggle('playing', playing);
+      toggle.setAttribute('aria-label', `${playing ? pause : play}: ${title}`);
+      restart.hidden = playing || audio.currentTime === 0;
+    };
+
+    toggle.addEventListener('click', () => (audio.paused ? start() : audio.pause()));
+    restart.addEventListener('click', () => {
+      audio.currentTime = 0;
+      start();
+    });
+    audio.addEventListener('error', () => {
+      toggle.disabled = true;
+      restart.hidden = true;
+    });
+    audio.addEventListener('play', render);
+    audio.addEventListener('pause', render);
+    audio.addEventListener('timeupdate', () => {
+      if (audio.duration) chip.style.setProperty('--progress', `${(audio.currentTime / audio.duration) * 100}%`);
+    });
+    audio.addEventListener('ended', () => {
+      audio.currentTime = 0;
+      chip.style.setProperty('--progress', '0%');
+      render();
+    });
+  }
+</script>
+
+<style>
+  /* The chip is the player: play/pause, a restart button while paused partway, progress along its bottom edge. */
+  .excerpt {
+    --progress: 0%;
+    display: inline-flex;
+    align-items: stretch;
+    padding: 0;
+    overflow: hidden;
+    background: linear-gradient(var(--color-accent-mark), var(--color-accent-mark)) no-repeat left bottom / var(--progress)
+      2px;
+  }
+  button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.05rem 0.45rem;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    cursor: pointer;
+  }
+  .restart {
+    padding: 0 0.3rem;
+    border-left: 1px solid var(--color-accent-mark);
+  }
+  button:hover:enabled {
+    background-color: var(--color-accent-mark);
+    color: var(--color-bg);
+  }
+  button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .restart[hidden] {
+    display: none;
+  }
+  .icon-pause,
+  .playing .icon-play {
+    display: none;
+  }
+  .playing .icon-pause {
+    display: block;
+  }
+</style>

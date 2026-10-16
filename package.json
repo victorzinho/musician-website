@@ -1,40 +1,38 @@
 {
   "name": "@victorzinho/musician-website",
   "version": "0.0.1-alpha.1",
+  "private": true,
+  "type": "module",
   "repository": "git@github.com:victorzinho/musician-website",
   "author": "Víctor González <victorzinho@gmail.com>",
-  "main": "bak/src/main.js",
-  "dependencies": {
-    "@flaticon/flaticon-uicons": "^2.1.0",
-    "@popperjs/core": "^2.11.7",
-    "bootstrap": "^5.2.3",
-    "isotope-layout": "^3.0.6",
-    "jquery": "^3.6.4",
-    "sweetalert2": "^11.7.3",
-    "waypoints": "^4.0.1"
-  },
-  "devDependencies": {
-    "copy-webpack-plugin": "^11.0.0",
-    "css-loader": "^6.7.3",
-    "css-minimizer-webpack-plugin": "^5.0.0",
-    "eslint": "^8.39.0",
-    "eslint-config-standard": "^16.0.3",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^5.2.0",
-    "gh-pages": "^5.0.0",
-    "html-webpack-plugin": "^5.5.1",
-    "mini-css-extract-plugin": "^2.7.5",
-    "style-loader": "^3.3.2",
-    "webpack": "^5.77.0",
-    "webpack-bundle-analyzer": "^4.8.0",
-    "webpack-cli": "^5.0.2",
-    "webpack-dev-server": "^4.13.3",
-    "webpack-merge": "^5.8.0"
+  "engines": {
+    "node": ">=22.12.0"
   },
   "scripts": {
-    "lint": "eslint src",
-    "build": "webpack --config webpack.prod.js",
-    "serve": "webpack serve --open --config webpack.dev.js"
+    "dev": "astro dev",
+    "build": "astro build",
+    "verify": "node scripts/verify.mjs",
+    "links": "astro build && linkinator dist --recurse",
+    "cv": "node scripts/cv-pdfs.mjs",
+    "docs": "rm -rf .docs/astro && git clone --quiet --filter=blob:none --no-checkout https://github.com/withastro/docs.git .docs/astro && git -C .docs/astro checkout --quiet $npm_package_config_astroDocsCommit"
+  },
+  "config": {
+    "astroDocsCommit": "52e538d93d0c430f4bc2dc5901ff999c3cfcd5e0"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "8.0.3",
+    "@astrojs/sitemap": "3.7.4",
+    "@fontsource-variable/playfair": "5.3.0",
+    "astro": "7.3.8",
+    "sharp": "0.35.5",
+    "yaml": "2.9.1"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.10",
+    "html-validate": "11.16.2",
+    "linkinator": "8.1.0",
+    "playwright-core": "1.64.0",
+    "schema-dts": "2.1.0",
+    "typescript": "6.0.3"
   }
 }

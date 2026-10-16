@@ -1,0 +1,203 @@
+---
+import { strings, type Lang } from '../i18n';
+
+type Props = {
+  /** Names the track for screen readers. */
+  title: string;
+  lang: Lang;
+  /** A smaller button, for players inside running text. */
+  compact?: boolean;
+} & ({ src: string; soundcloud?: never } | { soundcloud: string; src?: never });
+
+const { title, lang, src, soundcloud, compact = false } = Astro.props;
+const t = strings[lang].player;
+---
+
+{
+  /* The same controls for a local file and a SoundCloud track: play button on the left, the slot and the seek bar on
+     the right, then the `after` slot. */
+}
+<div class:list={['player', { compact }]} data-title={title} data-soundcloud={soundcloud}>
+  <button class="play" type="button" aria-label={`${t.play}: ${title}`} data-play={t.play} data-pause={t.pause}>
+    <svg class="icon-play" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+      <path d="M8 5v14l11-7z" fill="currentColor"></path>
+    </svg>
+    <svg class="icon-pause" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+      <path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor"></path>
+    </svg>
+  </button>
+  <div class="body">
+    <slot />
+    <div class="track">
+      <input class="seek" type="range" min="0" max="1000" value="0" aria-label={`${t.position}: ${title}`} />
+      <span class="time">0:00</span>
+      {src && <audio preload="metadata" src={src}></audio>}
+    </div>
+    <slot name="after" />
+  </div>
+</div>
+
+<script>
+  import { audioSource, soundcloudSource } from '../player';
+
+  const format = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+
+  for (const player of document.querySelectorAll<HTMLElement>('.player')) {
+    const audio = player.querySelector('audio');
+    const source = audio ? audioSource(audio) : soundcloudSource(player.dataset.soundcloud!, player);
+    const button = player.querySelector<HTMLButtonElement>('.play')!;
+    const seek = player.querySelector<HTMLInputElement>('.seek')!;
+    const time = player.querySelector<HTMLElement>('.time')!;
+    const title = player.dataset.title!;
+
+    const render = () => {
+      player.classList.toggle('playing', !source.paused);
+      player.classList.toggle('loading', source.loading);
+      button.disabled = source.failed;
+      button.setAttribute('aria-label', `${source.paused ? button.dataset.play : button.dataset.pause}: ${title}`);
+      if (!source.duration) return;
+      const progress = source.time / source.duration;
+      seek.value = String(progress * 1000);
+      seek.style.setProperty('--progress', `${progress * 100}%`);
+      time.textContent = `${format(source.time)} / ${format(source.duration)}`;
+    };
+
+    button.addEventListener('click', () => (source.paused ? source.play() : source.pause()));
+    seek.addEventListener('input', () => {
+      if (source.duration) source.seek((Number(seek.value) / 1000) * source.duration);
+    });
+    source.onChange(render);
+    // A file may have failed to load before this ran.
+    render();
+  }
+</script>
+
+<style>
+  .player {
+    display: grid;
+    grid-template-columns: 3rem 1fr;
+    gap: 1rem;
+  }
+  .body {
+    min-width: 0;
+  }
+  .compact {
+    grid-template-columns: 2.25rem 1fr;
+    gap: 0.75rem;
+    align-items: center;
+  }
+  .compact .play {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+  .compact .play svg {
+    width: 15px;
+    height: 15px;
+  }
+  .compact .body {
+    font-size: 0.9rem;
+    color: var(--color-muted);
+  }
+  .compact .track {
+    margin-top: 0.15rem;
+  }
+  .play {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+    border: 1.5px solid var(--color-accent-mark);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--color-accent-mark);
+    cursor: pointer;
+  }
+  .play:hover,
+  .playing .play {
+    background: var(--color-accent-mark);
+    color: var(--color-bg);
+  }
+  .play:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .loading .play {
+    animation: pulse 1s ease-in-out infinite alternate;
+  }
+  @keyframes pulse {
+    to {
+      opacity: 0.4;
+    }
+  }
+  .icon-pause,
+  .playing .icon-play {
+    display: none;
+  }
+  .playing .icon-pause {
+    display: block;
+  }
+  .track {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 0.75rem;
+    max-width: 20rem;
+    margin-top: 0.35rem;
+  }
+  .seek {
+    --progress: 0%;
+    flex: 1 1 8rem;
+    height: 1rem;
+    margin: 0;
+    background: transparent;
+    appearance: none;
+    cursor: pointer;
+  }
+  .seek::-webkit-slider-runnable-track {
+    height: 3px;
+    border-radius: 2px;
+    background: linear-gradient(to right, var(--color-accent-mark) var(--progress), var(--color-rule) var(--progress));
+  }
+  .seek::-moz-range-track {
+    height: 3px;
+    border-radius: 2px;
+    background: var(--color-rule);
+  }
+  .seek::-moz-range-progress {
+    height: 3px;
+    border-radius: 2px;
+    background: var(--color-accent-mark);
+  }
+  .seek::-webkit-slider-thumb {
+    width: 0.7rem;
+    height: 0.7rem;
+    margin-top: calc(1.5px - 0.35rem);
+    border: 0;
+    border-radius: 50%;
+    background: var(--color-accent-mark);
+    appearance: none;
+  }
+  .seek::-moz-range-thumb {
+    width: 0.7rem;
+    height: 0.7rem;
+    border: 0;
+    border-radius: 50%;
+    background: var(--color-accent-mark);
+  }
+  .time {
+    min-width: 5.5rem;
+    font-size: 0.85rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-muted);
+  }
+  /* Hidden but playing: browsers may not run a `display: none` embed. */
+  .player :global(.soundcloud-frame) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    border: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+</style>

@@ -1,0 +1,73 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ContactLinks from '../../components/ContactLinks.astro';
+import ListenItem from '../../components/ListenItem.astro';
+import Portrait from '../../components/Portrait.astro';
+import type { WebSite } from 'schema-dts';
+import { codas, langPaths, locales, strings, type Lang } from '../../i18n';
+import { person, personNode } from '../../structured-data';
+
+export const getStaticPaths = (() => langPaths()) satisfies GetStaticPaths;
+
+const lang = Astro.currentLocale as Lang;
+const t = strings[lang].home;
+const site: WebSite = {
+  '@type': 'WebSite',
+  name: 'Víctor González',
+  url: Astro.url.href,
+  inLanguage: locales[lang],
+  author: person,
+};
+const listen = (await getEntry('homeListen', 'homeListen'))!.data;
+---
+
+<Base lang={lang} title={strings[lang].meta.homeTitle} description={strings[lang].meta.description.home} coda={codas.home}
+  structuredData={[site, await personNode(lang)]}
+>
+  <section class="intro">
+    <Portrait size={10} />
+    <div>
+      <h1>{t.identity}</h1>
+      <p>{t.intro}</p>
+    </div>
+  </section>
+
+  <hr />
+
+  <section aria-labelledby="listen">
+    <h2 id="listen" class="label">{t.listen}</h2>
+    {listen.map((item) => <ListenItem item={item} lang={lang} />)}
+  </section>
+
+  <hr />
+
+  <section id="contact" aria-labelledby="contact-heading">
+    <h2 id="contact-heading" class="label">{strings[lang].nav.contact}</h2>
+    <ContactLinks />
+  </section>
+</Base>
+
+<style>
+  .intro {
+    display: grid;
+    grid-template-columns: 10rem 1fr;
+    gap: 2rem;
+    align-items: center;
+  }
+  @media (max-width: 36rem) {
+    .intro {
+      grid-template-columns: 1fr;
+    }
+  }
+  h1 {
+    margin: 0 0 1rem;
+    font-size: clamp(1.9rem, 6vw, 2.6rem);
+    line-height: 1.12;
+    color: var(--color-blue);
+  }
+  .intro p {
+    margin: 0;
+  }
+</style>

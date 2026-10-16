@@ -1,0 +1,188 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getEntry, render } from 'astro:content';
+import { aboutFacts } from '../../about';
+import Base from '../../layouts/Base.astro';
+import Portrait from '../../components/Portrait.astro';
+import ScoreTitle from '../../components/ScoreTitle.astro';
+import { codas, langPaths, languages, localize, strings, type Lang } from '../../i18n';
+import { cvs, roles, type Role } from '../../site';
+import { personNode } from '../../structured-data';
+
+const parts = ['intro', ...(Object.keys(roles) as Role[])] as const;
+for (const part of parts) {
+  for (const l of languages) {
+    if (!(await getEntry('about', `${part}/${l}`))) throw new Error(`no src/content/about/${part}-${l}.md`);
+  }
+}
+
+export const getStaticPaths = (() => langPaths()) satisfies GetStaticPaths;
+
+const lang = Astro.currentLocale as Lang;
+const t = strings[lang];
+const text = async (part: (typeof parts)[number]) =>
+  (await render((await getEntry('about', `${part}/${lang}`))!)).Content;
+const Intro = await text('intro');
+/** The four roles in the header's order, each with its page and its facts. */
+const movements = await Promise.all(
+  (Object.entries(roles) as [Role, string][]).map(async ([role, path]) => ({
+    role,
+    path: localize(lang, path),
+    Content: await text(role),
+    notes: await aboutFacts(role, lang),
+  })),
+);
+const numerals = ['I', 'II', 'III', 'IV'];
+---
+
+<Base lang={lang} title={t.nav.about} description={t.meta.description.about} coda={codas.about}
+  structuredData={[{ '@type': 'ProfilePage', url: Astro.url.href, mainEntity: await personNode(lang) }]}
+>
+  <header>
+    <ScoreTitle title="Víctor González" subtitle={t.about.subtitle} />
+  </header>
+  <div class="opening">
+    <div class="photo">
+      <Portrait size={18} />
+    </div>
+    <div class="text">
+      <Intro />
+    </div>
+  </div>
+
+  {
+    movements.map(({ role, path, Content, notes }, i) => (
+      <section aria-labelledby={role}>
+        <h2 id={role}>
+          <a href={path}>
+            {numerals[i]}. {t.nav.roles[role]}
+          </a>
+        </h2>
+        {/* `*text*` in a fact is italic. */}
+        {notes.length > 0 && (
+          <ul class="notes accents">
+            {notes.map((note) => (
+              <li>{note.split('*').map((part, j) => (j % 2 ? <em>{part}</em> : part))}</li>
+            ))}
+          </ul>
+        )}
+        <div class="text">
+          <Content />
+        </div>
+      </section>
+    ))
+  }
+
+  <hr class="rule" />
+  <section class="closing" aria-label={t.nav.contact}>
+    <p>
+      {t.contact.closing.text} <a href={localize(lang, '/contact/')}>{t.contact.closing.link} →</a>
+    </p>
+    <p class="cvs-lead">{t.about.cvs}</p>
+    <dl class="cvs">
+      {
+        cvs.map((cv) => (
+          <div>
+            <dt>{cv.title[lang]}</dt>
+            <dd>
+              {languages.map((l) => (
+                <a
+                  class="chip"
+                  href={cv.pdf[l]}
+                  hreflang={l}
+                  target="_blank"
+                  data-umami-event="cv"
+                  data-umami-event-file={cv.pdf[l].split('/').pop()}
+                >
+                  {l.toUpperCase()} <span aria-hidden="true">↗</span>
+                  <span class="visually-hidden">{t.works.labels.newTab}</span>
+                </a>
+              ))}
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+</Base>
+
+<style>
+  /* Portrait at the top left, the intro beside it and then under it at full width; centred above it on narrow
+     screens. */
+  .opening {
+    display: flow-root;
+  }
+  .photo {
+    float: left;
+    margin: 0 2rem 1rem 0;
+  }
+  @media (max-width: 40rem) {
+    .photo {
+      display: flex;
+      justify-content: center;
+      float: none;
+      margin: 0 0 1.5rem;
+    }
+  }
+  header {
+    margin: 1rem 0 2rem;
+  }
+  /* A bio of several paragraphs: a size below the one-paragraph openings. */
+  .text {
+    font-size: 1rem;
+  }
+  .text :global(p) {
+    margin: 0 0 0.9rem;
+  }
+  .text :global(p:last-child) {
+    margin-bottom: 0;
+  }
+  section {
+    margin-top: 2.75rem;
+  }
+  /* Centred, like the movement titles in a score. */
+  h2 {
+    margin: 0 0 1rem;
+    font-size: 1.5rem;
+    text-align: center;
+  }
+  .notes {
+    margin: 0 0 1rem;
+    font-size: 0.9rem;
+    color: var(--color-muted);
+  }
+  /* Each title leads to its section. */
+  h2 a {
+    text-decoration: none;
+  }
+  .closing {
+    margin-top: 0;
+  }
+  .closing p {
+    margin: 0;
+  }
+  /* One row per role: its name, then a chip per language. */
+  .cvs {
+    display: grid;
+    grid-template-columns: max-content auto;
+    justify-content: start;
+    gap: 0.4rem 1rem;
+    align-items: baseline;
+    margin: 0.6rem 0 0;
+    font-size: 0.9rem;
+  }
+  .closing .cvs-lead {
+    margin-top: 1.25rem;
+  }
+  .cvs div {
+    display: contents;
+  }
+  .cvs dt {
+    color: var(--color-muted);
+  }
+  .cvs dd {
+    display: flex;
+    gap: 0.35rem;
+    margin: 0;
+  }
+</style>

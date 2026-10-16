@@ -1,0 +1,32 @@
+title: Gravitational kook
+year: 2022
+forces:
+  en: Ensemble
+  es: Ensemble
+duration: 8
+license: CC-BY-SA-4.0
+premiere:
+  date: 2022-05-18
+  performers: Antara Ensemble
+  venue: Museu de les Ciències, Valencia
+recordings:
+  - url: https://www.youtube.com/watch?v=Kc40gazYqr4
+    kind: performance
+    title:
+      en: Antara Ensemble
+      es: Antara Ensemble
+    description:
+      en: Museu de les Ciències, Valencia · 2022
+      es: Museu de les Ciències, Valencia · 2022
+  - file: excerpt.mp3
+    kind: performance
+    title:
+      en: Excerpt
+      es: Fragmento
+    description:
+      en: Antara Ensemble · 2022
+      es: Antara Ensemble · 2022
+  - file: excerpt.mp3
+    kind: performance
+    excerpt: true
+

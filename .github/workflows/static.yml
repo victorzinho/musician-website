@@ -1,21 +1,21 @@
-name: Build and deploy to Pages
+name: Verify and deploy to Pages
 
 on:
   push:
     branches:
-     - master
-
+      - main
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+# Deploying to GitHub Pages needs these on the GITHUB_TOKEN.
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# One deploy at a time; a running one finishes before the next starts.
 concurrency:
-  group: "pages"
-  cancel-in-progress: true
+  group: pages
+  cancel-in-progress: false
 
 jobs:
   deploy:
@@ -24,17 +24,16 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: npm install
-        run: npm install
-      - name: Build
-        run: npm run build
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
-          path: 'dist'
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      # Checks, builds dist/ and checks it; any failure stops the deploy.
+      - run: npm run verify
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+      - id: deployment
+        uses: actions/deploy-pages@v5

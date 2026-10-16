@@ -1,0 +1,21 @@
+position: 1
+name: { en: Guitar, es: Guitarra }
+media:
+  - video: https://www.youtube.com/watch?v=JeDfZ5-xyzU
+    thumbnail: ./hells-kitchen.jpg
+    caption:
+      en: "Hell's Kitchen (Dream Theater) · 2016"
+      es: "Hell's Kitchen (Dream Theater) · 2016"
+  - video: https://www.youtube.com/watch?v=2AtPCEtDKuI
+    thumbnail: ./crying-machine.webp
+    caption: { en: "Crying Machine (Steve Vai) · 2017", es: "Crying Machine (Steve Vai) · 2017" }
+  - audio: https://soundcloud.com/victorzinho/jodete-petrucci
+    thumbnail: ./glasgow-kiss.jpg
+    caption:
+      en: "Glasgow Kiss (John Petrucci) · 2015"
+      es: "Glasgow Kiss (John Petrucci) · 2015"
+  - video: https://www.youtube.com/watch?v=ic3RxNNZidw
+    thumbnail: ./vivaldi-rv93.jpg
+    caption:
+      en: "Vivaldi, Concerto in D major, RV 93 · 2011"
+      es: "Vivaldi, Concierto en re mayor, RV 93 · 2011"

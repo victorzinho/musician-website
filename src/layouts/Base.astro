@@ -1,0 +1,358 @@
+---
+import { Font } from 'astro:assets';
+import { getAbsoluteLocaleUrl } from 'astro:i18n';
+import type { BreadcrumbList, Graph, Thing } from 'schema-dts';
+import ThemeToggle from '../components/ThemeToggle.astro';
+import { languageNames, languages, locales, localize, strings, type Lang } from '../i18n';
+import { roles, unfinished, type Role } from '../site';
+import '../styles/theme.css';
+import '../styles/base.css';
+
+interface Props {
+  lang: Lang;
+  /** Home: what follows the name (`meta.homeTitle`); other pages: what precedes it. */
+  title: string;
+  /** The search result's snippet: `meta.description` in `src/i18n.ts`, or one built per work and article. */
+  description: string;
+  /** The page's closing sentence: `codas` in `src/i18n.ts`. */
+  coda: string;
+  /** An article's publication date: link previews show the page as an article. */
+  published?: Date;
+  /** What the page is, for search engines (JSON-LD): `src/structured-data.ts`. Breadcrumbs are added here. */
+  structuredData?: Thing[];
+  /** Set by `UnderConstruction`: `noindex`. Must match `unfinished` in `src/site.ts`, which keeps it out of the sitemap. */
+  unfinished?: boolean;
+}
+
+const { lang, title, description, coda, published, structuredData = [], unfinished: isUnfinished = false } = Astro.props;
+const t = strings[lang];
+/** This page's path without its language: "/es/works/" → "/works/". */
+const page = Astro.url.pathname.slice(`/${lang}`.length) || '/';
+/** Also this page's own `hreflang` link, which search engines expect to match. */
+const canonical = getAbsoluteLocaleUrl(lang, page);
+const current = (path: string) => (page === path ? 'page' : page.startsWith(path) ? 'true' : undefined);
+const fullTitle = page === '/' ? `Víctor González · ${title}` : `${title} · Víctor González`;
+// Search engines cut titles past ~60 characters and descriptions past ~160-170; under 50, they write their own.
+if (fullTitle.length > 60) throw new Error(`${Astro.url.pathname}: title over 60 characters: ${fullTitle}`);
+if (!description || description.length < 50 || description.length > 170) {
+  throw new Error(`${Astro.url.pathname}: description not within 50–170 characters: ${description}`);
+}
+
+if (isUnfinished !== unfinished.includes(page)) {
+  throw new Error(`${Astro.url.pathname}: under construction and \`unfinished\` in src/site.ts disagree`);
+}
+
+/** Home › section › this page; the home page has none. */
+const sections: Record<string, string> = { '/works/': t.works.title, '/articles/': t.nav.articles };
+const section = Object.keys(sections).find((path) => page.startsWith(path) && page !== path);
+const trail = [
+  { name: 'Víctor González', path: '/' },
+  ...(section ? [{ name: sections[section], path: section }] : []),
+  { name: title, path: page },
+];
+const breadcrumbs: BreadcrumbList = {
+  '@type': 'BreadcrumbList',
+  itemListElement: trail.map((crumb, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: crumb.name,
+    item: getAbsoluteLocaleUrl(lang, crumb.path),
+  })),
+};
+const graph: Graph = {
+  '@context': 'https://schema.org',
+  '@graph': [...structuredData, ...(page === '/' ? [] : [breadcrumbs])],
+};
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {isUnfinished && <meta name="robots" content="noindex" />}
+    <link rel="canonical" href={canonical} />
+    {languages.map((l) => <link rel="alternate" hreflang={l} href={getAbsoluteLocaleUrl(l, page)} />)}
+    <link rel="alternate" hreflang="x-default" href={getAbsoluteLocaleUrl('en', page)} />
+    <!-- Link previews (Open Graph). The image: src/pages/og/[lang].astro. -->
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="Víctor González" />
+    <meta property="og:locale" content={locales[lang].replace('-', '_')} />
+    {languages.filter((l) => l !== lang).map((l) => <meta property="og:locale:alternate" content={locales[l].replace('-', '_')} />)}
+    <meta property="og:image" content={new URL(`/og-${lang}.jpg`, Astro.site)} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`Víctor González. ${t.home.identity}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    {
+      published ? (
+        <>
+          <meta property="og:type" content="article" />
+          <meta property="article:published_time" content={published.toISOString().slice(0, 10)} />
+          <meta property="article:author" content={getAbsoluteLocaleUrl(lang, '/about/')} />
+        </>
+      ) : (
+        <meta property="og:type" content="website" />
+      )
+    }
+    {/* `<` escaped: text in the data can't close the script. */}
+    <script type="application/ld+json" set:html={JSON.stringify(graph).replaceAll('<', '\\u003c')} />
+    <!-- Analytics: Umami Cloud, no cookies. Counts only on the live domain, not in development. -->
+    <script
+      is:inline
+      defer
+      src="https://cloud.umami.is/script.js"
+      data-website-id="c1ef88e6-9204-4800-87f5-cdc733326eda"
+      data-domains={Astro.site!.hostname}></script>
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <!-- Both Playfair styles: the footer uses italic on every page. Academico italic: quote translation notes. -->
+    <Font cssVariable="--font-heading" preload />
+    <Font
+      cssVariable="--font-body"
+      preload={[
+        { weight: '400', style: 'normal' },
+        { weight: '400', style: 'italic' },
+      ]}
+    />
+    <script is:inline>
+      try {
+        const theme = localStorage.getItem('theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <div class="masthead">
+      <header class="site-header">
+        <a class="name" href={localize(lang, '/')}>Víctor González</a>
+        <nav aria-label={t.nav.label}>
+          <ul class="roles">
+            {
+              (Object.entries(roles) as [Role, string][]).map(([role, path]) => (
+                <li>
+                  <a href={localize(lang, path)} aria-current={current(path)}>
+                    {t.nav.roles[role]}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+          <ul class="more">
+            <li><a href={localize(lang, '/articles/')} aria-current={current('/articles/')}>{t.nav.articles}</a></li>
+            <li><a href={localize(lang, '/about/')} aria-current={current('/about/')}>{t.nav.about}</a></li>
+            <li><a href={localize(lang, '/contact/')} aria-current={current('/contact/')}>{t.nav.contact}</a></li>
+          </ul>
+          {/* The same page in each language; the current one isn't a link. */}
+          <ul class="languages">
+            {
+              languages.map((l) => (
+                <li>
+                  {l === lang ? (
+                    <span aria-current="true">
+                      <span aria-hidden="true">{l.toUpperCase()}</span>
+                      <span class="visually-hidden">{languageNames[l]}</span>
+                    </span>
+                  ) : (
+                    <a href={localize(l, page)} hreflang={l} lang={l}>
+                      <span aria-hidden="true">{l.toUpperCase()}</span>
+                      <span class="visually-hidden">{languageNames[l]}</span>
+                    </a>
+                  )}
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </header>
+    </div>
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <p class="coda">{coda}</p>
+      <ThemeToggle lang={lang} />
+    </footer>
+  </body>
+</html>
+
+<style>
+  /* Main and footer form the sheet, on the surface around it: a 48rem text column inside its margins. */
+  main,
+  .site-footer {
+    --sheet-margin: 1.5rem;
+    --sheet-side: 1.5rem;
+    max-width: 48rem;
+    margin: 0 auto;
+    padding: 0 var(--sheet-side);
+    border: 1px solid var(--color-edge);
+    background-color: var(--color-bg);
+  }
+  /* One outline around both: main has no bottom edge, the footer no top edge. */
+  main {
+    border-bottom: 0;
+  }
+  .site-footer {
+    border-top: 0;
+  }
+  @media (min-width: 60rem) {
+    main,
+    .site-footer {
+      --sheet-margin: 2rem;
+      --sheet-side: 4rem;
+    }
+  }
+  /* One line on wide screens: name and the four roles on the left, the secondary links on the right. */
+  .site-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 2.5rem;
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 1.6rem;
+  }
+  .name {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--color-blue);
+    text-decoration: none;
+  }
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  nav,
+  nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+  }
+  nav {
+    flex: 1;
+    gap: 0.5rem 2.5rem;
+  }
+  nav a {
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+  nav a:hover {
+    color: var(--color-accent-text);
+  }
+  nav a[aria-current] {
+    text-decoration: underline;
+    text-decoration-color: var(--color-accent-mark);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.3em;
+  }
+  .roles {
+    gap: 0.25rem 1.5rem;
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+  }
+  .more {
+    gap: 0.25rem 1.1rem;
+    margin-left: auto;
+    font-size: 1rem;
+  }
+  .more a {
+    color: var(--color-muted);
+  }
+  .languages {
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+  }
+  .languages [aria-current] {
+    font-weight: 700;
+    color: var(--color-ink);
+  }
+  .languages a {
+    color: var(--color-muted);
+  }
+  /* Narrower, in rows: the name, the four roles, then the secondary links on the left and the languages on the right. */
+  @media (max-width: 73rem) {
+    .site-header {
+      padding-top: 1.5rem;
+      padding-bottom: 1.1rem;
+    }
+    nav,
+    .roles {
+      flex-basis: 100%;
+    }
+    .more {
+      margin-left: 0;
+    }
+    .languages {
+      margin-left: auto;
+    }
+  }
+  @media (max-width: 36rem) {
+    .name {
+      font-size: 1.7rem;
+    }
+    .roles {
+      gap: 0.25rem 1.1rem;
+      font-size: 1.2rem;
+    }
+  }
+  /* Full-width band behind the header: an edge line and a soft shadow along its bottom, both needed to read over the
+     sheet as well as the surface. */
+  .masthead {
+    z-index: 10;
+    border-bottom: 1px solid var(--color-edge);
+    background-color: var(--color-surface);
+    box-shadow: 0 2px 10px light-dark(rgb(0 0 0 / 0.12), rgb(0 0 0 / 0.6));
+  }
+  /* Sticky only while it's one row and the screen is tall enough: elsewhere (narrow, or a phone on its side) it would
+     take too much of it. */
+  @media (width > 73rem) and (height > 30rem) {
+    .masthead {
+      position: sticky;
+      top: 0;
+    }
+  }
+  /* One layer below the header: blend modes, masks and filters inside (the score preview, the portrait) can't end up
+     above the header's shadow. */
+  main {
+    position: relative;
+    z-index: 0;
+    isolation: isolate;
+    margin-top: 1.25rem;
+    padding-top: var(--sheet-margin);
+    padding-bottom: 2rem;
+  }
+  .site-footer {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: calc(17px + 1.5rem);
+    margin-bottom: 2rem;
+    padding-bottom: 1.25rem;
+    font-size: 0.95rem;
+    color: var(--color-muted);
+  }
+  .site-footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: var(--sheet-side);
+    left: var(--sheet-side);
+    height: 17px;
+    background: var(--staff);
+  }
+  .coda {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-style: italic;
+  }
+</style>

@@ -1,0 +1,77 @@
+---
+import Base from '../layouts/Base.astro';
+import { localize, strings, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+  coda: string;
+}
+
+const { lang, title, description, coda } = Astro.props;
+const t = strings[lang].construction;
+---
+
+<Base lang={lang} title={title} description={description} coda={coda} unfinished>
+  <section class="tacet">
+    <p class="label">{title}</p>
+    <h1>{t.title}</h1>
+    <svg class="rest" viewBox="0 -8 360 118" role="img" aria-label={t.figure}>
+      <g class="staff">
+        {[50, 60, 70, 80, 90].map((y) => <line x1="20" y1={y} x2="340" y2={y} />)}
+        <line x1="20" y1="50" x2="20" y2="90" />
+        <line x1="340" y1="50" x2="340" y2="90" />
+      </g>
+      <rect class="bar" x="110" y="64" width="140" height="12" />
+      <rect class="bar" x="108" y="58" width="3" height="24" />
+      <rect class="bar" x="249" y="58" width="3" height="24" />
+      <text class="count" x="180" y="40" text-anchor="middle">42</text>
+      <path class="fermata" d="M158 20 A22 20 0 0 1 202 20" />
+      <circle class="bar" cx="180" cy="15" r="2.6" />
+    </svg>
+    <p>{t.text}</p>
+    <p><a href={localize(lang, '/')}>{t.back}</a></p>
+  </section>
+</Base>
+
+<style>
+  .tacet {
+    text-align: center;
+    padding: 2rem 0 3rem;
+  }
+  .label {
+    margin-bottom: 0.5rem;
+  }
+  h1 {
+    margin: 0;
+    font-size: 3.5rem;
+    font-style: italic;
+  }
+  .rest {
+    display: block;
+    width: min(100%, 26rem);
+    margin: 1.5rem auto;
+  }
+  .staff line {
+    stroke: var(--color-muted);
+    stroke-width: 1.2;
+  }
+  .bar {
+    fill: var(--color-ink);
+  }
+  .count {
+    font-family: var(--font-heading);
+    font-size: 24px;
+    font-weight: 700;
+    fill: var(--color-ink);
+  }
+  .fermata {
+    fill: none;
+    stroke: var(--color-accent-mark);
+    stroke-width: 3;
+  }
+  .fermata + .bar {
+    fill: var(--color-accent-mark);
+  }
+</style>

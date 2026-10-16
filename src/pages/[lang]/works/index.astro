@@ -1,0 +1,128 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import ExcerptChip from '../../../components/ExcerptChip.astro';
+import Quote from '../../../components/Quote.astro';
+import { codas, langPaths, localize, strings, type Lang } from '../../../i18n';
+import { hasScore, scorePath } from '../../../scores';
+import { excerpt, performance } from '../../../works';
+
+export const getStaticPaths = (() => langPaths()) satisfies GetStaticPaths;
+
+const lang = Astro.currentLocale as Lang;
+const t = strings[lang];
+
+const works = (await getCollection('works')).sort(
+  (a, b) => b.data.year - a.data.year || a.data.title.localeCompare(b.data.title),
+);
+---
+
+<Base lang={lang} title={t.works.title} description={t.meta.description.works} coda={codas.works}>
+  <h1 class="visually-hidden">{t.works.title}</h1>
+  <div class="opening">
+    {t.works.intro && <p class="intro">{t.works.intro}</p>}
+    <Quote id="composer" lang={lang} />
+  </div>
+
+  <hr />
+
+  <ul class="works">
+    {
+      works.map((work) => (
+        <li>
+          <span class="year">{work.data.year}</span>
+          <a class="title" href={localize(lang, `/works/${work.id}/`)}>
+            {work.data.title}
+          </a>
+          <div class="details">
+            <p class="forces">
+              {work.data.forces[lang]} ({work.data.duration}'){' '}
+              <span class="chips">
+                {hasScore(work.id) && (
+                  <a class="chip" href={scorePath(work.id)} target="_blank" data-umami-event="score" data-umami-event-work={work.id}>
+                    {t.works.labels.score} <span aria-hidden="true">↗</span>
+                    <span class="visually-hidden">{t.works.labels.newTab}</span>
+                  </a>
+                )}
+                {excerpt(work, lang) && <ExcerptChip {...excerpt(work, lang)!} title={work.data.title} lang={lang} />}
+              </span>
+            </p>
+            {performance(work, lang) && <p class="performance">{performance(work, lang)}</p>}
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+
+  <hr class="rule" />
+  <p class="contact">
+    {t.works.contact.text} <a href={localize(lang, '/contact/')}>{t.works.contact.link} →</a>
+  </p>
+</Base>
+
+<style>
+  .opening {
+    display: grid;
+    gap: 1.25rem;
+  }
+  .intro {
+    margin: 0;
+  }
+  .works {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  /* One line per work, in aligned columns; stacked under the title on narrow screens. */
+  .works li {
+    display: grid;
+    grid-template-columns: 3rem 14rem 1fr;
+    gap: 0.4rem 1rem;
+    align-items: baseline;
+    padding: 0.7rem 0;
+  }
+  .year {
+    font-size: 0.95rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-muted);
+  }
+  .title {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    line-height: 1.3;
+    text-decoration: none;
+  }
+  .details p {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--color-muted);
+  }
+  .details .performance {
+    margin-top: 0.3rem;
+    font-style: italic;
+  }
+  .contact {
+    margin: 0;
+  }
+  /* The chips wrap to the next line together, never one by one. The space before them, not a margin, separates them
+     from the forces, so a wrapped group starts flush. */
+  .chips {
+    display: inline-flex;
+    gap: 0.35rem;
+    vertical-align: 0.1em;
+    white-space: nowrap;
+  }
+  .chips:empty {
+    display: none;
+  }
+  @media (max-width: 40rem) {
+    .works li {
+      grid-template-columns: 3rem 1fr;
+    }
+    .details {
+      grid-column: 2;
+    }
+  }
+</style>

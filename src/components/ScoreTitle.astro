@@ -1,0 +1,38 @@
+---
+interface Props {
+  title: string;
+  /** The forces, as under a score's title: "for female choir". */
+  subtitle: string;
+}
+
+const { title, subtitle } = Astro.props;
+---
+
+<div class="score-title">
+  <h1>{title}</h1>
+  <p class="subtitle">{subtitle}</p>
+</div>
+
+<style>
+  /* Centred, as on a score's first page. The title is trimmed to its cap height so whatever sits level with its top
+     lines up with the letters. */
+  .score-title {
+    text-align: center;
+  }
+  /* `--title-inset`: room kept clear on both sides, so the title stays centred beside a back link. */
+  h1 {
+    margin: 0 0 0.4rem;
+    padding-inline: var(--title-inset, 0);
+    font-size: clamp(1.9rem, 6vw, 2.6rem);
+    line-height: 1.12;
+    color: var(--color-blue);
+    text-box: trim-start cap alphabetic;
+  }
+  .subtitle {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--color-muted);
+  }
+</style>

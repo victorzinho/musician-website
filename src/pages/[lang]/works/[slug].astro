@@ -1,0 +1,384 @@
+---
+import type { GetStaticPaths, ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+import { getCollection, getEntry, render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import BackLink from '../../../components/BackLink.astro';
+import Player from '../../../components/Player.astro';
+import ScoreTitle from '../../../components/ScoreTitle.astro';
+import YouTube from '../../../components/YouTube.astro';
+import { youtubeId } from '../../../youtube';
+import { codas, languages, locales, localize, strings, type Lang } from '../../../i18n';
+import { hasScore, scorePath } from '../../../scores';
+import type { MusicComposition } from 'schema-dts';
+import { person } from '../../../structured-data';
+import { download, fileUrl, licenses } from '../../../works';
+
+export const getStaticPaths = (async () => {
+  const works = await getCollection('works');
+  for (const work of works) {
+    for (const lang of languages) {
+      if (!(await getEntry('notes', `${work.id}/${lang}`))) throw new Error(`${work.id}: no ${lang}.md note`);
+    }
+  }
+  return languages.flatMap((lang) => works.map((work) => ({ params: { lang, slug: work.id }, props: { work } })));
+}) satisfies GetStaticPaths;
+
+/** A glimpse of each score, exported from Sibelius. */
+const previews = import.meta.glob<{ default: ImageMetadata }>('/src/content/works/*/score-preview.png', { eager: true });
+
+const lang = Astro.currentLocale as Lang;
+const t = strings[lang];
+const { work } = Astro.props;
+const { title, year, forces, duration, license, text, premiere, recordings = [], resources = [] } = work.data;
+const { Content } = await render((await getEntry('notes', `${work.id}/${lang}`))!);
+
+const score = hasScore(work.id) ? scorePath(work.id) : undefined;
+const preview = previews[`/src/content/works/${work.id}/score-preview.png`]?.default;
+if (score && !preview) throw new Error(`${work.id}: no score-preview.png; export one from Sibelius`);
+
+const shown = recordings.filter((r) => !r.excerpt);
+const videos = shown.flatMap((r) => {
+  const id = r.url && youtubeId(r.url);
+  return id ? [{ ...r, id }] : [];
+});
+/** Local files and SoundCloud tracks, after the videos. */
+const audios = shown.filter((r) => r.file || !youtubeId(r.url!));
+/** A staff after the note, a single line after the recordings; each only when something follows. */
+const recorded = videos.length + audios.length > 0;
+const afterRecordings = score !== undefined || resources.length > 0;
+/** The title; without title or description, "Mockup" or "Studio recording", and nothing for a performance. */
+const heading = (r: (typeof recordings)[number]) =>
+  r.title?.[lang] ?? (r.description || r.kind === 'performance' ? undefined : t.works.labels[r.kind]);
+
+const subtitle = `${t.works.page.for} ${forces[lang].charAt(0).toLowerCase()}${forces[lang].slice(1)}`;
+const { by, ...has } = t.meta.work;
+const description = `${title} (${year}), ${subtitle}, ${by}: ${new Intl.ListFormat(locales[lang]).format([
+  has.note,
+  ...(score ? [has.score] : []),
+  ...(recorded ? [has.recordings] : []),
+])}.`;
+const composition: MusicComposition = {
+  '@type': 'MusicComposition',
+  name: title,
+  url: Astro.url.href,
+  description,
+  composer: person,
+  dateCreated: String(year),
+  license: licenses[license].url,
+  ...(text && { lyricist: { '@type': 'Person', name: text.author } }),
+  ...(premiere && {
+    firstPerformance: {
+      '@type': 'Event',
+      name: title,
+      startDate: typeof premiere.date === 'string' ? premiere.date : premiere.date.toISOString().slice(0, 10),
+      ...(premiere.venue && { location: { '@type': 'Place', name: premiere.venue } }),
+      ...(premiere.performers && { performer: { '@type': 'PerformingGroup', name: premiere.performers } }),
+    },
+  }),
+  recordedAs: recordings
+    .filter((r) => r.url)
+    .map((r) => {
+      const name = (r.title ?? r.description)?.[lang];
+      return { '@type': 'MusicRecording', url: r.url, ...(name && { name }) };
+    }),
+};
+/** A day in full; a month ("2024-06") as month and year. */
+const date = (d: Date | string) =>
+  typeof d === 'string'
+    ? new Date(`${d}-01`).toLocaleDateString(lang, { month: 'long', year: 'numeric', timeZone: 'UTC' })
+    : d.toLocaleDateString(lang, { dateStyle: 'long', timeZone: 'UTC' });
+---
+
+<Base lang={lang} title={title} description={description} coda={codas.works} structuredData={[composition]}>
+  <article>
+    <BackLink href={localize(lang, '/works/')} text={t.works.title} />
+    <header class="title-block">
+      <ScoreTitle title={title} subtitle={subtitle} />
+      {/* Labelled like a concert programme; each row a dt/dd pair, laid out on one shared grid. */}
+      <dl class="details">
+        <div>
+          <dt>{t.works.page.year}</dt>
+          <dd>{year}</dd>
+        </div>
+        <div>
+          <dt>{t.works.page.duration}</dt>
+          <dd>{duration} min</dd>
+        </div>
+        {
+          text && (
+            <div>
+              <dt>{t.works.page.text}</dt>
+              <dd>
+                {text.author}, <cite>{text.title}</cite>
+              </dd>
+            </div>
+          )
+        }
+        {
+          premiere && (
+            <div>
+              <dt>{t.works.page.premiere}</dt>
+              <dd>
+                {[premiere.performers, premiere.venue].filter(Boolean).join(', ')}
+                <span class="when">{date(premiere.date)}</span>
+              </dd>
+            </div>
+          )
+        }
+      </dl>
+      {
+        score && (
+          <p class="chips">
+            <a class="chip" href={score} target="_blank" data-umami-event="score" data-umami-event-work={work.id}>
+              {t.works.labels.score} <span aria-hidden="true">↗</span>
+              <span class="visually-hidden">{t.works.labels.newTab}</span>
+            </a>
+          </p>
+        )
+      }
+    </header>
+
+    <div class="note">
+      <Content />
+    </div>
+
+    {(recorded || afterRecordings) && <hr />}
+
+    {
+      videos.map((v) => (
+        <YouTube id={v.id} title={`${title}: ${t.works.page.video}`}>
+          {heading(v) && <span class="credit">{heading(v)}</span>}
+          {v.description && <span class="description">{v.description[lang]}</span>}
+        </YouTube>
+      ))
+    }
+
+    {
+      audios.length > 0 && (
+        <div class="audios">
+          {audios.map((r) =>
+            r.file ? (
+              <Player title={title} lang={lang} src={fileUrl(work, r.file)}>
+                {heading(r) && <p class="credit">{heading(r)}</p>}
+                {r.description && <p class="meta">{r.description[lang]}</p>}
+              </Player>
+            ) : (
+              <Player title={title} lang={lang} soundcloud={r.url!}>
+                {heading(r) && <p class="credit">{heading(r)}</p>}
+                {r.description && <p class="meta">{r.description[lang]}</p>}
+                <p class="attribution" slot="after">
+                  <a class="chip" href={r.url} target="_blank">
+                    SoundCloud <span aria-hidden="true">↗</span>
+                    <span class="visually-hidden">{t.works.labels.newTab}</span>
+                  </a>
+                </p>
+              </Player>
+            ),
+          )}
+        </div>
+      )
+    }
+
+    {recorded && afterRecordings && <hr class="rule" />}
+
+    {
+      score && preview && (
+        <figure class="score">
+          <a class="peek" href={score} target="_blank" data-umami-event="score" data-umami-event-work={work.id}>
+            <Image
+              src={preview}
+              alt={`${t.works.page.score}: ${title}`}
+              widths={[640, 1240]}
+              sizes="(min-width: 48rem) 40rem, 100vw"
+            />
+          </a>
+        </figure>
+      )
+    }
+
+    {
+      resources.length > 0 && (
+        <section class="resources">
+          <h2 class="label">{t.works.page.resources}</h2>
+          <ul>
+            {resources.map((r) => {
+              const file = download(work, r.file);
+              return (
+                <li>
+                  <p class="credit">
+                    {r.name[lang]}{' '}
+                    <a class="chip" href={file.url} download={`${work.id}-${r.file}`}>
+                      {file.type} · {file.size} <span aria-hidden="true">↓</span>
+                      <span class="visually-hidden">{t.works.page.download}</span>
+                    </a>
+                  </p>
+                  {r.description && <p class="meta">{r.description[lang]}</p>}
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      )
+    }
+
+    {/* The small print at the foot of a score's title page. */}
+    <footer class="colophon">
+      <p class="license">
+        © {year} Víctor González ·{' '}
+        <a href={licenses[license].url} rel="license">{licenses[license].name}</a>
+      </p>
+    </footer>
+  </article>
+</Base>
+
+<style>
+  /* The back link and the title share one top edge, 1rem into the sheet; the title keeps clear of the link. */
+  article {
+    --top: 1rem;
+    --title-inset: 7rem;
+    position: relative;
+    padding-top: var(--top);
+  }
+  @media (max-width: 40rem) {
+    article {
+      --title-inset: 0;
+    }
+  }
+  .title-block {
+    text-align: center;
+  }
+  /* As wide as the longest row and centred; labels and values each share a left edge. Labels above values on narrow
+     screens. */
+  .details {
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: center;
+    align-items: baseline;
+    gap: 0.35rem 1rem;
+    margin: 1.75rem auto 0;
+    padding: 0.9rem 0;
+    border-block: 1px solid var(--color-rule);
+    text-align: left;
+    line-height: 1.5;
+  }
+  .details div {
+    display: contents;
+  }
+  .details dt {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .details dd {
+    margin: 0;
+    font-size: 1rem;
+  }
+  .when {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--color-muted);
+  }
+  @media (max-width: 36rem) {
+    .details {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+    .details div + div dt {
+      margin-top: 0.6rem;
+    }
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.35rem;
+    margin: 1.5rem 0 0;
+  }
+  .note {
+    margin: 2.25rem 0;
+  }
+  .note :global(p) {
+    margin: 0 0 1rem;
+  }
+  .note :global(p:last-child) {
+    margin-bottom: 0;
+  }
+  /* A glimpse of the music that opens the full score. Light: the page takes the paper's tone; dark: the page as printed,
+     black on white. */
+  .peek {
+    display: block;
+    border: 1px solid var(--color-rule);
+    box-shadow: 0 2px 10px light-dark(rgb(0 0 0 / 0.08), rgb(0 0 0 / 0.5));
+    transition: box-shadow 0.2s;
+  }
+  .peek:hover {
+    box-shadow: 0 4px 18px light-dark(rgb(0 0 0 / 0.16), rgb(0 0 0 / 0.7));
+  }
+  .peek img {
+    display: block;
+    width: 100%;
+    height: auto;
+    mix-blend-mode: multiply;
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme='light'])) .peek img {
+      mix-blend-mode: normal;
+    }
+  }
+  :global(:root[data-theme='dark']) .peek img {
+    mix-blend-mode: normal;
+  }
+  .colophon {
+    margin-top: 2.5rem;
+    font-size: 0.85rem;
+    font-style: italic;
+    text-align: center;
+    color: var(--color-muted);
+  }
+  .colophon p {
+    margin: 0.25rem 0;
+  }
+  .credit {
+    margin: 0;
+    color: var(--color-ink);
+  }
+  :global(figcaption) span {
+    display: block;
+  }
+  .resources {
+    margin: 2.5rem 0;
+  }
+  .resources ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .resources li {
+    padding: 0.6rem 0;
+  }
+  .resources li + li {
+    border-top: 1px solid var(--color-rule);
+  }
+  .resources .chip {
+    white-space: nowrap;
+  }
+  /* Centred, as wide as a player's button and its longest seek bar. */
+  .audios {
+    display: grid;
+    grid-template-columns: min(100%, 24rem);
+    justify-content: center;
+    gap: 1.5rem;
+    margin: 2.5rem 0;
+  }
+  .attribution {
+    margin: 0.5rem 0 0;
+  }
+  .license {
+    margin-top: 1rem;
+    font-style: normal;
+    font-variant-numeric: tabular-nums;
+  }
+</style>

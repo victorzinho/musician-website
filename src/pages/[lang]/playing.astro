@@ -1,0 +1,106 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection, getEntry, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Quote from '../../components/Quote.astro';
+import Stage, { type StageItem } from '../../components/Stage.astro';
+import { yearSpan } from '../../cv';
+import { codas, languages, langPaths, localize, strings, type Lang } from '../../i18n';
+
+export const getStaticPaths = (() => langPaths()) satisfies GetStaticPaths;
+
+const lang = Astro.currentLocale as Lang;
+const t = strings[lang];
+
+const groups = await Promise.all(
+  (await getCollection('playing'))
+    .sort((a, b) => a.data.position - b.data.position)
+    .map(async ({ id, data }) => {
+      const texts = await Promise.all(languages.map((l) => getEntry('playingTexts', `${id}/${l}`)));
+      if (texts.some(Boolean) && !texts.every(Boolean)) throw new Error(`src/content/playing/${id}/: en.md and es.md, or neither`);
+      const text = texts[languages.indexOf(lang)];
+      return {
+        id,
+        name: typeof data.name === 'string' ? data.name : data.name[lang],
+        about: data.about?.[lang],
+        /** As on the CV: the role, then the years. */
+        role: [data.role?.[lang], yearSpan(data.start, data.end)].filter(Boolean).join(' · '),
+        highlights: (data.highlights ?? []).map((h) => h[lang]),
+        Text: text && (await render(text)).Content,
+        items: data.media.map((m): StageItem => {
+          const shared = { slug: m.slug, caption: m.caption[lang] };
+          if ('video' in m) return { ...shared, kind: 'video', url: m.video, thumbnail: m.thumbnail };
+          if ('audio' in m) return { ...shared, kind: 'audio', soundcloud: m.audio, thumbnail: m.thumbnail, title: shared.caption };
+          return { ...shared, kind: 'photo', photo: m.photo };
+        }),
+      };
+    }),
+);
+---
+
+<Base lang={lang} title={t.nav.roles.performer} description={t.meta.description.playing} coda={codas.playing}>
+  <h1 class="visually-hidden">{t.nav.roles.performer}</h1>
+  <div class="opening">
+    {t.playing.intro && <p class="intro">{t.playing.intro}</p>}
+    <Quote id="performer" lang={lang} />
+  </div>
+
+  {
+    groups.map(({ id, name, about, role, highlights, Text, items }, i) => (
+      <>
+        {i === 0 ? <hr /> : <hr class="rule" />}
+        <section aria-labelledby={id}>
+          <h2 id={id}>{name}</h2>
+          {about && <p class="meta">{about}</p>}
+          <p class="meta">{role}</p>
+          <Stage id={id} items={items} lang={lang} />
+          {highlights.length > 0 && (
+            <ul class="highlights accents">
+              {highlights.map((h) => <li>{h}</li>)}
+            </ul>
+          )}
+          {Text && (
+            <div class="text">
+              <Text />
+            </div>
+          )}
+        </section>
+      </>
+    ))
+  }
+
+  <hr class="rule" />
+  <p class="contact">
+    {t.playing.contact.text} <a href={localize(lang, '/contact/')}>{t.playing.contact.link} →</a>
+  </p>
+</Base>
+
+<style>
+  .opening {
+    display: grid;
+    gap: 1.25rem;
+  }
+  .intro {
+    margin: 0;
+  }
+  h2 {
+    margin: 0;
+  }
+  /* Description, then role and years; the stage keeps its own margin below them. */
+  section > .meta {
+    margin: 0.25rem 0 0;
+  }
+  /* As the facts on About. */
+  .highlights {
+    margin: 0 0 1rem;
+    font-size: 0.9rem;
+    color: var(--color-muted);
+  }
+  /* A link to an item stops with the group's name, description, role and years in view, above the stage. */
+  section :global([data-panel]) {
+    scroll-margin-top: 7rem;
+  }
+  .contact {
+    margin: 0;
+  }
+</style>

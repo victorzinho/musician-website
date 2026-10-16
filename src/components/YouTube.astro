@@ -1,0 +1,33 @@
+---
+import { youtubeEmbed } from '../youtube';
+
+interface Props {
+  /** The video id, `v=` in a YouTube URL. */
+  id: string;
+  /** Names the embed for screen readers. */
+  title: string;
+}
+
+const { id, title } = Astro.props;
+const caption = (await Astro.slots.render('default')).trim();
+---
+
+<figure>
+  <iframe
+    src={youtubeEmbed(id)}
+    title={title}
+    loading="lazy"
+    allow="encrypted-media; picture-in-picture; fullscreen"
+    referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  {caption && <figcaption set:html={caption} />}
+</figure>
+
+<style>
+  iframe {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: 0;
+    background: var(--color-surface);
+  }
+</style>

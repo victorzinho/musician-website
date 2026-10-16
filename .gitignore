@@ -2,3 +2,9 @@
 .idea/
 node_modules/
 dist/
+.astro/
+.docs/
+interviews/
+/parked/
+/REVAMP.md
+/ROADMAP.md
