@@ -1,0 +1,38 @@
+---
+interface Props {
+  href: string;
+  text: string;
+  /** On its own line above the title, instead of beside it. */
+  above?: boolean;
+}
+
+const { href, text, above = false } = Astro.props;
+---
+
+<p class:list={['label', 'back', { above }]}><a href={href}>← {text}</a></p>
+
+<style>
+  /* Out of the flow at the page's top left, its cap height level with the title's: the parent sets `--top` as its own
+     top padding and is positioned, and keeps the title clear of it with ScoreTitle's `--title-inset`. On narrow screens,
+     its own line above the title. */
+  .back {
+    position: absolute;
+    top: var(--top);
+    margin: 0;
+    text-box: trim-start cap alphabetic;
+  }
+  .above {
+    position: static;
+    margin-bottom: 1.25rem;
+  }
+  @media (max-width: 40rem) {
+    .back {
+      position: static;
+      margin-bottom: 1.25rem;
+    }
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+</style>

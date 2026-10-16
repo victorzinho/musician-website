@@ -1,0 +1,11 @@
+---
+import type { GetStaticPaths } from 'astro';
+import UnderConstruction from '../../components/UnderConstruction.astro';
+import { codas, langPaths, strings, type Lang } from '../../i18n';
+
+export const getStaticPaths = (() => langPaths()) satisfies GetStaticPaths;
+
+const lang = Astro.currentLocale as Lang;
+---
+
+<UnderConstruction lang={lang} title={strings[lang].nav.roles.producer} description={strings[lang].meta.description.studio} coda={codas.studio} />

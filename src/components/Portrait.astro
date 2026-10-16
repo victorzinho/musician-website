@@ -1,0 +1,46 @@
+---
+import { Image } from 'astro:assets';
+import photo from '../assets/victor.jpg';
+
+interface Props {
+  /** Shown width and height, in rem. */
+  size: number;
+}
+
+const { size } = Astro.props;
+---
+
+<Image
+  src={photo}
+  alt="Víctor González"
+  width={size * 32}
+  height={size * 32}
+  class="portrait"
+  style={`--size: ${size}rem`}
+  loading="eager"
+/>
+
+<style>
+  /* Light: blended into the paper. Dark: rounded and dimmed. */
+  .portrait {
+    display: block;
+    width: var(--size);
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+    mix-blend-mode: multiply;
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme='light'])) .portrait {
+      mix-blend-mode: normal;
+      border-radius: 10px;
+      filter: brightness(0.82);
+    }
+  }
+  :global(:root[data-theme='dark']) .portrait {
+    mix-blend-mode: normal;
+    border-radius: 10px;
+    filter: brightness(0.82);
+  }
+</style>

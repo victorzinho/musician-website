@@ -1,0 +1,28 @@
+#- title: Turbulence in Circles
+#  context:
+#    en: Orchestral mockup, excerpt
+#    es: Maqueta orquestal, extracto
+#  audio: works/turbulence-in-circles/excerpt.mp3
+#  href: /works/turbulence-in-circles/
+#  tags: [composer, producer, mockup]
+- title: Gravitational Kook
+  context:
+    en: Antara Ensemble
+    es: Antara Ensemble
+  audio: works/gravitational-kook/excerpt.mp3
+  href: /works/gravitational-kook/
+  tags: [composer]
+- title: Ese Mi parece un Mi♭
+  context:
+    en: Fretless electric guitar and electronics
+    es: Guitarra eléctrica sin trastes y electrónica
+  audio: works/ese-mi-parece-un-mi-bemol/excerpt.mp3
+  href: /works/ese-mi-parece-un-mi-bemol/
+  tags: [composer, producer, engineer]
+- title: Glasgow Kiss (John Petrucci)
+  context:
+    en: Electric guitar cover
+    es: Versión a guitarra eléctrica
+  audio: playing/guitar/glasgow-kiss.mp3
+  href: /playing/#guitar-glasgow-kiss
+  tags: [performer]

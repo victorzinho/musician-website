@@ -1,0 +1,19 @@
+# Placeholders until real quotes arrive, with permission (ROADMAP, sprint 5); live on purpose, as an invitation.
+- id: composer
+  lang: en
+  text: An empty space beside the stand, the score open at the first page. Whoever played it hasn't sat down yet.
+  translations:
+    es: Un espacio vacío junto al atril, la partitura abierta por la primera página. Quien la tocó aún no ha llegado.
+  name: "..."
+  role:
+    en: the score is on the stand
+    es: la partitura está en el atril
+- id: performer
+  lang: en
+  text: Open mic at the front of the stage. The band waits for whoever played with him to step up.
+  translations:
+    es: Micro abierto al borde del escenario. La banda espera a que suba quien tocó con él.
+  name: "..."
+  role:
+    en: the stage is yours
+    es: el escenario es tuyo

@@ -1,0 +1,424 @@
+---
+import type { ImageMetadata } from 'astro';
+import { getImage, Image } from 'astro:assets';
+import Player from './Player.astro';
+import { strings, type Lang } from '../i18n';
+import { youtubeId } from '../youtube';
+
+export type StageItem = { /** Unique in the stage: its panel is `#<id>-<slug>`. */ slug: string; caption: string } & (
+  | { kind: 'video'; url: string; thumbnail: ImageMetadata }
+  | { kind: 'photo'; photo: ImageMetadata }
+  | { kind: 'audio'; soundcloud: string; thumbnail?: ImageMetadata; title: string }
+);
+
+interface Props {
+  /** Unique on the page; prefixes the panels' ids, which links can point to. */
+  id: string;
+  /** Best first: the first item is the one on stage. */
+  items: StageItem[];
+  lang: Lang;
+}
+
+const { id, items, lang } = Astro.props;
+const t = strings[lang];
+const sizes = '(max-width: 48rem) 100vw, 48rem';
+/** The full-size photo the lightbox opens. */
+const full = async (photo: ImageMetadata) => (await getImage({ src: photo, width: Math.min(photo.width, 2400) })).src;
+const panels = await Promise.all(
+  items.map(async (item) => ({ ...item, full: item.kind === 'photo' ? await full(item.photo) : undefined })),
+);
+const thumbnail = (item: StageItem) => (item.kind === 'photo' ? item.photo : item.thumbnail);
+---
+
+{
+  /* One item on stage, the rest as thumbnails below it. Without JavaScript every item is shown, one after another, and
+     videos and photos are links. */
+}
+<div class="stage" data-stage>
+  {
+    panels.map((item) => (
+      <figure class="panel" id={`${id}-${item.slug}`} data-panel>
+        <div class="screen">
+          {item.kind === 'video' && (
+            <a class="facade" href={item.url} data-video={youtubeId(item.url)} aria-label={`${t.player.play}: ${item.caption}`}>
+              <Image src={item.thumbnail} alt="" widths={[640, 960, 1280]} sizes={sizes} />
+              <span class="play" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="32" height="32">
+                  <path d="M8 5v14l11-7z" fill="currentColor" />
+                </svg>
+              </span>
+            </a>
+          )}
+          {item.kind === 'photo' && (
+            <a class="photo" href={item.full} data-photo aria-label={`${t.playing.stage.open}: ${item.caption}`}>
+              <Image src={item.photo} alt={item.caption} widths={[640, 960, 1280]} sizes={sizes} />
+            </a>
+          )}
+          {item.kind === 'audio' && (
+            <>
+              {item.thumbnail && <Image src={item.thumbnail} alt="" widths={[640, 960, 1280]} sizes={sizes} />}
+              <div class="overlay">
+                <div class="card">
+                  <Player title={item.title} lang={lang} soundcloud={item.soundcloud}>
+                    <p class="attribution" slot="after">
+                      <a class="chip" href={item.soundcloud} target="_blank">
+                        SoundCloud <span aria-hidden="true">↗</span>
+                        <span class="visually-hidden">{t.works.labels.newTab}</span>
+                      </a>
+                    </p>
+                  </Player>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+        <figcaption>{item.caption}</figcaption>
+      </figure>
+    ))
+  }
+  {
+    items.length > 1 && (
+      <div class="steps" data-steps hidden>
+        <button type="button" data-step="-1" aria-label={t.playing.stage.previous}>
+          <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+            <path d="M15.4 7.4 14 6l-6 6 6 6 1.4-1.4L10.8 12z" fill="currentColor" />
+          </svg>
+        </button>
+        <button type="button" data-step="1" aria-label={t.playing.stage.next}>
+          <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+            <path d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z" fill="currentColor" />
+          </svg>
+        </button>
+      </div>
+    )
+  }
+  {
+    items.length > 1 && (
+      <ul class="strip" data-strip hidden>
+        {items.map((item) => (
+          <li>
+            <button type="button" aria-controls={`${id}-${item.slug}`} aria-label={item.caption}>
+              {thumbnail(item) ? (
+                <Image src={thumbnail(item)!} alt="" width={240} />
+              ) : (
+                <span class="tile" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="22" height="22">
+                    <path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3z" fill="currentColor" />
+                  </svg>
+                </span>
+              )}
+              {item.kind === 'video' && (
+                <span class="badge" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="14" height="14">
+                    <path d="M8 5v14l11-7z" fill="currentColor" />
+                  </svg>
+                </span>
+              )}
+            </button>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+  {
+    items.some((item) => item.kind === 'photo') && (
+      <dialog class="lightbox" data-lightbox aria-label={t.playing.stage.open}>
+        <button class="close" type="button" aria-label={t.playing.stage.close}>×</button>
+      </dialog>
+    )
+  }
+</div>
+
+<script>
+  import { exclusive } from '../player';
+  import { youtubeEmbed } from '../youtube';
+
+  for (const stage of document.querySelectorAll<HTMLElement>('[data-stage]')) {
+    const panels = [...stage.querySelectorAll<HTMLElement>('[data-panel]')];
+    const buttons = [...stage.querySelectorAll<HTMLButtonElement>('[data-strip] button')];
+    const lightbox = stage.querySelector<HTMLDialogElement>('[data-lightbox]');
+
+    /** Puts the playing video's thumbnail back, which stops it. */
+    let stopVideo = () => {};
+    const pauseOthers = exclusive(() => stopVideo());
+
+    let current = 0;
+    const show = (index: number) => {
+      current = index;
+      stopVideo();
+      pauseOthers();
+      panels.forEach((panel, i) => (panel.hidden = i !== index));
+      buttons.forEach((button, i) =>
+        i === index ? button.setAttribute('aria-current', 'true') : button.removeAttribute('aria-current'),
+      );
+    };
+
+    for (const facade of stage.querySelectorAll<HTMLAnchorElement>('[data-video]')) {
+      facade.addEventListener('click', (event) => {
+        event.preventDefault();
+        stopVideo();
+        pauseOthers();
+        const iframe = document.createElement('iframe');
+        // Started by the click, so it plays at once.
+        iframe.src = `${youtubeEmbed(facade.dataset.video!)}?autoplay=1`;
+        iframe.title = facade.getAttribute('aria-label')!;
+        iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+        iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+        facade.replaceWith(iframe);
+        stopVideo = () => {
+          iframe.replaceWith(facade);
+          stopVideo = () => {};
+        };
+      });
+    }
+
+    if (lightbox) {
+      // Created here: an <img> without src is invalid HTML.
+      const image = document.createElement('img');
+      lightbox.prepend(image);
+      for (const photo of stage.querySelectorAll<HTMLAnchorElement>('[data-photo]')) {
+        photo.addEventListener('click', (event) => {
+          event.preventDefault();
+          image.src = photo.href;
+          image.alt = photo.querySelector('img')!.alt;
+          lightbox.showModal();
+        });
+      }
+      // Any click closes it: the photo, the backdrop or the button.
+      lightbox.addEventListener('click', () => lightbox.close());
+    }
+
+    stage.dataset.js = '';
+    if (buttons.length > 0) {
+      stage.querySelector<HTMLElement>('[data-strip]')!.hidden = false;
+      /** Shows a panel and points the address at it, ready to copy; no step back per click. */
+      const pick = (index: number) => {
+        show(index);
+        history.replaceState(null, '', `#${panels[index].id}`);
+      };
+      buttons.forEach((button, i) => button.addEventListener('click', () => pick(i)));
+      const steps = stage.querySelector<HTMLElement>('[data-steps]')!;
+      steps.hidden = false;
+      for (const step of steps.querySelectorAll<HTMLButtonElement>('[data-step]')) {
+        step.addEventListener('click', () => {
+          // Wraps around at both ends.
+          pick((current + Number(step.dataset.step) + panels.length) % panels.length);
+          buttons[current].scrollIntoView({ block: 'nearest', inline: 'nearest' });
+        });
+      }
+      /** Shows the panel the address points at, if it's in this stage. */
+      const showLinked = () => {
+        const linked = panels.findIndex((panel) => panel.id === decodeURIComponent(location.hash.slice(1)));
+        if (linked < 0) return false;
+        show(linked);
+        // Hidden until now, so the browser couldn't scroll to it.
+        panels[linked].scrollIntoView();
+        return true;
+      };
+      addEventListener('hashchange', showLinked);
+      if (!showLinked()) show(0);
+    }
+  }
+</script>
+
+<style>
+  .stage {
+    position: relative;
+    margin: 1.25rem 0;
+  }
+  .panel {
+    margin: 0;
+  }
+  /* Stacked only without JavaScript; with it, one panel shows at a time. */
+  .stage:not([data-js]) .panel + .panel {
+    margin-top: 2.5rem;
+  }
+  .panel[hidden] {
+    display: none;
+  }
+  /* Every item in the same 16:9 frame, so switching never moves the page; portrait photos are letterboxed. */
+  .screen {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--color-surface);
+  }
+  .screen img,
+  .screen :global(iframe) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    object-fit: contain;
+  }
+  .facade,
+  .photo {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .photo {
+    cursor: zoom-in;
+  }
+  /* Terracotta for what plays. */
+  .play {
+    position: absolute;
+    inset: 50% auto auto 50%;
+    display: grid;
+    place-items: center;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    color: #fff;
+    background: var(--color-accent-mark);
+    box-shadow: 0 2px 10px rgb(0 0 0 / 0.3);
+    transform: translate(-50%, -50%);
+    transition: transform 0.15s;
+  }
+  .facade:hover .play,
+  .facade:focus-visible .play {
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+  /* An audio track plays from a card in the middle of its picture. */
+  .overlay {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+  }
+  .card {
+    margin-top: 5em;
+    width: min(26rem, 85%);
+    padding: 1rem 1.25rem;
+    border-radius: 6px;
+    background: var(--color-bg);
+    box-shadow: 0 2px 12px rgb(0 0 0 / 0.3);
+  }
+  .attribution {
+    margin: 0.5rem 0 0;
+  }
+  /* Over the frame's edges: as wide as the stage, as tall as its 16:9 frame. */
+  .steps {
+    position: absolute;
+    inset: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    aspect-ratio: 16 / 9;
+    padding: 0 0.5rem;
+    pointer-events: none;
+  }
+  .steps[hidden] {
+    display: none;
+  }
+  .steps button {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    color: #fff;
+    background: rgb(0 0 0 / 0.5);
+    cursor: pointer;
+    pointer-events: auto;
+    transition: background 0.15s;
+  }
+  .steps button:hover,
+  .steps button:focus-visible {
+    background: rgb(0 0 0 / 0.75);
+  }
+  /* Scrolls sideways when it doesn't fit, snapping to whole thumbnails. */
+  .strip {
+    display: flex;
+    gap: 0.5rem;
+    margin: 1rem 0 0;
+    padding: 0 0 0.4rem;
+    overflow-x: auto;
+    list-style: none;
+    scroll-snap-type: x mandatory;
+  }
+  .strip[hidden] {
+    display: none;
+  }
+  .strip li {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+  .strip button {
+    position: relative;
+    display: block;
+    padding: 0;
+    border: 2px solid transparent;
+    background: none;
+    cursor: pointer;
+    opacity: 0.65;
+    transition: opacity 0.15s;
+  }
+  .strip button:hover,
+  .strip button[aria-current] {
+    opacity: 1;
+  }
+  .strip button[aria-current] {
+    border-color: var(--color-accent-mark);
+  }
+  .strip img,
+  .tile {
+    display: block;
+    width: 7.5rem;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+  .tile {
+    display: grid;
+    place-items: center;
+    color: var(--color-accent-mark);
+    background: var(--color-surface);
+  }
+  .badge {
+    position: absolute;
+    right: 0.3rem;
+    bottom: 0.3rem;
+    display: grid;
+    place-items: center;
+    width: 1.4rem;
+    height: 1.4rem;
+    border-radius: 50%;
+    color: #fff;
+    background: var(--color-accent-mark);
+  }
+  .lightbox {
+    max-width: 95vw;
+    max-height: 95vh;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: zoom-out;
+  }
+  .lightbox::backdrop {
+    background: rgb(0 0 0 / 0.85);
+  }
+  .lightbox :global(img) {
+    display: block;
+    max-width: 95vw;
+    max-height: 95vh;
+    object-fit: contain;
+  }
+  .close {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 0;
+    border-radius: 50%;
+    font-size: 1.6rem;
+    line-height: 1;
+    color: #fff;
+    background: rgb(0 0 0 / 0.5);
+    cursor: pointer;
+  }
+</style>

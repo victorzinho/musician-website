@@ -1,0 +1,39 @@
+# Media aside, the rest is the CV's.
+position: 2
+name: { en: Virelai · Orfeó Veus Juntes, es: Virelai · Orfeó Veus Juntes }
+about: { en: Youth and amateur adult choirs, es: Coro juvenil y coro de adultos no profesionales }
+role: { en: "Guitar and keys; band arrangements", es: "Guitarra y teclados; arreglos para la banda" }
+start: 2011
+end: 2022
+highlights:
+  - en: Wrote the drums, bass, keys and guitar parts, shaped with the conductor to support the choir
+    es: Escribí las partes de batería, bajo, teclados y guitarra, con la dirección para apoyar al coro
+  - en: "Coordination and logistics: rehearsal timings, the band's rehearsals, the venue's technicians"
+    es: "Coordinación y logística: tiempos de ensayo, ensayos de la banda, técnicos de la sala"
+media:
+  - video: https://www.youtube.com/watch?v=cBSBMNnlBWY
+    thumbnail: ./queen-portada.jpg
+    caption:
+      en: "Bohemian Rhapsody (Queen) · Palau de la Música, Valencia, 2013"
+      es: "Bohemian Rhapsody (Queen) · Palau de la Música, Valencia, 2013"
+  - video: https://www.youtube.com/watch?v=Fzt0mbDwboA
+    thumbnail: ./cantautores-portada.png
+    caption: { en: "Blowin' in the Wind (Bob Dylan) · 2013", es: "Blowin' in the Wind (Bob Dylan) · 2013" }
+  - photo: ./queen-1.jpg
+    caption: { en: "Queen at Quart · 2011", es: "Queen at Quart · 2011" }
+  - photo: ./queen-2.jpg
+    caption: { en: "Queen at Quart · 2011", es: "Queen at Quart · 2011" }
+  - photo: ./cantautores-1.jpg
+    caption: { en: "Cantautor: La veu, el missatge · 2013", es: "Cantautor: La veu, el missatge · 2013" }
+  - photo: ./60s.jpg
+    caption: { en: "The 60s · Auditori Molí de Vila, Quart, 2015", es: "The 60s · Auditori Molí de Vila, Quart, 2015" }
+  - photo: ./mecano-1.jpg
+    caption: { en: "MCN: Mecano tribute · 2019", es: "MCN: Tributo a Mecano · 2019" }
+  - photo: ./mecano-2.jpg
+    caption: { en: "MCN: Mecano tribute · 2019", es: "MCN: Tributo a Mecano · 2019" }
+  - photo: ./mecano-3.jpg
+    caption: { en: "MCN: Mecano tribute · 2019", es: "MCN: Tributo a Mecano · 2019" }
+  - photo: ./mecano-4.jpg
+    caption: { en: "MCN: Mecano tribute · 2019", es: "MCN: Tributo a Mecano · 2019" }
+  - photo: ./mecano-5.jpg
+    caption: { en: "MCN: Mecano tribute · 2019", es: "MCN: Tributo a Mecano · 2019" }

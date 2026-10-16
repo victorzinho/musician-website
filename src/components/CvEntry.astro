@@ -1,0 +1,106 @@
+---
+import type { CvEntry } from '../cv';
+
+interface Props {
+  entry: CvEntry;
+  /** The label before the entry's technologies. */
+  stackLabel: string;
+}
+
+const { entry, stackLabel } = Astro.props;
+---
+
+<div class="entry">
+  <div class="head">
+    <h3>
+      {entry.url ? <a href={entry.url}>{entry.title}</a> : entry.title}
+      {entry.about && <span class="about"> · {entry.about}</span>}
+    </h3>
+    <span class="dates">{entry.dates}</span>
+  </div>
+  {entry.role && <p class="role">{entry.role}</p>}
+  {
+    entry.bullets.length > 0 && (
+      <ul>
+        {entry.bullets.map((bullet) => (
+          <li>{bullet}</li>
+        ))}
+      </ul>
+    )
+  }
+  {entry.stack && <p class="stack"><span>{stackLabel}:</span> {entry.stack.join(', ')}</p>}
+  {
+    entry.children && (
+      <div class="children">
+        {entry.children.map((child) => (
+          <Astro.self entry={child} stackLabel={stackLabel} />
+        ))}
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .entry {
+    margin: 0 0 1.1em;
+  }
+  /* The title and the dates on one line, kept with what follows. */
+  .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1em;
+    break-after: avoid;
+  }
+  h3 {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 1em;
+    font-weight: 700;
+  }
+  h3 a {
+    color: var(--color-blue);
+    text-decoration: none;
+  }
+  .about {
+    font-weight: 400;
+    color: var(--color-muted);
+  }
+  .dates {
+    flex: none;
+    font-size: 0.92em;
+    color: var(--color-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .role {
+    margin: 0;
+    font-style: italic;
+    break-after: avoid;
+  }
+  ul {
+    margin: 0.45em 0 0;
+    padding-left: 1.1em;
+  }
+  li {
+    margin: 0.3em 0;
+    break-inside: avoid;
+  }
+  li::marker {
+    color: var(--color-accent-mark);
+  }
+  .stack {
+    margin: 0.35em 0 0;
+    font-size: 0.92em;
+    color: var(--color-muted);
+  }
+  .stack span {
+    font-style: italic;
+  }
+  /* Clients under their freelance entry. */
+  .children {
+    margin: 0.8em 0 0 1.1em;
+  }
+  .children .entry:last-child {
+    margin-bottom: 0;
+  }
+</style>

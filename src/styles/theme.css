@@ -1,0 +1,60 @@
+/* Light/dark follows the system; `data-theme` on <html> overrides it. Contrast: scripts/check-contrast.mjs.
+   Fonts: astro.config.mjs. */
+:root {
+  color-scheme: light dark;
+
+  /* The sheet (content) and the surface it lies on: the paper, 0.03 lower in OKLCH lightness. */
+  --color-bg: light-dark(#f7f5f0, #151516);
+  --color-surface: light-dark(#edebe6, #0e0e0f);
+  --color-ink: light-dark(#1c1b19, #e0ddd6);
+  --color-muted: light-dark(#5e5a52, #9a958b);
+  /* RAL 5001 from its published CIELab (31.00, −9.64, −19.77); dark: same hue, lighter and greyer. */
+  --color-blue: light-dark(#104f67, #88abbb);
+  /* Link chips: the same hue, 0.04 lower in OKLCH lightness, 60% of the chroma. */
+  --color-blue-chip: light-dark(#244250, #889ca6);
+  --color-accent-text: light-dark(#a3482a, #e08c71);
+  --color-accent-mark: light-dark(#c2643e, #d77d60);
+  --color-rule: color-mix(in oklab, var(--color-ink) 14%, var(--color-bg));
+  /* Fainter than a rule: the edge between two backgrounds a shade apart (the sheet, code blocks). */
+  --color-edge: color-mix(in oklab, var(--color-rule) 60%, transparent);
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+/* Academico's accidentals for headings, scaled so the flat's top matches Playfair's ascenders (0.63 / 0.91 em).
+   Every weight and style maps to the regular, upright glyph, so browsers don't fake bold or italic. */
+@font-face {
+  font-family: 'Music symbols';
+  src: url('../assets/fonts/academico/Academico-Regular.woff2') format('woff2');
+  unicode-range: U+266D-266F;
+  size-adjust: 70%;
+  font-weight: 1 1000;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Music symbols';
+  src: url('../assets/fonts/academico/Academico-Regular.woff2') format('woff2');
+  unicode-range: U+266D-266F;
+  size-adjust: 70%;
+  font-weight: 1 1000;
+  font-style: italic;
+}
+
+html {
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3 {
+  font-family: 'Music symbols', var(--font-heading);
+}

@@ -1,0 +1,196 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { Font } from 'astro:assets';
+import CvEntry from '../../components/CvEntry.astro';
+import { cvPaths, loadCv, type CvKind } from '../../cv';
+import { strings, type Lang } from '../../i18n';
+import '../../styles/theme.css';
+
+// An A4 sheet, printed to `public/cv/<id>.pdf` by scripts/cv-pdfs.mjs. One column of real text, so ATS parsers read it
+// in order. Light theme only.
+export const getStaticPaths = (() => cvPaths()) satisfies GetStaticPaths;
+
+const { kind, lang } = Astro.props as { kind: CvKind; lang: Lang };
+const cv = await loadCv(kind, lang);
+const t = strings[lang].cv;
+---
+
+<!doctype html>
+<html lang={lang} data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>{`${cv.name} · ${t.title[kind]}`}</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <Font cssVariable="--font-heading" preload />
+    <Font cssVariable="--font-body" preload />
+  </head>
+  <body>
+    <article class={`sheet ${kind}`}>
+      <header>
+        <h1><a href={cv.home}>{cv.name}</a></h1>
+        <p class="headline">{cv.headline}</p>
+        {
+          cv.contact.map((line) => (
+            <p class="contact">
+              {line.map((c, i) => (
+                <>
+                  {i > 0 && <span class="separator"> · </span>}
+                  {c.url ? <a href={c.url}>{c.text}</a> : c.text}
+                </>
+              ))}
+            </p>
+          ))
+        }
+      </header>
+      <hr />
+      <p class="summary">{cv.summary}</p>
+      {
+        cv.sections.map((section) => (
+          <section>
+            <h2>
+              {section.url ? (
+                <a href={section.url}>{section.title}</a>
+              ) : (
+                section.title
+              )}
+            </h2>
+            {'entries' in section ? (
+              section.entries.map((entry) => <CvEntry entry={entry} stackLabel={t.stack} />)
+            ) : (
+              <ul class="lines">
+                {section.lines.map((line) => (
+                  <li>
+                    {line.label && (
+                      <strong>{line.url ? <a href={line.url}>{line.label}</a> : line.label}: </strong>
+                    )}
+                    {line.text}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        ))
+      }
+    </article>
+  </body>
+</html>
+
+<style>
+  @page {
+    size: A4;
+    margin: 16mm 18mm;
+  }
+  html {
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    /* ATS parsers sometimes drop ligature glyphs. */
+    font-variant-ligatures: no-common-ligatures;
+  }
+  body {
+    margin: 0;
+  }
+  /* The sheet on the surface on screen; the whole page when printed, on white. */
+  .sheet {
+    box-sizing: border-box;
+    width: 210mm;
+    min-height: 297mm;
+    margin: 2rem auto;
+    padding: 16mm 18mm;
+    border: 1px solid var(--color-edge);
+    background-color: var(--color-bg);
+    font-size: 10.5pt;
+    line-height: 1.5;
+  }
+  /* Less to say than the engineer CV: larger type, so it fills its pages too. */
+  .musician {
+    font-size: 11pt;
+    line-height: 1.5;
+  }
+  @media print {
+    :global(html[data-theme]),
+    .sheet {
+      background: #fff;
+    }
+    /* The page margins come from @page, so every page has them. */
+    .sheet {
+      width: auto;
+      min-height: 0;
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
+  }
+  h1 {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 2.4em;
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--color-ink);
+  }
+  .headline {
+    margin: 0.15em 0 0;
+    font-family: var(--font-heading);
+    font-size: 1.25em;
+    font-style: italic;
+    color: var(--color-accent-text);
+  }
+  .contact {
+    margin: 0.15em 0 0;
+  }
+  .headline + .contact {
+    margin-top: 0.45em;
+  }
+  .contact {
+    color: var(--color-muted);
+  }
+  .separator {
+    color: var(--color-rule);
+  }
+  a {
+    color: var(--color-blue);
+    text-decoration: none;
+  }
+  /* The site's five-line staff, once, under the header. */
+  hr {
+    height: 13px;
+    margin: 4mm 0;
+    border: 0;
+    background: repeating-linear-gradient(to bottom, var(--color-rule) 0 1px, transparent 1px 3px);
+    print-color-adjust: exact;
+  }
+  .summary {
+    margin: 0;
+    font-size: 1.05em;
+  }
+  section {
+    margin-top: 7mm;
+  }
+  .musician section {
+    margin-top: 6mm;
+  }
+  h2 {
+    margin: 0 0 4mm;
+    padding-bottom: 1mm;
+    border-bottom: 1px solid var(--color-rule);
+    font-family: var(--font-heading);
+    font-size: 1.25em;
+    font-weight: 500;
+    color: var(--color-ink);
+    break-after: avoid;
+  }
+  .lines {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .lines li {
+    margin: 0.4em 0;
+  }
+  .lines strong {
+    font-weight: 700;
+  }
+</style>

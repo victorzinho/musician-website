@@ -1,0 +1,250 @@
+# Facts behind the CVs (engineer, musician), in English and Spanish. The renderer picks entries by `cvs`.
+# Dates: YYYY-MM; no `end` means ongoing. Only `summary` is prose; everything else renders as entries and bullets.
+# Source: `interviews/2026-10-12-cv.md`.
+
+person:
+  name: Víctor González
+  email: victorzinho@gmail.com
+  location: { en: "Valencia, Spain · remote", es: "Valencia · en remoto" }
+  links:
+    site: https://music.victorzinho.es
+    linkedin: https://www.linkedin.com/in/vicgonco
+    github: https://github.com/victorzinho
+    youtube: https://www.youtube.com/@vicgonco
+
+headline:
+  engineer: { en: Senior backend engineer and composer, es: Ingeniero backend sénior y compositor }
+  musician: { en: "Composer, producer and guitarist", es: "Compositor, productor y guitarrista" }
+
+summary:
+  engineer:
+    en: >-
+      Backend engineer with more than fifteen years building data-heavy services: ingestion pipelines, message-driven
+      microservices, PostgreSQL at tens of millions of rows. At xarvio (BASF) I led the services that turned satellite
+      and machinery data into the maps that drive farm machinery. A composer with a conservatory degree, I want to
+      build the tools musicians work with. I take vague requests to production on schedule, with little supervision.
+    es: >-
+      Ingeniero backend con más de quince años construyendo servicios con mucho volumen de datos: ingesta,
+      microservicios con mensajería, PostgreSQL con decenas de millones de filas. En xarvio (BASF) lideré los servicios
+      que convertían datos de satélite y de maquinaria en los mapas que guían a la maquinaria agrícola. Compositor
+      titulado, quiero construir las herramientas con las que trabajan los músicos. Llevo peticiones difusas a
+      producción en plazo, con poca supervisión.
+  musician:
+    en: >-
+      Composer with a degree from the Conservatorio Superior Joaquín Rodrigo, premiered by the Cor de la Generalitat
+      Valenciana and Antara Ensemble. I produce orchestral mockups and recordings, and for more than a decade I played
+      guitar and keys in choir concerts, writing the band parts and handling the logistics. More than fifteen years of
+      software engineering under real deadlines taught me to deliver on the date.
+    es: >-
+      Compositor titulado por el Conservatorio Superior Joaquín Rodrigo, estrenado por el Cor de la Generalitat
+      Valenciana y Antara Ensemble. Produzco maquetas orquestales y grabaciones, y durante más de una década toqué
+      guitarra y teclados en conciertos de coros, escribiendo las partes de la banda y ocupándome de la logística. Más
+      de quince años de ingeniería de software con plazos reales me enseñaron a entregar en fecha.
+
+experience:
+  - id: freelance-2026
+    cvs: [engineer, musician]
+    org: { en: Freelance, es: Autónomo }
+    role: { en: Software engineer, es: Ingeniero de software }
+    start: 2026-11
+
+  - id: geomatico
+    cvs: [engineer, musician]
+    org: geomatico
+    about: { en: Open-source software cooperative, es: Cooperativa de software libre }
+    role: { en: Partner and senior engineer, es: Socio e ingeniero sénior }
+    start: 2023-10
+    end: 2026-10
+    stack: [Python, Django, FastAPI, PostGIS, React, TypeScript, MapLibre, Docker, AWS]
+    highlights:
+      - cvs: [engineer, musician]
+        en: Built the service framework every backend here runs on, for both Django and FastAPI
+        es: Creé el framework de servicios sobre el que corren todos los backends, en Django y FastAPI
+      - cvs: [engineer]
+        en: "It handles transactions, data access, http semantics and headers"
+        es: "Gestiona transacciones, acceso a datos, semántica y cabeceras http"
+      - cvs: [engineer]
+        en: Its strict, mechanical conventions make AI coding agents productive, under review
+        es: Sus convenciones estrictas y mecánicas hacen productivos a los agentes de IA, con revisión
+      - cvs: [engineer]
+        en: Backend technical lead, code reviews and technical contact with clients across projects
+        es: Liderazgo técnico en backend, revisiones de código e interlocución técnica con clientes
+      - cvs: [engineer]
+        en: "CUBIA (LiDAR forest inventory): data platform running research algorithms and publishing data"
+        es: "CUBIA (inventario forestal LiDAR): plataforma de datos con algoritmos en contenedores"
+      - cvs: [engineer]
+        en: "ICM-CSIC: rebuilt Observadores del Mar, normalizing its data and linking species to WoRMS"
+        es: "ICM-CSIC: nuevo Observadores del Mar, con datos normalizados y especies enlazadas a WoRMS"
+
+  - id: career-break
+    cvs: [engineer]
+    org: { en: Career break, es: Pausa profesional }
+    role: { en: Composition studies, es: Estudios de composición }
+    start: 2023-01
+    end: 2023-09
+
+  - id: xarvio
+    cvs: [engineer, musician]
+    org: xarvio
+    about: { en: BASF Digital Farming, es: BASF Digital Farming }
+    role: { en: "GIS engineer, geospatial backend lead", es: "Ingeniero SIG, responsable del backend geoespacial" }
+    start: 2018-08
+    end: 2022-12
+    stack: [Java, Spring, Kubernetes, RabbitMQ, PostGIS, GeoServer, GeoTools, JTS, GDAL, GraphQL, AWS, Docker]
+    highlights:
+      - cvs: [engineer, musician]
+        en: Led the data pipeline from satellite imagery to prescription maps for farm machinery
+        es: Lideré el flujo de datos de la imagen de satélite al mapa de prescripción para la maquinaria
+      - cvs: [engineer]
+        en: Led a three-person geospatial subteam, owning its goals and dates
+        es: Lideré el subequipo geoespacial de tres personas, responsable de objetivos y plazos
+      - cvs: [engineer, musician]
+        en: Co-led the backend's technical design; built the geospatial library every microservice used
+        es: Codirigí el diseño del backend y creé la librería geoespacial para todos los microservicios
+      - cvs: [engineer]
+        en: Owned ingestion and publishing among a few dozen isolated microservices on Kubernetes
+        es: Responsable de ingesta y publicación, entre decenas de microservicios aislados en Kubernetes
+      - cvs: [engineer]
+        en: Served millions of zoned maps to many thousands of farmers, in high availability
+        es: Millones de mapas zonificados para miles de agricultores, en alta disponibilidad
+      - cvs: [engineer]
+        en: "Ingested machinery, drone and satellite data: million-point files, topology problems"
+        es: "Ingesta de maquinaria, drones y satélites: millones de puntos por fichero, problemas topológicos"
+      - cvs: [engineer]
+        en: Did many of the backend's code reviews; presented sprint reviews to stakeholders
+        es: Hice muchas de las revisiones de código del backend y presenté las sprint reviews
+      - cvs: [engineer]
+        en: "Production support: Kibana, Grafana and Datadog monitoring, and on hand when things broke"
+        es: "Soporte en producción: monitorización con Kibana, Grafana y Datadog, y respuesta a incidencias"
+
+  - id: freelance
+    cvs: [engineer]
+    org: { en: Freelance, es: Autónomo }
+    role: { en: "Software engineer, GIS", es: "Ingeniero de software, SIG" }
+    start: 2012-01
+    end: 2018-07
+    clients:
+      - org: CSGIS
+        about: { en: "GIS consultancy, Germany", es: "Consultora SIG, Alemania" }
+        role: { en: Main developer, es: Desarrollador principal }
+        start: 2014-01
+        end: 2018-07
+        highlights:
+          - en: Web applications to view and edit spatial data, owned from design to deployment
+            es: Aplicaciones web de datos espaciales, a mi cargo del diseño al despliegue
+          - en: Designed PostGIS databases; deployed spatial data infrastructures in high availability
+            es: Bases de datos PostGIS e infraestructuras de datos espaciales en alta disponibilidad
+      - id: fao
+        org: FAO
+        about: { en: National Forest Monitoring Systems, es: Sistemas Nacionales de Monitoreo Forestal }
+        role: { en: GIS consultant, es: Consultor SIG }
+        start: 2017-11
+        end: 2018-07
+        highlights:
+          - en: Platform for forestry specialists across Latin America to publish data with minimal programming
+            es: Plataforma para que técnicos forestales de Latinoamérica publiquen sus datos sin programar
+          - en: Wrote the documentation and trained the specialists
+            es: Documentación y formación de los especialistas
+      - org: gvSIG CE
+        about: { en: Open-source desktop GIS, es: SIG de escritorio libre }
+        role: { en: "Core developer", es: "Desarrollador principal" }
+        start: 2012-01
+        end: 2018-07
+
+  - id: itaca
+    cvs: [engineer]
+    org: { en: "ITACA Institute, Universitat Politècnica de València", es: "Instituto ITACA, Universitat Politècnica de València" }
+    role: { en: Research programmer (part time), es: Programador de investigación (media jornada) }
+    start: 2009-02
+    end: 2011-02
+    highlights:
+      - en: "CFD research group: test automation, data cleanup, jobs for supercomputing centres"
+        es: "Grupo de CFD: automatización de pruebas, limpieza de datos y trabajos en supercomputadores"
+
+education:
+  - id: composition
+    cvs: [engineer, musician]
+    degree: { en: Degree in Composition, es: Título Superior de Composición }
+    school: Conservatorio Superior de Música Joaquín Rodrigo, Valencia
+    end: 2025
+    thesis: { en: Musical creation as an algorithm, es: La creación musical como algoritmo }
+  - cvs: [engineer, musician]
+    degree:
+      en: Computer Engineering, Master's level (Ingeniero en Informática)
+      es: Ingeniero en Informática (nivel de máster)
+    school: Universitat Politècnica de València
+    end: 2011
+    thesis:
+      cvs: [engineer]
+      en: MICSc, a parallel computational fluid dynamics code based on PETSc
+      es: MICSc, un código paralelo de dinámica de fluidos computacional basado en PETSc
+  - cvs: [musician]
+    degree: { en: "Professional music studies, guitar", es: "Enseñanzas profesionales de música, guitarra" }
+    school: Conservatorio Profesional de Música de Torrent
+    end: 2011
+
+# Musician CV only: the works it lists, by folder in `src/content/works/`; their facts come from each `work.yaml`,
+# newest first.
+works:
+  - turbulence-in-circles
+  - kissed-by-god
+  - gravitational-kook
+  - ese-mi-parece-un-mi-bemol
+  - ancho-es-el-mar
+  - we-fade-away
+
+# Musician CV only, same shape as `experience`.
+production:
+  - id: yo-matare-miedos-por-ti
+    org: Yo mataré miedos por ti
+    about: { en: Musical, es: Musical }
+    role: { en: Producer, es: Productor }
+    start: 2026
+    highlights:
+      - en: Recording to stage the musical without live musicians, from the composer's scores
+        es: Grabación para el musical sin músicos en directo, desde las partituras del compositor
+      - en: MIDI programming (piano, percussion, solos), editing and mixing
+        es: Programación MIDI (piano, percusión, solos), edición y mezcla
+
+# Musician CV only: groups on `/playing`, by folder in `src/content/playing/`, in order; their facts come from each
+# `playing.yaml`.
+performing: 
+  - choir-concerts
+  - desluthiers
+
+projects:
+  - cvs: [engineer, musician]
+    name: imogen
+    url: # TODO sprint 5
+    en: plain-text scores editable by voice or language models, round-tripping MusicXML
+    es: partituras en texto editables por voz o con IA, de ida y vuelta con MusicXML
+  - cvs: [engineer, musician]
+    name: scanterpoint
+    url: # TODO sprint 5
+    en: "optical music recognition on Audiveris for real-world scans: PDF to MusicXML"
+    es: "reconocimiento óptico con Audiveris para escaneos reales: de PDF a MusicXML"
+  - cvs: [engineer]
+    name: Google Summer of Code 2011
+    en: geoprocessing language GGL as an OGC WPS service, for 52°North
+    es: lenguaje de geoprocesado GGL como servicio WPS, para 52°North
+
+skills:
+  engineer:
+    - { en: Backend, es: Backend, items: [Python, Django, FastAPI, Java, Spring, SQL, GraphQL, RabbitMQ] }
+    - { en: Infrastructure, es: Infraestructura, items: [Kubernetes, Docker, AWS] }
+    - { en: Observability, es: Observabilidad, items: [Grafana, Kibana, Datadog] }
+    - { en: Geospatial, es: Geoespacial, items: [PostGIS, GeoServer, GeoTools, JTS, GDAL/OGR] }
+    - { en: Frontend, es: Frontend, items: [React, TypeScript, MapLibre] }
+  musician:
+    - { en: Notation, es: Notación, items: [Sibelius, MuseScore] } # Sibelius: licence pending
+    - { en: Production, es: Producción, items: [Cubase, Muse Sounds, SWAM] } # Cubase: licence pending; ? SWAM licence
+    - en: Instruments
+      es: Instrumentos
+      items:
+        - { en: Classical and electric guitar, es: Guitarra clásica y eléctrica }
+        - { en: keys (pads and simple parts in a band), es: teclados (pads y partes sencillas en banda) }
+
+languages:
+  - { en: Spanish, es: Español, level: { en: native, es: nativo } }
+  - { en: English, es: Inglés, level: { en: fluent, es: fluido } }
+  - { en: Catalan, es: Catalán, level: { en: fluent, es: fluido } }

@@ -1,0 +1,21 @@
+# Facts listed under each About movement title, in order:
+# `cv:` an id in src/content/cv.yaml
+# `work:` the work's premiere
+# or text in both languages (`*text*` is italic).
+composer:
+  - work: ancho-es-el-mar
+  - work: gravitational-kook
+  - cv: composition
+producer:
+  - cv: yo-matare-miedos-por-ti
+  - en: "MIDI programming, editing, mixing"
+    es: "Programación MIDI, edición, mezcla"
+performer:
+  - en: Classical and electric guitar
+    es: Guitarra clásica y eléctrica
+  - en: "More than playing: arrangements, coordination, logistics"
+    es: "Más que tocar: arreglos, coordinación, logística"
+engineer:
+  - cv: geomatico
+  - cv: xarvio
+  - cv: fao

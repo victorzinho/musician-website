@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- A boxed V, like a rehearsal mark in the scores: Academico Bold, as Dorico sets them. Light colours from src/styles/theme.css, in both themes. -->
+  <style>
+    rect { fill: #f7f5f0; stroke: #1c1b19; }
+    path { fill: #104f67; }
+  </style>
+  <rect x="1" y="1" width="30" height="30" stroke-width="2" />
+  <path transform="translate(6.448 25.113) scale(0.02578 -0.02578)" d="M349 -15H402L676 637C686 660 723 687 760 687V722H487V687C556 687 624 666 613 628L423 176L233 637C211 693 314 687 333 687V722H-19V687C11 683 58 679 73 645Z" />
+</svg>

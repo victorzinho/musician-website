@@ -1,0 +1,186 @@
+/* scroll-padding keeps anchored sections clear of the sticky header; the stable gutter keeps the layout from shifting
+   between pages with and without a scrollbar. */
+html {
+  scroll-padding-top: 7.5rem;
+  scrollbar-gutter: stable;
+}
+
+body {
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+a {
+  color: var(--color-blue);
+  text-decoration-color: color-mix(in oklab, var(--color-blue) 40%, transparent);
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  color: var(--color-accent-text);
+  text-decoration-color: var(--color-accent-mark);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent-mark);
+  outline-offset: 3px;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+/* A five-line staff, 17px tall: section dividers and the footer's top edge. */
+:root {
+  --staff: repeating-linear-gradient(to bottom, var(--color-rule) 0 1px, transparent 1px 4px);
+}
+
+hr {
+  height: 17px;
+  margin: 2.25rem 0;
+  border: 0;
+  background: var(--staff);
+}
+
+/* A single line, between parts of the same thing. */
+hr.rule {
+  height: 1px;
+  background: var(--color-rule);
+}
+
+figure {
+  margin: 2.5rem 0;
+}
+
+figcaption {
+  margin-top: 0.6rem;
+  font-size: 0.9rem;
+  text-align: center;
+  color: var(--color-muted);
+}
+
+figcaption p {
+  margin: 0;
+}
+
+code,
+pre {
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+}
+
+/* Inline code and code blocks on the surface colour; code colours from Shiki's light or dark theme. */
+:not(pre) > code {
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+  background: var(--color-surface);
+  font-size: 0.88em;
+}
+
+pre.astro-code {
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--color-edge);
+  border-radius: 4px;
+  background-color: var(--color-surface);
+  font-size: 0.85rem;
+  line-height: 1.55;
+  overflow-x: auto;
+}
+
+.astro-code span {
+  color: var(--shiki-light);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .astro-code span {
+    color: var(--shiki-dark);
+  }
+}
+
+:root[data-theme='dark'] .astro-code span {
+  color: var(--shiki-dark);
+}
+
+/* Lists whose bullets are accent marks (>), drawn as a mask so they take the accent colour. */
+ul.accents {
+  padding: 0;
+  list-style: none;
+}
+
+ul.accents li {
+  position: relative;
+  padding-left: 1.1rem;
+}
+
+ul.accents li + li {
+  margin-top: 0.25rem;
+}
+
+ul.accents li::before {
+  content: '';
+  position: absolute;
+  top: 0.55em;
+  left: 0.05rem;
+  width: 0.6em;
+  height: 0.42em;
+  background: var(--color-accent-mark);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 7'%3E%3Cpath d='M.8.8 9.2 3.5.8 6.2' fill='none' stroke='%23000' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+    no-repeat center / contain;
+}
+
+/* Small uppercase section heading. */
+.label {
+  margin: 0 0 1.25rem;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent-text);
+}
+
+.meta {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--color-muted);
+}
+
+/* Small bordered label. */
+.chip {
+  display: inline-block;
+  padding: 0.05rem 0.45rem;
+  border: 1px solid var(--color-accent-mark);
+  border-radius: 3px;
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent-text);
+}
+
+/* Link chips are blue, like other links; terracotta chips play or act. */
+a.chip {
+  border-color: var(--color-blue-chip);
+  color: var(--color-blue-chip);
+  text-decoration: none;
+}
+
+a.chip:hover {
+  background: var(--color-blue-chip);
+  color: var(--color-bg);
+}
+
+/* Read by screen readers and search engines, not shown. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

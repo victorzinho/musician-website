@@ -1,0 +1,67 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { localize, strings, type Lang } from '../i18n';
+import { tags as tagPaths } from '../site';
+import Player from './Player.astro';
+
+interface Props {
+  item: CollectionEntry<'homeListen'>['data'][number];
+  lang: Lang;
+}
+
+const audio = import.meta.glob<string>('/src/content/**/*.mp3', { query: '?url', import: 'default', eager: true });
+
+const { item, lang } = Astro.props;
+const t = strings[lang];
+const { title, context, href, tags } = item;
+const src = audio[`/src/content/${item.audio}`];
+if (!src) throw new Error(`home-listen.yaml, ${title}: audio ${item.audio} not found`);
+---
+
+<article class="card">
+  <Player title={title} lang={lang} src={src}>
+    <h3><a href={localize(lang, href)}>{title}</a></h3>
+    <p class="meta">{context[lang]}</p>
+    <ul class="tags" slot="after">
+      {
+        tags.map((tag) => (
+          <li>
+            <a class="chip" href={localize(lang, tagPaths[tag])}>
+              {t.tags[tag]}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </Player>
+</article>
+
+<style>
+  .card {
+    padding: 1.25rem 0;
+  }
+  .card ~ .card {
+    border-top: 1px solid var(--color-rule);
+  }
+  .card:first-of-type {
+    padding-top: 0;
+  }
+  .card:last-of-type {
+    padding-bottom: 0;
+  }
+  h3 {
+    margin: 0 0 0.3rem;
+    font-size: 1.5rem;
+  }
+  h3 a {
+    text-decoration: none;
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0.6rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+</style>

@@ -1,0 +1,2 @@
+# The / redirect page is Astro's own template (i18n redirectToDefaultLocale), not ours.
+dist/index.html

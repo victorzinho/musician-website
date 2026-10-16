@@ -1,0 +1,64 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { Font, Image } from 'astro:assets';
+import photo from '../../assets/victor.jpg';
+import { langPaths, strings, type Lang } from '../../i18n';
+import '../../styles/theme.css';
+
+// The link preview image (Open Graph), 1200×630: screenshotted to `public/og-<lang>.jpg` by scripts/og-image.mjs.
+// Light theme only.
+export const getStaticPaths = (() => langPaths()) satisfies GetStaticPaths;
+
+const lang = Astro.params.lang as Lang;
+---
+
+<!doctype html>
+<html lang={lang} data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <title>Víctor González</title>
+    <Font cssVariable="--font-heading" preload />
+    <Font cssVariable="--font-body" preload />
+  </head>
+  <body>
+    <Image src={photo} alt="" width={630} height={630} loading="eager" />
+    <div class="text">
+      <h1>Víctor González</h1>
+      <p>{strings[lang].home.identity}</p>
+    </div>
+  </body>
+</html>
+
+<style>
+  body {
+    display: flex;
+    align-items: center;
+    width: 1200px;
+    height: 630px;
+    margin: 0;
+    overflow: hidden;
+    background: var(--color-bg);
+    color: var(--color-ink);
+  }
+  /* Blended into the paper, its backdrop fading out towards the text. */
+  img {
+    flex: none;
+    mix-blend-mode: multiply;
+    mask-image: linear-gradient(to right, black 70%, transparent);
+  }
+  .text {
+    padding: 0 56px 0 40px;
+  }
+  h1 {
+    margin: 0;
+    padding-bottom: 20px;
+    border-bottom: 5px solid var(--color-accent-mark);
+    font: 500 76px/1.1 var(--font-heading);
+    color: var(--color-blue);
+  }
+  p {
+    margin: 24px 0 0;
+    font: 40px/1.3 var(--font-body);
+  }
+</style>
