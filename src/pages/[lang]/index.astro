@@ -1,10 +1,11 @@
 ---
 import type { GetStaticPaths } from 'astro';
+import { Image } from 'astro:assets';
 import { getEntry } from 'astro:content';
+import photo from '../../assets/victor-guitar.jpg';
 import Base from '../../layouts/Base.astro';
 import ContactLinks from '../../components/ContactLinks.astro';
 import ListenItem from '../../components/ListenItem.astro';
-import Portrait from '../../components/Portrait.astro';
 import type { WebSite } from 'schema-dts';
 import { codas, langPaths, locales, strings, type Lang } from '../../i18n';
 import { person, personNode } from '../../structured-data';
@@ -26,12 +27,23 @@ const listen = (await getEntry('homeListen', 'homeListen'))!.data;
 <Base lang={lang} title={strings[lang].meta.homeTitle} description={strings[lang].meta.description.home} coda={codas.home}
   structuredData={[site, await personNode(lang)]}
 >
+  <section slot="hero" class="hero">
+    {/* The header's height, so the hero fills the rest of the screen; it changes with the width and the fonts. */}
+    <script is:inline>
+      {
+        const masthead = document.querySelector('.masthead');
+        new ResizeObserver(() =>
+          document.documentElement.style.setProperty('--masthead-height', `${masthead.offsetHeight}px`),
+        ).observe(masthead);
+      }
+    </script>
+    <Image src={photo} alt="Víctor González playing classical guitar, looking up at a singer"
+      widths={[800, 1200, 1600]} sizes="100vw" class="portrait" loading="eager" />
+  </section>
+
   <section class="intro">
-    <Portrait size={10} />
-    <div>
-      <h1>{t.identity}</h1>
-      <p>{t.intro}</p>
-    </div>
+    <h1>{t.identity}</h1>
+    <p>{t.intro}</p>
   </section>
 
   <hr />
@@ -50,16 +62,18 @@ const listen = (await getEntry('homeListen', 'homeListen'))!.data;
 </Base>
 
 <style>
-  .intro {
-    display: grid;
-    grid-template-columns: 10rem 1fr;
-    gap: 2rem;
-    align-items: center;
+  /* The photo fills the rest of the screen under the header. */
+  .hero {
+    position: relative;
+    height: max(22rem, calc(100svh - var(--masthead-height, 7rem)));
   }
-  @media (max-width: 36rem) {
-    .intro {
-      grid-template-columns: 1fr;
-    }
+  .portrait {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 30%;
   }
   h1 {
     margin: 0 0 1rem;
@@ -67,7 +81,7 @@ const listen = (await getEntry('homeListen', 'homeListen'))!.data;
     line-height: 1.12;
     color: var(--color-blue);
   }
-  .intro p {
+  .intro p:last-child {
     margin: 0;
   }
 </style>
