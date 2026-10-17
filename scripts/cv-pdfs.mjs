@@ -4,6 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { readdirSync } from 'node:fs';
 import { chromium } from 'playwright-core';
 import { record } from './generated.mjs';
+import { strip } from './strip-metadata.mjs';
 
 const port = 6007;
 if (!process.env.CHROMIUM_HEADLESS) throw new Error('CHROMIUM_HEADLESS is not set: no headless Chromium on this machine');
@@ -19,6 +20,7 @@ try {
     await page.goto(`http://localhost:${port}/cv/${id}/`, { waitUntil: 'networkidle' });
     await page.evaluate(() => document.fonts.ready);
     await page.pdf({ path: `public/cv/${id}.pdf`, preferCSSPageSize: true, printBackground: true, tagged: true });
+    strip(`public/cv/${id}.pdf`);
     console.log(`public/cv/${id}.pdf`);
   }
   await browser.close();

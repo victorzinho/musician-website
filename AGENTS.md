@@ -52,6 +52,8 @@ Víctor's music portfolio, `music.victorzinho.es`. Plan: `REVAMP.md`; tasks: `RO
   `src/site.ts`.
 - Generated and committed (CV PDFs, link preview images): `generated.json` holds the hash of each one's
   source; `npm run verify` fails when one is out of date and names the script to rerun (`scripts/generated.mjs`).
+- Published images and PDFs carry no metadata beyond a photo's credit and a PDF's title: run
+  `node scripts/strip-metadata.mjs` after adding one; `npm run verify` checks the built site.
 - Articles: `src/content/articles/<slug>/` with `article.yaml` and `en.mdx`, `es.mdx` (both required). MDX imports
   `Figure`, `Player` and `YouTube` from `src/components/`; `parked/articles/mixing-like-a-rehearsal` uses them all.
 - Home excerpts: `src/content/home-listen.yaml`, in the file's order (schema: `src/content.config.ts`); tags lead to

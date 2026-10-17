@@ -11,6 +11,7 @@ const phases = {
   'After the build': [
     ['Search and link previews', 'node', ['scripts/check-seo.mjs']],
     ['Generated files', 'node', ['scripts/check-generated.mjs']],
+    ['File metadata', 'node', ['scripts/check-metadata.mjs']],
     ['HTML', 'npx', ['html-validate', 'dist/**/*.html']],
     // Local links and fragments only: other sites are not checked.
     ['Links', 'npx', ['linkinator', 'dist', '--recurse', '--check-fragments', '--skip', '^https?://(?!(localhost|127\\.0\\.0\\.1|\\[::1\\])[:/])']],
