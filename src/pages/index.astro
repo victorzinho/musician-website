@@ -1,3 +1,33 @@
 ---
-// Redirects to /en/: i18n.routing.redirectToDefaultLocale in astro.config.mjs.
+// Sends each visitor to the home page in the first of their browser's languages the site has, else English. Previews
+// and search engines read the English home page's tags.
+import { getAbsoluteLocaleUrl, getRelativeLocaleUrl } from 'astro:i18n';
+import LinkPreview from '../components/LinkPreview.astro';
+import { languages, strings } from '../i18n';
+
+const title = `Víctor González · ${strings.en.meta.homeTitle}`;
+const description = strings.en.meta.description.home;
+const english = getAbsoluteLocaleUrl('en', '/');
+const homes = Object.fromEntries(languages.map((l) => [l, getRelativeLocaleUrl(l, '/')]));
 ---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="noindex" />
+    <link rel="canonical" href={english} />
+    <LinkPreview lang="en" title={title} description={description} url={english} />
+    <script is:inline define:vars={{ homes }}>
+      const lang = navigator.languages.map((l) => l.slice(0, 2)).find((l) => l in homes) ?? 'en';
+      location.replace(homes[lang]);
+    </script>
+    {/* Only without JavaScript: alongside the script, it could win the race and override the language. */}
+    <noscript><meta http-equiv="refresh" content={`0;url=${homes.en}`} /></noscript>
+  </head>
+  <body>
+    <a href={homes.en}>Víctor González</a>
+  </body>
+</html>
