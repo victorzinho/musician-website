@@ -121,7 +121,8 @@ const playing = defineCollection({
       about: translated.optional(),
       /** Required where the CV lists the group (`performing` in `cv.yaml`). */
       role: translated.optional(),
-      start: date,
+      /** Required where the CV lists the group, like `role`. None: no years shown. */
+      start: date.optional(),
       /** None: ongoing. */
       end: date.optional(),
       /** Bullets on `/playing` and on the CV. */

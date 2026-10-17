@@ -42,8 +42,9 @@ export type Cv = {
   sections: CvSection[];
 };
 
-/** Years only: "2011–2022", "2023–" while ongoing, "2026" for a single year. */
-export const yearSpan = (start: string, end?: string) => {
+/** Years only: "2011–2022", "2023–" while ongoing, "2026" for a single year; none without `start`. */
+export const yearSpan = (start?: string, end?: string) => {
+  if (!start) return undefined;
   const [from, to] = [start, end].map((date) => date?.slice(0, 4));
   return from === to ? from : `${from}–${to ?? ''}`;
 };
@@ -116,7 +117,7 @@ export const loadCv = async (kind: CvKind, lang: Lang): Promise<Cv> => {
   const performing = data.performing.map((id): Source => {
     const group = groups.find((g) => g.id === id)?.data;
     if (!group) throw new Error(`src/content/cv.yaml: no group ${id} in src/content/playing/`);
-    if (!group.role) throw new Error(`src/content/playing/${id}/playing.yaml: no role, which the CV needs`);
+    if (!group.role || !group.start) throw new Error(`src/content/playing/${id}/playing.yaml: no role or start, which the CV needs`);
     return { org: group.name, about: group.about, role: group.role, start: group.start, end: group.end, highlights: group.highlights };
   });
   const catalogue = await getCollection('works');
