@@ -35,8 +35,9 @@ Víctor's music portfolio, `music.victorzinho.es`. Plan: `REVAMP.md`; tasks: `RO
 ## Content
 
 - English and Spanish under `/en/` and `/es/`, same paths in both, with Astro's i18n routing (`astro.config.mjs`); `/`
-  redirects to `/en/`; English is each page's `x-default`. Pages live in `src/pages/[lang]/`; internal links take a
-  path without language through `localize` (`src/i18n.ts`). Scores and CVs have no language prefix.
+  sends to the browser's language, else `/en/` (`src/pages/index.astro`); English is each page's `x-default`. Pages
+  live in `src/pages/[lang]/`; internal links take a path without language through `localize` (`src/i18n.ts`). Scores
+  and CVs have no language prefix.
 - Works: `src/content/works/<slug>/` with `work.yaml` (schema: `src/content.config.ts`), one Markdown note per language
   (`en.md`, `es.md`), `score.pdf` (published as `/works/<slug>-score.pdf`, `src/scores.ts`) and any other files of the
   work. `score-preview.png` is exported from Sibelius at 600 dpi.

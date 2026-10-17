@@ -25,16 +25,16 @@ const academico = (file, weight, style) => ({
 export default defineConfig({
   site: 'https://music.victorzinho.es',
   output: 'static',
-  // Every page under /en/ and /es/ (src/pages/[lang]/); `/` redirects to /en/.
+  // Every page under /en/ and /es/ (src/pages/[lang]/); `/` picks one: src/pages/index.astro.
   i18n: {
     locales: ['en', 'es'],
     defaultLocale: 'en',
-    routing: { prefixDefaultLocale: true, redirectToDefaultLocale: true },
+    routing: { prefixDefaultLocale: true, redirectToDefaultLocale: false },
   },
   server: { host: true, port: 6006 },
   integrations: [
     sitemap({
-      // Out: the `/` redirect, unfinished pages, and the CV and link preview pages (sources of PDFs and images).
+      // Out: `/`, unfinished pages, and the CV and link preview pages (sources of PDFs and images).
       filter: (page) => {
         const path = new URL(page).pathname;
         return path !== '/' && !/^\/(cv|og)\//.test(path) && !unfinished.includes(path.slice('/en'.length));

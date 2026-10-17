@@ -1,0 +1,39 @@
+---
+// Link previews (Open Graph). The image: src/pages/og/[lang].astro.
+import { getAbsoluteLocaleUrl } from 'astro:i18n';
+import { languages, locales, strings, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+  url: string;
+  /** An article's publication date: link previews show the page as an article. */
+  published?: Date;
+}
+
+const { lang, title, description, url, published } = Astro.props;
+---
+
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={url} />
+<meta property="og:site_name" content="Víctor González" />
+<meta property="og:locale" content={locales[lang].replace('-', '_')} />
+{languages.filter((l) => l !== lang).map((l) => <meta property="og:locale:alternate" content={locales[l].replace('-', '_')} />)}
+<meta property="og:image" content={new URL(`/og-${lang}.jpg`, Astro.site)} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={`Víctor González. ${strings[lang].home.identity}`} />
+<meta name="twitter:card" content="summary_large_image" />
+{
+  published ? (
+    <>
+      <meta property="og:type" content="article" />
+      <meta property="article:published_time" content={published.toISOString().slice(0, 10)} />
+      <meta property="article:author" content={getAbsoluteLocaleUrl(lang, '/about/')} />
+    </>
+  ) : (
+    <meta property="og:type" content="website" />
+  )
+}
