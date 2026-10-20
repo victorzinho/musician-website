@@ -3,6 +3,7 @@ import type { GetStaticPaths } from 'astro';
 import { getCollection, getEntry, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Quote from '../../components/Quote.astro';
+import Lightbox from '../../components/Lightbox.astro';
 import Stage, { type StageItem } from '../../components/Stage.astro';
 import { yearSpan } from '../../cv';
 import { codas, languages, langPaths, localize, strings, type Lang } from '../../i18n';
@@ -73,6 +74,7 @@ const groups = await Promise.all(
   <p class="contact">
     {t.playing.contact.text} <a href={localize(lang, '/contact/')}>{t.playing.contact.link} →</a>
   </p>
+  <Lightbox lang={lang} />
 </Base>
 
 <style>

@@ -22,7 +22,7 @@ interface Props {
 const { id, items, lang } = Astro.props;
 const t = strings[lang];
 const sizes = '(max-width: 48rem) 100vw, 48rem';
-/** The full-size photo the lightbox opens. */
+/** The full-size photo the lightbox (`Lightbox.astro`) opens. */
 const full = async (photo: ImageMetadata) => (await getImage({ src: photo, width: Math.min(photo.width, 2400) })).src;
 const panels = await Promise.all(
   items.map(async (item) => ({ ...item, full: item.kind === 'photo' ? await full(item.photo) : undefined })),
@@ -50,7 +50,7 @@ const thumbnail = (item: StageItem) => (item.kind === 'photo' ? item.photo : ite
             </a>
           )}
           {item.kind === 'photo' && (
-            <a class="photo" href={item.full} data-photo aria-label={`${t.playing.stage.open}: ${item.caption}`}>
+            <a class="photo" href={item.full} data-zoom aria-label={`${t.lightbox.open}: ${item.caption}`}>
               <Image src={item.photo} alt={item.caption} widths={[640, 960, 1280]} sizes={sizes} />
             </a>
           )}
@@ -120,13 +120,6 @@ const thumbnail = (item: StageItem) => (item.kind === 'photo' ? item.photo : ite
       </ul>
     )
   }
-  {
-    items.some((item) => item.kind === 'photo') && (
-      <dialog class="lightbox" data-lightbox aria-label={t.playing.stage.open}>
-        <button class="close" type="button" aria-label={t.playing.stage.close}>×</button>
-      </dialog>
-    )
-  }
 </div>
 
 <script>
@@ -136,7 +129,6 @@ const thumbnail = (item: StageItem) => (item.kind === 'photo' ? item.photo : ite
   for (const stage of document.querySelectorAll<HTMLElement>('[data-stage]')) {
     const panels = [...stage.querySelectorAll<HTMLElement>('[data-panel]')];
     const buttons = [...stage.querySelectorAll<HTMLButtonElement>('[data-strip] button')];
-    const lightbox = stage.querySelector<HTMLDialogElement>('[data-lightbox]');
 
     /** Puts the playing video's thumbnail back, which stops it. */
     let stopVideo = () => {};
@@ -170,22 +162,6 @@ const thumbnail = (item: StageItem) => (item.kind === 'photo' ? item.photo : ite
           stopVideo = () => {};
         };
       });
-    }
-
-    if (lightbox) {
-      // Created here: an <img> without src is invalid HTML.
-      const image = document.createElement('img');
-      lightbox.prepend(image);
-      for (const photo of stage.querySelectorAll<HTMLAnchorElement>('[data-photo]')) {
-        photo.addEventListener('click', (event) => {
-          event.preventDefault();
-          image.src = photo.href;
-          image.alt = photo.querySelector('img')!.alt;
-          lightbox.showModal();
-        });
-      }
-      // Any click closes it: the photo, the backdrop or the button.
-      lightbox.addEventListener('click', () => lightbox.close());
     }
 
     stage.dataset.js = '';
@@ -389,36 +365,5 @@ const thumbnail = (item: StageItem) => (item.kind === 'photo' ? item.photo : ite
     border-radius: 50%;
     color: #fff;
     background: var(--color-accent-mark);
-  }
-  .lightbox {
-    max-width: 95vw;
-    max-height: 95vh;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    cursor: zoom-out;
-  }
-  .lightbox::backdrop {
-    background: rgb(0 0 0 / 0.85);
-  }
-  .lightbox :global(img) {
-    display: block;
-    max-width: 95vw;
-    max-height: 95vh;
-    object-fit: contain;
-  }
-  .close {
-    position: fixed;
-    top: 1rem;
-    right: 1rem;
-    width: 2.5rem;
-    height: 2.5rem;
-    border: 0;
-    border-radius: 50%;
-    font-size: 1.6rem;
-    line-height: 1;
-    color: #fff;
-    background: rgb(0 0 0 / 0.5);
-    cursor: pointer;
   }
 </style>

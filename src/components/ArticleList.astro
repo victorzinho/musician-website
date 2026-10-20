@@ -1,7 +1,8 @@
 ---
+import LinkChips from './LinkChips.astro';
 import RoleChips from './RoleChips.astro';
-import { articleHref, type Article } from '../articles';
-import { strings, type Lang } from '../i18n';
+import { articleHref, pdfChip, type Article } from '../articles';
+import type { Lang } from '../i18n';
 
 interface Props {
   list: Article[];
@@ -11,7 +12,6 @@ interface Props {
 }
 
 const { list, lang, roles = true } = Astro.props;
-const t = strings[lang];
 const month = (d: Date) => d.toLocaleDateString(lang, { month: 'short', year: 'numeric', timeZone: 'UTC' });
 ---
 
@@ -20,26 +20,15 @@ const month = (d: Date) => d.toLocaleDateString(lang, { month: 'short', year: 'n
     list.map((article) => (
       <li>
         <p class="heading">
-          {article.pdf ? (
-            <span class="title">{article.data.title[lang]}</span>
-          ) : (
+          {article.text ? (
             <a class="title" href={articleHref(article, lang)}>
               {article.data.title[lang]}
             </a>
+          ) : (
+            <span class="title">{article.data.title[lang]}</span>
           )}
           <span class="chips">
-            {article.pdf && (
-              <a
-                class="chip"
-                href={articleHref(article, lang)}
-                target="_blank"
-                data-umami-event="article"
-                data-umami-event-file={articleHref(article, lang).split('/').pop()}
-              >
-                {t.articles.pdf} <span aria-hidden="true">↗</span>
-                <span class="visually-hidden">{t.works.labels.newTab}</span>
-              </a>
-            )}
+            {article.pdf && <LinkChips links={[pdfChip(article, lang)]} lang={lang} />}
             {roles && <RoleChips roles={article.data.roles} lang={lang} />}
           </span>
         </p>
@@ -73,7 +62,7 @@ const month = (d: Date) => d.toLocaleDateString(lang, { month: 'short', year: 'n
     gap: 0.3rem 0.75rem;
     margin: 0;
   }
-  /* A PDF's title is plain text: its chip opens it. */
+  /* Without a page, the title is plain text: its PDF chip opens it. */
   .title {
     font-family: var(--font-heading);
     font-size: 1.2rem;

@@ -51,6 +51,7 @@ export const strings = {
       contact: 'Contact',
     },
     theme: { toDark: 'Switch to dark theme', toLight: 'Switch to light theme' },
+    lightbox: { open: 'Open full size', close: 'Close' },
     home: {
       identity: 'Musician, engineer.',
       intro:
@@ -86,13 +87,13 @@ export const strings = {
       intro: '',
       contact: { text: 'Need a guitarist for your concert?', link: 'Let’s talk' },
       /** The gallery of videos and photos. */
-      stage: { open: 'Open full size', close: 'Close', previous: 'Previous', next: 'Next' },
+      stage: { previous: 'Previous', next: 'Next' },
     },
     articles: {
       intro: 'The longer version of what I do and how I think about it.',
       /** Shown while there are no articles. */
       empty: 'So far, the long version fits in this sentence.',
-      /** After the title of an article that is a PDF. */
+      /** The chip that opens an article's PDF. */
       pdf: 'PDF',
     },
     tech: {
@@ -169,6 +170,7 @@ export const strings = {
       contact: 'Contacto',
     },
     theme: { toDark: 'Cambiar al tema oscuro', toLight: 'Cambiar al tema claro' },
+    lightbox: { open: 'Ver a tamaño completo', close: 'Cerrar' },
     home: {
       identity: 'Músico, ingeniero.',
       intro:
@@ -200,7 +202,7 @@ export const strings = {
     playing: {
       intro: '',
       contact: { text: '¿Necesitas un guitarrista para tu concierto?', link: 'Hablemos' },
-      stage: { open: 'Ver a tamaño completo', close: 'Cerrar', previous: 'Anterior', next: 'Siguiente' },
+      stage: { previous: 'Anterior', next: 'Siguiente' },
     },
     articles: {
       intro: 'La versión larga de lo que hago y de cómo lo pienso.',
