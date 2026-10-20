@@ -2,7 +2,7 @@ export const email = 'victorzinho@gmail.com';
 
 /** Icons: Simple Icons (CC0), 24×24 viewBox. */
 export const profiles = [
-  // TODO sprint 6: LinkedIn, once the profile is updated (ROADMAP.md).
+  // TODO WEB-35: LinkedIn, once the profile is updated.
   // {
   //   name: 'LinkedIn',
   //   url: 'https://www.linkedin.com/in/vicgonco',
