@@ -37,7 +37,7 @@ export const strings = {
         tech: 'Víctor González, senior software engineer and composer: more than fifteen years building software, at xarvio (BASF) among others, and tools for musicians.',
         articles: 'Articles by Víctor González on composing, producing, playing and software engineering.',
         about: 'Víctor González: a guitar at fourteen, software at eighteen, and composition studied while working full time. Musician and engineer CVs.',
-        // TODO sprint 6: LinkedIn back in the list (src/site.ts).
+        // TODO WEB-35: LinkedIn back in the list (src/site.ts).
         contact: 'Contact Víctor González for a new piece or a guitarist for your concert: email, YouTube, SoundCloud and GitHub.',
       },
       /** A work page: "<title> (<year>), for <forces>, <by>: <what the page has>." */
@@ -156,7 +156,7 @@ export const strings = {
         tech: 'Víctor González, ingeniero de software sénior y compositor: más de quince años construyendo software, en xarvio (BASF) entre otros, y herramientas para músicos.',
         articles: 'Artículos de Víctor González sobre composición, producción, interpretación e ingeniería de software.',
         about: 'Víctor González: una guitarra a los catorce, el software a los dieciocho y composición estudiada trabajando a jornada completa. CV de músico e ingeniero.',
-        // TODO sprint 6: LinkedIn back in the list (src/site.ts).
+        // TODO WEB-35: LinkedIn back in the list (src/site.ts).
         contact: 'Contacta con Víctor González para una obra nueva o un guitarrista para tu concierto: correo, YouTube, SoundCloud y GitHub.',
       },
       work: { by: 'obra del compositor Víctor González', note: 'notas al programa', score: 'partitura', recordings: 'grabaciones' },

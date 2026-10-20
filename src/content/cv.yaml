@@ -215,12 +215,12 @@ performing:
 projects:
   - cvs: [engineer, musician]
     name: imogen
-    url: # TODO imogen on the site (ROADMAP.md, backlog)
+    url: # TODO WEB-34
     en: plain-text scores editable by voice or language models, round-tripping MusicXML
     es: partituras en texto editables por voz o con IA, de ida y vuelta con MusicXML
   - cvs: [engineer, musician]
     name: scanterpoint
-    url: # TODO sprint 5
+    url: # TODO WEB-23
     en: "optical music recognition on Audiveris for real-world scans: PDF to MusicXML"
     es: "reconocimiento óptico con Audiveris para escaneos reales: de PDF a MusicXML"
   - cvs: [engineer]

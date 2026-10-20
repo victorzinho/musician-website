@@ -1,6 +1,6 @@
 # AGENTS.md — website
 
-Víctor's music portfolio, `music.victorzinho.es`. Plan: `REVAMP.md`; tasks: `ROADMAP.md`.
+Víctor's music portfolio, `music.victorzinho.es`. Plan: `REVAMP.md`; tasks: Jira project `WEB`.
 
 ## Stack
 
@@ -71,4 +71,6 @@ Víctor's music portfolio, `music.victorzinho.es`. Plan: `REVAMP.md`; tasks: `RO
 - Stand-in content to work on a layout carries `FAKE` in a comment; `npm run verify` fails while any is in `src/`.
 - `interviews/` (gitignored): Víctor's answers to content questions, one file per session; source for the site's text.
 - `research/` (gitignored): investigations behind roadmap decisions (gear, services), one file per topic.
+- `unpublished/` (gitignored): content ready but private until it launches (imogen's videos, article and site
+  changes); publishing moves it into `src/`.
 - Recordings live on YouTube/SoundCloud; only small files (scores, images, short excerpts) go in the repo.
