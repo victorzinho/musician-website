@@ -1,0 +1,106 @@
+---
+import RoleChips from './RoleChips.astro';
+import { articleHref, type Article } from '../articles';
+import { strings, type Lang } from '../i18n';
+
+interface Props {
+  list: Article[];
+  lang: Lang;
+  /** The sections each belongs to, as chips; off inside a section's own page. */
+  roles?: boolean;
+}
+
+const { list, lang, roles = true } = Astro.props;
+const t = strings[lang];
+const month = (d: Date) => d.toLocaleDateString(lang, { month: 'short', year: 'numeric', timeZone: 'UTC' });
+---
+
+<ul class="articles">
+  {
+    list.map((article) => (
+      <li>
+        <p class="heading">
+          {article.pdf ? (
+            <span class="title">{article.data.title[lang]}</span>
+          ) : (
+            <a class="title" href={articleHref(article, lang)}>
+              {article.data.title[lang]}
+            </a>
+          )}
+          <span class="chips">
+            {article.pdf && (
+              <a
+                class="chip"
+                href={articleHref(article, lang)}
+                target="_blank"
+                data-umami-event="article"
+                data-umami-event-file={articleHref(article, lang).split('/').pop()}
+              >
+                {t.articles.pdf} <span aria-hidden="true">↗</span>
+                <span class="visually-hidden">{t.works.labels.newTab}</span>
+              </a>
+            )}
+            {roles && <RoleChips roles={article.data.roles} lang={lang} />}
+          </span>
+        </p>
+        <p class="description">
+          {article.data.description[lang]}
+          <span class="dash" aria-hidden="true">—</span>
+          <time datetime={article.data.date.toISOString().slice(0, 10)}>{month(article.data.date)}</time>
+        </p>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .articles:empty {
+    display: none;
+  }
+  .articles {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .articles li {
+    padding: 0.9rem 0;
+  }
+  /* Title and its role chips on one line; the chips wrap together. */
+  .heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.3rem 0.75rem;
+    margin: 0;
+  }
+  /* A PDF's title is plain text: its chip opens it. */
+  .title {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    line-height: 1.3;
+    text-decoration: none;
+  }
+  /* The PDF chip, then the role chips, spaced as one group. */
+  .chips {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+  .chips:empty {
+    display: none;
+  }
+  .description {
+    margin: 0.3rem 0 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--color-muted);
+  }
+  .dash {
+    margin: 0 0.25rem;
+  }
+  /* The date ends the description, kept on one line. */
+  .description time {
+    font-style: italic;
+    white-space: nowrap;
+  }
+</style>

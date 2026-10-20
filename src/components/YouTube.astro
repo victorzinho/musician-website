@@ -9,7 +9,7 @@ interface Props {
 }
 
 const { id, title } = Astro.props;
-const caption = (await Astro.slots.render('default')).trim();
+const caption = Astro.slots.has('default') ? (await Astro.slots.render('default')).trim() : '';
 ---
 
 <figure>

@@ -34,10 +34,10 @@ export const strings = {
         works: 'Concert works by composer Víctor González for choir, orchestra, ensemble and electronics, with programme notes, scores and recordings.',
         playing: 'Víctor González on classical and electric guitar and keys, in concerts of choirs and amateur ensembles: videos, recordings and photos.',
         studio: 'Music production by Víctor González: orchestral mockups, MIDI programming, editing and mixing, with examples to listen to.',
-        tech: 'Víctor González, software engineer for more than fifteen years: geographic data at xarvio (BASF), forest monitoring for FAO, and most recently geomatico.',
+        tech: 'Víctor González, senior software engineer and composer: more than fifteen years building software, at xarvio (BASF) among others, and tools for musicians.',
         articles: 'Articles by Víctor González on composing, producing, playing and software engineering.',
         about: 'Víctor González: a guitar at fourteen, software at eighteen, and composition studied while working full time. Musician and engineer CVs.',
-        // TODO sprint 4: LinkedIn back in the list (src/site.ts).
+        // TODO sprint 6: LinkedIn back in the list (src/site.ts).
         contact: 'Contact Víctor González for a new piece or a guitarist for your concert: email, YouTube, SoundCloud and GitHub.',
       },
       /** A work page: "<title> (<year>), for <forces>, <by>: <what the page has>." */
@@ -92,6 +92,18 @@ export const strings = {
       intro: 'The longer version of what I do and how I think about it.',
       /** Shown while there are no articles. */
       empty: 'So far, the long version fits in this sentence.',
+      /** After the title of an article that is a PDF. */
+      pdf: 'PDF',
+    },
+    tech: {
+      title: 'Senior software engineer, and a composer.',
+      availability: 'Freelance, open to remote roles and projects, music technology above all.',
+      software: { title: 'Software for musicians', intro: 'I build tools that serve musicians, not ones that replace them.' },
+      /** Chips on each tool. */
+      cv: 'CV',
+      labels: { article: 'Article', code: 'Code' },
+      how: 'How I work',
+      contact: { text: 'Hiring, or need something built?', link: 'Let’s talk' },
     },
     about: {
       /** Under the name at the top of the page. */
@@ -141,10 +153,10 @@ export const strings = {
         works: 'Obras de concierto del compositor Víctor González para coro, orquesta, ensemble y electrónica, con notas al programa, partituras y grabaciones.',
         playing: 'Víctor González a la guitarra clásica y eléctrica y a los teclados, en conciertos de coros y agrupaciones no profesionales: vídeos, grabaciones y fotos.',
         studio: 'Producción musical de Víctor González: maquetas orquestales, programación MIDI, edición y mezcla, con ejemplos para escuchar.',
-        tech: 'Víctor González, ingeniero de software desde hace más de quince años: datos geográficos en xarvio (BASF), monitorización forestal para la FAO y después geomatico.',
+        tech: 'Víctor González, ingeniero de software sénior y compositor: más de quince años construyendo software, en xarvio (BASF) entre otros, y herramientas para músicos.',
         articles: 'Artículos de Víctor González sobre composición, producción, interpretación e ingeniería de software.',
         about: 'Víctor González: una guitarra a los catorce, el software a los dieciocho y composición estudiada trabajando a jornada completa. CV de músico e ingeniero.',
-        // TODO sprint 4: LinkedIn back in the list (src/site.ts).
+        // TODO sprint 6: LinkedIn back in the list (src/site.ts).
         contact: 'Contacta con Víctor González para una obra nueva o un guitarrista para tu concierto: correo, YouTube, SoundCloud y GitHub.',
       },
       work: { by: 'obra del compositor Víctor González', note: 'notas al programa', score: 'partitura', recordings: 'grabaciones' },
@@ -193,6 +205,16 @@ export const strings = {
     articles: {
       intro: 'La versión larga de lo que hago y de cómo lo pienso.',
       empty: 'De momento, la versión larga cabe en esta frase.',
+      pdf: 'PDF',
+    },
+    tech: {
+      title: 'Ingeniero de software sénior, y compositor.',
+      availability: 'Autónomo, abierto a puestos y proyectos en remoto, sobre todo en tecnología musical.',
+      software: { title: 'Software para músicos', intro: 'Construyo herramientas al servicio de los músicos, no para sustituirlos.' },
+      cv: 'CV',
+      labels: { article: 'Artículo', code: 'Código' },
+      how: 'Cómo trabajo',
+      contact: { text: '¿Estás contratando o tienes un proyecto entre manos?', link: 'Hablemos' },
     },
     about: {
       subtitle: 'para músico e ingeniero',

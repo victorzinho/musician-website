@@ -54,7 +54,7 @@ export const cvPaths = () =>
   cvKinds.flatMap((kind) => languages.map((lang) => ({ params: { id: `${kind}-${lang}` }, props: { kind, lang } })));
 
 /** The links each CV shows, in order. */
-// TODO sprint 4: 'linkedin' back in both (engineer after 'site', musician last); rerun scripts/cv-pdfs.mjs.
+// TODO sprint 6: 'linkedin' back in both (engineer after 'site', musician last); rerun scripts/cv-pdfs.mjs.
 const links: Record<CvKind, string[]> = { engineer: ['site', 'github'], musician: ['site', 'youtube'] };
 
 export const loadCv = async (kind: CvKind, lang: Lang): Promise<Cv> => {
@@ -87,7 +87,11 @@ export const loadCv = async (kind: CvKind, lang: Lang): Promise<Cv> => {
   const experience = data.experience.filter(inCv).map(entry);
   const projects = {
     title: t.projects,
-    lines: data.projects.filter(inCv).map((p) => ({ label: p.name, text: p[lang], url: p.url ?? undefined })),
+    lines: data.projects.filter(inCv).map((p) => ({
+      label: p.name,
+      text: p[lang],
+      url: p.url?.startsWith('/') ? `${person.links.site}/${lang}${p.url}` : (p.url ?? undefined),
+    })),
   };
   const education = {
     title: t.education,
@@ -150,12 +154,14 @@ export const loadCv = async (kind: CvKind, lang: Lang): Promise<Cv> => {
           skills,
         ];
 
-  const url = (key: string) => (key === 'site' ? `${person.links.site}/${lang}/` : person.links[key]);
+  const home = `${person.links.site}/${lang}/`;
+  /** The engineer CV's site link opens its section; the name always opens the home page. */
+  const url = (key: string) => (key !== 'site' ? person.links[key] : kind === 'engineer' ? section('engineer') : home);
   return {
     kind,
     lang,
     name: person.name,
-    home: url('site'),
+    home,
     headline: data.headline[kind][lang],
     summary: data.summary[kind][lang],
     contact: [

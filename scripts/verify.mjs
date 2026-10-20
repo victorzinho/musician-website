@@ -4,6 +4,7 @@ import { execFileSync } from 'node:child_process';
 
 const phases = {
   'Before the build': [
+    ['Stand-in content', 'node', ['scripts/check-fake.mjs']],
     ['Contrast of the palettes', 'node', ['scripts/check-contrast.mjs']],
     ['Types', 'npx', ['astro', 'check']],
   ],

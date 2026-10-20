@@ -1,0 +1,8 @@
+title:
+  en: MICSc, a parallel computational fluid dynamics code based on PETSc
+  es: MICSc, un código paralelo de dinámica de fluidos computacional basado en PETSc
+description:
+  en: "Engineering thesis, in Spanish: refactoring, extending and benchmarking a parallel fluid simulation code on PETSc."
+  es: "Proyecto final de carrera: refactorización, ampliación y medida del rendimiento de un código paralelo de simulación de fluidos sobre PETSc."
+date: 2011-02-13
+roles: [engineer]

@@ -1,0 +1,42 @@
+---
+import { strings, type Lang } from '../i18n';
+
+export type LinkChip = { label: string; href: string; title?: string; external?: boolean; event?: Record<string, string> };
+
+interface Props {
+  links: LinkChip[];
+  lang: Lang;
+}
+
+const { links, lang } = Astro.props;
+---
+
+<span class="chips">
+  {
+    links.map(({ label, href, title, external, event }) => (
+      <a class="chip" href={href} title={title} target={external ? '_blank' : undefined} {...event}>
+        {label}
+        {external && (
+          <>
+            {' '}
+            <span aria-hidden="true">↗</span>
+            <span class="visually-hidden">{strings[lang].works.labels.newTab}</span>
+          </>
+        )}
+      </a>
+    ))
+  }
+</span>
+
+<style>
+  /* The chips wrap to the next line together, never one by one. */
+  .chips {
+    display: inline-flex;
+    gap: 0.35rem;
+    vertical-align: 0.1em;
+    white-space: nowrap;
+  }
+  .chips:empty {
+    display: none;
+  }
+</style>
