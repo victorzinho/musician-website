@@ -4,15 +4,18 @@ import { getEntry, render } from 'astro:content';
 import Base from '../../../layouts/Base.astro';
 import AccentList from '../../../components/AccentList.astro';
 import BackLink from '../../../components/BackLink.astro';
+import Lightbox from '../../../components/Lightbox.astro';
+import LinkChips from '../../../components/LinkChips.astro';
 import RoleChips from '../../../components/RoleChips.astro';
-import { articles } from '../../../articles';
+import Rule from '../../../components/Rule.astro';
+import { articles, pdfChip } from '../../../articles';
 import type { Article } from 'schema-dts';
 import { codas, languages, locales, localize, strings, type Lang } from '../../../i18n';
 import { person } from '../../../structured-data';
 
 export const getStaticPaths = (async () => {
   const all = await articles();
-  const pages = all.filter((article) => !article.pdf);
+  const pages = all.filter((article) => article.text);
   return languages.flatMap((lang) => pages.map((article) => ({ params: { lang, slug: article.id }, props: { article } })));
 }) satisfies GetStaticPaths;
 
@@ -43,13 +46,13 @@ const published = date.toLocaleDateString(lang, { dateStyle: 'long', timeZone: '
       <h1>{title[lang]}</h1>
       <p class="date">
         <time datetime={date.toISOString().slice(0, 10)}>{published}</time>
+        {article.pdf && <LinkChips links={[pdfChip(article, lang)]} lang={lang} />}
         <RoleChips roles={sections} lang={lang} />
       </p>
-      <p class="lead">{description[lang]}</p>
     </header>
     <hr class="rule" />
     <div class="prose">
-      <Content components={{ ul: AccentList }} />
+      <Content components={{ ul: AccentList, hr: Rule }} />
     </div>
     <hr class="rule" />
     <footer class="closing">
@@ -61,10 +64,11 @@ const published = date.toLocaleDateString(lang, { dateStyle: 'long', timeZone: '
       </p>
     </footer>
   </article>
+  <Lightbox lang={lang} />
 </Base>
 
 <style>
-  /* A plain article header, flush left: back link, title, date, then the description as the lead. */
+  /* A plain article header, flush left: back link, title, date. */
   header {
     padding-top: 1rem;
   }
@@ -74,7 +78,7 @@ const published = date.toLocaleDateString(lang, { dateStyle: 'long', timeZone: '
     line-height: 1.15;
     color: var(--color-blue);
   }
-  /* The date, then the sections as chips. */
+  /* The date, then its PDF and sections as chips. */
   .date {
     display: flex;
     flex-wrap: wrap;
@@ -86,10 +90,6 @@ const published = date.toLocaleDateString(lang, { dateStyle: 'long', timeZone: '
     font-family: var(--font-heading);
     font-style: italic;
     color: var(--color-muted);
-  }
-  /* The body size, like the openings on other pages; the text below is a step smaller. */
-  .lead {
-    margin: 1.25rem 0 0;
   }
   .closing p {
     margin: 0 0 0.75rem;
@@ -172,10 +172,6 @@ const published = date.toLocaleDateString(lang, { dateStyle: 'long', timeZone: '
   }
   .prose :global(.player) {
     margin-block: 1.5rem;
-  }
-  .prose :global(hr) {
-    height: 1px;
-    background: var(--color-rule);
   }
   /* A centred column at a comfortable line length; figures, code and tables use the full width, centred under it. */
   header,

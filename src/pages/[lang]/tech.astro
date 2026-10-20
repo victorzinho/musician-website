@@ -7,7 +7,7 @@ import ArticleList from '../../components/ArticleList.astro';
 import LinkChips, { type LinkChip } from '../../components/LinkChips.astro';
 import Quote from '../../components/Quote.astro';
 import YouTube from '../../components/YouTube.astro';
-import { articleHref, articles } from '../../articles';
+import { articleHref, articles, pdfChip } from '../../articles';
 import { codas, langPaths, languages, localize, strings, type Lang } from '../../i18n';
 import { cvs, profiles } from '../../site';
 import { youtubeId } from '../../youtube';
@@ -38,11 +38,8 @@ const list = (await getEntry('software', 'software'))!.data.map((tool) => {
   const links: LinkChip[] = [
     ...(tool.articles ?? []).map(({ id }): LinkChip => {
       const article = byId.get(id)!;
-      const href = articleHref(article, lang);
-      const title = article.data.title[lang];
-      if (!article.pdf) return { label: t.tech.labels.article, href, title };
-      const event = { 'data-umami-event': 'article', 'data-umami-event-file': href.split('/').pop()! };
-      return { label: t.articles.pdf, href, title, external: true, event };
+      if (!article.text) return pdfChip(article, lang);
+      return { label: t.tech.labels.article, href: articleHref(article, lang), title: article.data.title[lang] };
     }),
     ...(tool.code ? [{ label: t.tech.labels.code, href: tool.code, external: true }] : []),
   ];

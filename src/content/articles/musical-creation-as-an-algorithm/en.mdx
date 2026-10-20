@@ -1,0 +1,285 @@
+import Colophon from '../../../components/Colophon.astro';
+import Figure from '../../../components/Figure.astro';
+import YouTube from '../../../components/YouTube.astro';
+import fieldGenerated from './field-generated.png';
+import fieldMarimbas from './field-marimbas.png';
+import surfPlan from './surf-plan.png';
+import tuningChords from './tuning-chords.png';
+import tuningScore from './tuning-score.png';
+import atemporal from './atemporal.png';
+import subdivisions from './subdivisions.png';
+import complexSubdivisions from './complex-subdivisions.png';
+
+This is a summary of *La creación musical como algoritmo*, my thesis for the Degree in Composition at the Conservatorio
+Superior de Música Joaquín Rodrigo (Valencia, 2025), supervised by Iluminada Pérez Troya. The full text, in Spanish, is
+linked above as a PDF.
+
+---
+
+Can you compose with algorithms without losing control of the music? The question came to me from two sides. I have
+written software for a living for more than fifteen years, a job that trains you to spot costly processes and judge
+whether automating them pays off. At the conservatory I met works with no metre and no tonality, and composing without
+those known structures felt, to some extent, like a leap into the void. I wanted a process to lean on, defined enough to
+give the music coherence.
+
+Generating music with software is no longer in question; keeping control of it is. The thesis starts from a hypothesis:
+if composing is described as transforming something we perceive into musical parameters, the composer can keep control
+of what is generated, as long as the process leaves room for the composer's own contribution.
+
+The article loosely follows the thesis. First, [a few definitions](#composing-as-a-transformation), a look at
+[history](#transformations-through-history) and some thoughts on [artificial intelligence](#artificial-intelligence).
+Then the experiments, on three of my own works: [two on generating material](#the-problem-of-time), and one on [the
+limits of humans and machines](#the-limits-of-the-human). Last, [what I concluded](#conclusions).
+
+## Composing as a transformation
+
+The idea the thesis puts to the test is that composing is, to a large extent, translating: something we perceive in the
+world (the size of an animal, the amount of wheat in a field) becomes a musical parameter (an instrument, a pitch). If
+that translation can be described precisely, it might be automated without losing control. Describing it takes only a
+few words from statistics. Both what is perceived and what is musical take values of four kinds:
+
+- **Nominal**: categories with no order (oboe, violin).
+- **Ordinal**: categories with an order (*piano* is softer than *forte*).
+- **Discrete**: numbers in steps (pitch in semitones).
+- **Continuous**: any number (pitch in hertz).
+
+Each type turns into another through a different operation. Between categories and numbers in steps, an **assignment**
+picks a value for each value, one by one: large animals (ordinal) to percussion, small ones to strings (nominal). It is
+arbitrary, which is precisely what lets it jump from anything perceived to anything musical. Continuous values need two
+more. An **interpolation** goes from discrete to continuous: it fills in the values missing between known ones, like
+estimating the wheat between two measured points of a field. A **classification** goes the other way, from continuous to
+categories or steps: it cuts a continuous range into bands, the way semitones cut the continuum of frequency.
+
+Chained together, these operations make an **algorithm** in the broad sense the thesis uses: not necessarily code, but a
+recipe, a set of rules that turns what is perceived into music step by step. Some of the experiments below ran as
+software; others were followed by hand, on paper.
+
+## Transformations through history
+
+In Ancient Greece, music was thought to carry *ethos*, the power to shape character: Plato ties courage to the Dorian
+mode and lament to the Lydian. It is an assignment between categories: traits of character to modes, rhythms or
+instruments. Its arbitrariness was at the heart of much of the Greek discussion of music, which sought to ground those
+associations so that they weren't mere whim. In Gregorian chant, mode and rhythm serve the sacred text, and the
+transformation aims to be minimal so that the message arrives intact.
+
+From the Renaissance on, what is translated shifts from the divine message to human emotion. Monteverdi cites Plato and
+Boethius to link passions to qualities of the voice; Mattheson writes that joy, an expansion of the soul, is best
+expressed by large intervals; later, keys gather associations, such as F major with the pastoral or D minor with death.
+Romantic programme music multiplies the extramusical content: Berlioz's *idée fixe*, Wagner's leitmotifs, Prokofiev's
+instruments for animals, Berg's C major chord for money in *Wozzeck*. More things to translate, but still categories,
+and still assigned.
+
+The 20th century brings two changes. Integral serialism derives every parameter from a numeric series. And computers
+open two lines: sound itself as material (Stockhausen, spectralism, Vivier's *jeux de couleurs*) and algorithms taking
+the centre stage, with Xenakis's stochastic processes, for example.
+
+## Artificial intelligence
+
+A system that learns from its environment and produces music fits the same description: it transforms what it perceives
+into music through what it has learned. What matters is how much room it leaves the composer.
+
+As of today (the thesis is from 2025), a strong line of **generative AI**, aims at finished works with little or minimal
+human input, trained mostly without supervision on recorded audio, with the idea of a musical Turing test as the goal.
+Beyond its ethical and energy problems, that use reduces the composer's contribution to almost nothing, which places it
+outside the thesis.
+
+AI in **computer-assisted composition** does leave that room for creation: IRCAM's Orchidea, given a target sound, searches
+for the orchestral combination that sounds most alike (Cella 2022); DYCI2 improvises with musicians from a corpus of
+classified sounds (Nika et al. 2017). The composer chooses the target or the corpus, and uses the result like any other
+material.
+
+Generative AI also reopens an old question: is music a product or an activity? The original Turing test was a
+conversation, not the comparison of finished texts (Ariza 2009). As Christopher Small put it: "Music is not a thing at
+all but an activity, something that people do" (Small 1998).
+
+## The problem of time
+
+If music is sound organised in time, its hardest problem, wherever a discourse is expected, is managing material across
+a work: what comes next, and when it changes. Forms such as the sonata answer in part; integral serialism answers with
+rules, at times at the cost of an erratic discourse; generative AI, in 2025, still struggled to stay coherent over time.
+
+Two experiments addressed one question each. Each was judged on what it costs to set up (writing code, for instance),
+what it costs to turn its output into a finished work, how audible the process is, and how satisfying overall.
+
+### What comes next: -90.938, 42.3 – 2017
+
+This piece for three marimbas translates a process that is already coherent in the real world: a season in a wheat
+field. Farm machinery recorded, at each point of its path, the seeds sown, the product sprayed and the crop harvested,
+and satellite images gave the vegetation. Each point became a sixteenth note: the three measurements, continuous values,
+were classified into pitch classes, and the vegetation set the key, turning notes outside it into rests.  From the lines
+generated, I then wrote, freely, one marimba line per machine.
+
+<Figure src={fieldGenerated} alt="Nine staves of generated sixteenth notes, labelled by variable and classification algorithm">
+  The first three bars as generated: seeding, crop protection and yield, each classified with three algorithms.
+</Figure>
+
+<Figure src={fieldMarimbas} alt="Three marimba staves, the same three bars as written from the generated lines">
+  The same three bars, written for the three marimbas.
+</Figure>
+
+The machinery's measurements can't be heard without an explanation: an abrupt change in one passage could be anything in
+the field. Implementing the processing from scratch is expensive; here it wasn't, because I was developing that same
+algorithm at work, to display vegetation on maps, and the part this experiment needs is now public. Refinement stayed
+costly: the process gives harmony and little else, and dynamics, articulation, dialogue and form were all still to be
+decided. The success of the piece depends almost entirely on the composer; its value was personal, a way out of
+established structures and of the *horror vacui* of composing without known patterns.
+
+It also exposed a gap: the harmony ignores the time the machine spent at each point, so cadences, transitions and
+tension are left to chance, and the composer ends up shaping a sequence that was never generated with a form in mind.
+
+### When it changes: Kissed by God
+
+[*Kissed by God*](/en/works/kissed-by-god/) takes its large-scale form from a surf session, an activity with a small set
+of actions and very characteristic proportions: watching the sea, paddling out, misjudging a wave, paddling back, being
+held under by another, paddling back again, and finally riding one. From them come four themes: watching the sea;
+paddling, out (rising) or to catch a wave (falling); the wipeout; and triumph. Sections, their character and the
+transitions between them follow the session, and the plan was drawn before any note was written:
+
+<Figure src={surfPlan} alt="Hand-drawn plan: tempo, keys and dynamics over a seven-minute timeline, with sections a, b, wipeout and triumph">
+  The composition plan: tempo, keys, playing techniques and dynamics over seven minutes, under the session's phases
+  and the resulting form.
+</Figure>
+
+The main transformations:
+
+- **Time (continuous) → time (continuous).** At first a plain scaling of the session's proportions; it had to adapt.
+- **Distance from the shore (continuous) → pitch class (discrete).** The shore set as A♭ and the best take-off points as
+  E♭ and F, interpolated between them and rounded to semitones.
+- **Lack of air, chaos (nominal) → randomness, sudden changes of dynamics and register (nominal).** An arbitrary
+  assignment, chosen so that the frenzy of the wipeout feels as close as possible to the real thing.
+- **Heart rate (continuous) → pulse (continuous).** Also meant as a direct translation, and also adapted.
+
+Again, the session can't be recovered from the music. Some sensation may come through, softened, as in the wipeout, but
+the video carries most of the translation. With nothing to compute, the process costs nothing beyond composing; a
+programmatic plan helps order ideas and get past a block, but these transformations add nothing audible and save no
+work.
+
+<YouTube id="O06FQ8ONp9s" title="Kissed by God">*Kissed by God* (2024), for piano, video and electronics.</YouTube>
+
+### The problem of proportions
+
+In the water, waiting is disproportionately long next to paddling or riding, so the plan was corrected from the start,
+and again while writing, by musical judgement alone.
+
+Kaija Saariaho faced a similar problem in *Orion*. In its second movement, *Winter Sky*, the length of each section
+follows a numeric plan, beats against tempo; yet where a slower tempo would have stretched one section beyond its place
+in the plan, she cut six beats from it. Even composers of her stature adjust their numeric plans when the music asks for
+it; my own adjustments, at a different scale, answer the same question.
+
+Deciding *what* comes next can be formalised and kept under control, though the cost may exceed the work it saves.
+Deciding *when* the material changes involves an arbitrariness, often shared and rooted in our artistic context, that
+resists formalisation. Algorithms can help, but guarantee nothing: "hope of an extraordinary aesthetic success based on
+extraordinary technology is a cruel deceit" (Xenakis 1985).
+
+## The limits of the human
+
+[*Ese Mi parece un Mi♭*](/en/works/ese-mi-parece-un-mi-bemol/), for fretless electric guitar and electronics, treats
+pitch and time as continuous, and asks where the limits lie: what performers and electronics can play, what listeners
+can hear, and how to write it down.
+
+### Pitch as a continuous parameter
+
+Any pitch should be possible, yet pitches need relations to build a discourse rather than an erratic sequence. The
+starting conditions: notes repeat at the octave; fifths are pure (702 cents, against 700 in equal temperament); thirds
+are ambiguous, halfway between major and minor (340 cents); C is the reference, and whatever applies to C applies to G.
+
+Two more chords were found by ear on a synthesiser, to give the harmony direction: a tenser one, with a low tritone and
+a sixth as ambiguous as the thirds, and a "dominant" of two stacked low tritones that resolves back to C.
+
+<Figure src={tuningChords} alt="Eight chords on a staff in two groups, labelled Do and Sol, with microtonal accidentals">
+  The basic chords of the tuning, on C (*Do*) and on G (*Sol*); the G chord belongs to both.
+</Figure>
+
+The remaining gaps were filled in so that no step exceeds a semitone: 19 unequal notes per octave.
+
+Then comes precision. Listeners tell apart pitch differences of about 3 to 6 cents (Loeffler 2006; Olson 1967), and
+producing a pitch on an instrument is necessarily harder than hearing it. An A at 906 cents against one at 900 is at the
+edge of perception, and beyond what a composer can reasonably ask of a performer. So the electronics play every pitch
+exactly, while the score keeps notation as conventional as possible, with the real cents as a reference:
+
+<Figure src={tuningScore} alt="The score's tuning instructions: 19 notes on a staff with their cents, and notes on the accidentals">
+  The tuning, as explained at the start of the score.
+</Figure>
+
+### Time as a continuous parameter
+
+Time has its own established proportions: halves and thirds of a beat mean something to every trained listener. The
+piece avoids them in two ways.
+
+First, treating time as a continuous line. The electronics place events at random clustering organically; the guitar
+part has no barlines, only noteheads at distances proportional to time. With no recognisable
+relation between events, the section has no pulse, however dense it gets.
+
+<Figure src={atemporal} alt="Guitar and electronics staves without barlines, with time marked in seconds">
+  The section without pulse: events placed in seconds, not beats.
+</Figure>
+
+Second, using proportions outside our tradition. Plotting eighths, sixths and fifths of a beat shows how little room is
+left between them, and how close those gaps are to the limit of what we can perceive or play:
+
+<Figure src={subdivisions} alt="A line from 0 to 1 with points marking eighths, sixths and fifths of a beat">
+  Eighths (red dots), sixths (blue circles) and fifths (green crosses) of a beat.
+</Figure>
+
+Subdividing the beat ever further is already well explored, down to what Adam Neely and Shawn Crowder call
+*hypertuplets* (Neely 2021, 2024; Crowder 2021). The piece looks elsewhere: a subdivision that doesn't add up to the
+beat, so that two quavers last more or less than a crotchet. The ratio, chosen arbitrarily, is 1 quaver = 0.6 crotchets.
+
+That raises two problems. The first is writing it down. We discriminate musical events as short as about 100
+milliseconds (London 2002), and we performers can reach that precision from a traditional notation that has been in use
+for centuries. Inventing a notation would throw that away, and could even be counterproductive; writing the relation
+with a pulse and known figures, however complex, is more productive. The beat is written as five semiquavers and the
+subdivision as three (3 / 5 = 0.6):
+
+<Figure src={complexSubdivisions} alt="Guitar and electronics staves in a 5+12+5+6 over 16 time signature">
+  The 0.6 subdivision, written as three semiquavers against a beat of five.
+</Figure>
+
+The second is the performer's deviations, deliberate (a *ritardando*, a fermata) or not. Electronics can place events to
+the millisecond, but can't follow a performer as another musician would. In the piece, the electronics are a
+pre-recorded track written to double as the guitarist's click, with cues to measure the complex relations.
+
+<YouTube id="q6tZGH8PJuI" title="Ese Mi parece un Mi♭">*Ese Mi parece un Mi♭* (2022), for fretless electric guitar and electronics: studio recording.</YouTube>
+
+Machines have more resolution than our perception, but can't adapt to a live performance; performers are less precise,
+though a professional comes very close to the limits of perception, and they react at once. And traditional notation,
+with as few additions as possible, proved the most effective.
+
+## Conclusions
+
+- **History prefers categories.** Numbers were always there, but they and complex processing only take centre stage in
+  the 20th century, with computers and a growing attention to sound itself as material.
+- **Control depends on the tool.** Generative AI aimed at finished works takes most of it away; designing the process
+  yourself keeps it all.
+- **Technology guarantees nothing.** Generated material takes real time to become a finished work, so the work saved is
+  small. Its value is elsewhere: like sketching on paper or at the piano, it leads to material one wouldn't reach
+  otherwise.
+- **The algorithm shouldn't be heard.** An algorithm is deterministic: when the listener can always tell what comes
+  next, the music loses its capacity to surprise.
+
+This thesis is also where my two trades began to meet. Writing software taught me to formalise processes; composing
+taught me which decisions shouldn't be. Any tool for musicians draws that line somewhere, between what the machine
+decides and what stays with the person using it, and having drawn it from the composer's side, in my own pieces, is what
+I bring to the tools I build. The code behind these experiments is [public](
+https://github.com/victorzinho/brain-fartools), along with [browser
+tools](https://victorzinho.github.io/brain-fartools/) I use while composing.
+
+## Selected references
+
+- Ariza, Christopher. 2009. "The Interrogator as Critic: The Turing Test and the Evaluation of Generative Music
+  Systems". *Computer Music Journal* 33 (2): 48–70.
+- Cella, Carmine-Emanuele. 2022. "Orchidea: A Comprehensive Framework for Target-Based Computer-Assisted Dynamic
+  Orchestration". *Journal of New Music Research* 51 (1): 40–68.
+- Crowder, Shawn. 2021. "h y p e r t u p l e t s." YouTube.
+- Loeffler, Dominik B. 2006. "Instrument Timbres and Pitch Estimation in Polyphonic Music". Master's thesis, Georgia
+  Institute of Technology.
+- London, Justin. 2002. "Cognitive Constraints on Metric Systems". *Music Perception* 19 (4): 529–50.
+- Neely, Adam. 2021. "The Psychology of Extreme Rhythms"; 2024. "Wait, it's all just in 4/4?". YouTube.
+- Nika, Jérôme, et al. 2017. "DYCI2 agents: merging the 'free', 'reactive', and 'scenario-based' music generation
+  paradigms". International Computer Music Conference.
+- Olson, Harry F. 1967. *Music, Physics and Engineering*. Dover.
+- Saariaho, Kaija. 2002. *Orion*. Chester Music.
+- Small, Christopher. 1998. *Musicking: The Meanings of Performing and Listening*. University Press of New England.
+- Xenakis, Iannis. 1985. "Music Composition Treks". In *Composers and the Computer*. William Kaufmann.
+
+<Colophon>Contains traces of AI · 5 rounds of notes · ~50% of draft content discarded.</Colophon>

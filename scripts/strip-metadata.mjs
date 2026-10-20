@@ -161,11 +161,23 @@ const pdfLeftovers = (text) => [
   ...(/\/Metadata\s+\d+\s+\d+\s+R/.test(text) ? ['XMP /Metadata'] : []),
 ];
 
-/** Info entries blanked with spaces, so every byte offset (the xref table) stays valid. */
+/** Each `/Metadata` reference and the body of its XMP stream: where each starts and ends in `text`. */
+const pdfXmp = (text) =>
+  [...text.matchAll(/\/Metadata\s+(\d+)\s+(\d+)\s+R/g)].map((ref) => {
+    const obj = new RegExp(`(?:^|[^\\d])${ref[1]}\\s+${ref[2]}\\s+obj\\s*<<([^]*?)>>\\s*stream\\r?\\n`).exec(text);
+    if (!obj || obj[1].includes('/Filter')) throw new Error(`XMP ${ref[1]} ${ref[2]}: compressed or in an object stream, strip it with a PDF tool`);
+    const start = obj.index + obj[0].length;
+    return [
+      { start: ref.index, end: ref.index + ref[0].length },
+      { start, end: text.indexOf('endstream', start) },
+    ];
+  });
+
+/** Info entries, XMP references and XMP packets blanked with spaces, so every byte offset (the xref table) stays valid. */
 const stripPdf = (buf) => {
   const text = buf.toString('latin1');
-  if (/\/Metadata\s+\d+\s+\d+\s+R/.test(text)) throw new Error('XMP metadata stream: not handled, strip it with a PDF tool');
   const out = Buffer.from(buf);
+  for (const { start, end } of pdfXmp(text).flat()) out.fill(0x20, start, end);
   for (const entry of pdfInfo(text).flat()) {
     if (entry.key === '/Title' && !emptyTitle(entry.value)) continue;
     out.fill(0x20, entry.start, entry.end);

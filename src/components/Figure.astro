@@ -1,6 +1,7 @@
 ---
 import type { ImageMetadata } from 'astro';
-import { Image } from 'astro:assets';
+import { getImage, Image } from 'astro:assets';
+import { strings, type Lang } from '../i18n';
 
 interface Props {
   src: ImageMetadata;
@@ -8,15 +9,23 @@ interface Props {
 }
 
 const { src, alt } = Astro.props;
+const t = strings[Astro.currentLocale as Lang];
 const caption = (await Astro.slots.render('default')).trim();
+/** Full size in the page's lightbox (`Lightbox.astro`). */
+const full = (await getImage({ src, width: Math.min(src.width, 2400) })).src;
 ---
 
 <figure>
-  <Image src={src} alt={alt} widths={[640, 1280]} sizes="(min-width: 48rem) 40rem, 100vw" />
+  <a href={full} data-zoom aria-label={`${t.lightbox.open}: ${alt}`}>
+    <Image src={src} alt={alt} widths={[640, 1280]} sizes="(min-width: 48rem) 40rem, 100vw" />
+  </a>
   {caption && <figcaption set:html={caption} />}
 </figure>
 
 <style>
+  a {
+    cursor: zoom-in;
+  }
   img {
     display: block;
     width: 100%;

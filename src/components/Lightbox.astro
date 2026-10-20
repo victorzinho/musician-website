@@ -1,0 +1,65 @@
+---
+import { strings, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const t = strings[Astro.props.lang].lightbox;
+---
+
+{/* Opens every `a[data-zoom]` on the page: the image it links to, full size. Without JavaScript, the link opens it. */}
+<dialog class="lightbox" data-lightbox aria-label={t.open}>
+  <button class="close" type="button" aria-label={t.close}>×</button>
+</dialog>
+
+<script>
+  const lightbox = document.querySelector<HTMLDialogElement>('[data-lightbox]')!;
+  // Created here: an <img> without src is invalid HTML.
+  const image = document.createElement('img');
+  lightbox.prepend(image);
+  for (const link of document.querySelectorAll<HTMLAnchorElement>('[data-zoom]')) {
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      image.src = link.href;
+      image.alt = link.querySelector('img')!.alt;
+      lightbox.showModal();
+    });
+  }
+  // Any click closes it: the image, the backdrop or the button.
+  lightbox.addEventListener('click', () => lightbox.close());
+</script>
+
+<style>
+  .lightbox {
+    max-width: 95vw;
+    max-height: 95vh;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: zoom-out;
+  }
+  .lightbox::backdrop {
+    background: rgb(0 0 0 / 0.85);
+  }
+  .lightbox :global(img) {
+    display: block;
+    max-width: 95vw;
+    max-height: 95vh;
+    object-fit: contain;
+  }
+  .close {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 0;
+    border-radius: 50%;
+    font-size: 1.6rem;
+    line-height: 1;
+    color: #fff;
+    background: rgb(0 0 0 / 0.5);
+    cursor: pointer;
+  }
+</style>

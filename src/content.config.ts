@@ -182,8 +182,8 @@ const aboutNotes = defineCollection({
 });
 
 /**
- * Articles: `src/content/articles/<slug>/article.yaml`, id `<slug>`; text in `en.mdx` and `es.mdx`, both required, or
- * a PDF instead, `article.pdf`, published as `/articles/<slug>.pdf` (`src/articles.ts`).
+ * Articles: `src/content/articles/<slug>/article.yaml`, id `<slug>`; text in `en.mdx` and `es.mdx` (both), a PDF in
+ * `article.pdf`, published as `/articles/<slug>.pdf` (`src/articles.ts`), or both.
  */
 const articles = defineCollection({
   loader: glob({
@@ -193,7 +193,7 @@ const articles = defineCollection({
   }),
   schema: z.strictObject({
     title: translated,
-    /** One sentence, shown under the title in the index. */
+    /** One sentence, 50–170 characters: its line in the index and its search snippet. */
     description: translated,
     date: z.coerce.date(),
     /** The sections it belongs to, as chips in the index and at the top and end of the article. */
