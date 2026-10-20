@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { getCollection, getEntry } from 'astro:content';
-import { articles } from '../articles';
+import { articleHref, articles } from '../articles';
 import { strings } from '../i18n';
 import { hasScore, scorePath } from '../scores';
 import { cvs, email, profiles, roles, unfinished, type Role } from '../site';
@@ -37,7 +37,7 @@ export const GET: APIRoute = async ({ site }) => {
   const sections = {
     Pages: pages.map((page) => `- [${page.name}](${url(`/en${page.path}`)}): ${description(page.path)}`),
     Works: works.map(work),
-    Articles: (await articles()).map((a) => `- [${a.data.title.en}](${url(`/en/articles/${a.id}/`)}): ${a.data.description.en}`),
+    Articles: (await articles()).map((a) => `- [${a.data.title.en}](${url(articleHref(a, 'en'))}): ${a.data.description.en}`),
     CVs: cvs.map((cv) => `- [${cv.title.en} CV](${url(cv.pdf.en.replace(/\.pdf$/, '.md'))}): plain text; PDF: ${url(cv.pdf.en)}`),
     Contact: [`- Email: ${email}`, ...profiles.map((p) => `- [${p.name}](${p.url})`)],
   };

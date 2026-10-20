@@ -2,12 +2,12 @@
   "public/cv/engineer-en.pdf": {
     "script": "scripts/cv-pdfs.mjs",
     "source": "dist/cv/engineer-en/index.html",
-    "hash": "bdb96ba2f11f4e89870766f9aab835647c53058c60a73084e97a467a43f393d0"
+    "hash": "144520d8e13e39417f3f080912364c9e2ce9825dad99e331e2a0e25d518a11f2"
   },
   "public/cv/engineer-es.pdf": {
     "script": "scripts/cv-pdfs.mjs",
     "source": "dist/cv/engineer-es/index.html",
-    "hash": "51812374f61dc2e42094913981a04799c17a275522f996b31d287aacfabf69de"
+    "hash": "298ddf0f7661448da7faf278f500726dd53c8fb14427f0579e750660cb92769d"
   },
   "public/cv/musician-en.pdf": {
     "script": "scripts/cv-pdfs.mjs",

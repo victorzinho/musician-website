@@ -2,7 +2,7 @@ export const email = 'victorzinho@gmail.com';
 
 /** Icons: Simple Icons (CC0), 24×24 viewBox. */
 export const profiles = [
-  // TODO sprint 4: LinkedIn, once the profile is updated (ROADMAP.md).
+  // TODO sprint 6: LinkedIn, once the profile is updated (ROADMAP.md).
   // {
   //   name: 'LinkedIn',
   //   url: 'https://www.linkedin.com/in/vicgonco',
@@ -36,7 +36,7 @@ export const roles = {
 export type Role = keyof typeof roles;
 
 /** Pages that render `UnderConstruction`, without language: `noindex` and out of the sitemap. */
-export const unfinished = ['/studio/', '/tech/'];
+export const unfinished = ['/studio/'];
 
 /** Tags on listen excerpts, each leading to a section. */
 export const tags = {
@@ -48,6 +48,6 @@ export type Tag = keyof typeof tags;
 
 /** CVs on the About page, in order: a title per language and a PDF in `public/cv/` per language. */
 export const cvs = [
-  { title: { en: 'Musician', es: 'Músico' }, pdf: { en: '/cv/musician-en.pdf', es: '/cv/musician-es.pdf' } },
-  { title: { en: 'Engineer', es: 'Ingeniero' }, pdf: { en: '/cv/engineer-en.pdf', es: '/cv/engineer-es.pdf' } },
-];
+  { kind: 'musician', title: { en: 'Musician', es: 'Músico' }, pdf: { en: '/cv/musician-en.pdf', es: '/cv/musician-es.pdf' } },
+  { kind: 'engineer', title: { en: 'Engineer', es: 'Ingeniero' }, pdf: { en: '/cv/engineer-en.pdf', es: '/cv/engineer-es.pdf' } },
+] as const;

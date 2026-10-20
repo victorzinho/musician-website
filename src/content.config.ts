@@ -1,4 +1,4 @@
-import { defineCollection } from 'astro:content';
+import { defineCollection, reference } from 'astro:content';
 import { file, glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { parse } from 'yaml';
@@ -181,7 +181,10 @@ const aboutNotes = defineCollection({
   ),
 });
 
-/** Articles: `src/content/articles/<slug>/article.yaml`, id `<slug>`; text in `en.mdx` and `es.mdx`, both required. */
+/**
+ * Articles: `src/content/articles/<slug>/article.yaml`, id `<slug>`; text in `en.mdx` and `es.mdx`, both required, or
+ * a PDF instead, `article.pdf`, published as `/articles/<slug>.pdf` (`src/articles.ts`).
+ */
 const articles = defineCollection({
   loader: glob({
     base: './src/content/articles',
@@ -201,6 +204,37 @@ const articles = defineCollection({
 /** Article text: MDX, so it can use the components in `src/components/` (Figure, Player, YouTube). */
 const articleTexts = defineCollection({
   loader: glob({ base: './src/content/articles', pattern: '*/{en,es}.mdx', generateId: ({ entry }) => entry.replace(/\.mdx$/, '') }),
+  schema: z.strictObject({}),
+});
+
+/** Software on `/tech`, in the file's order: a single entry, `software` (`src/content/tech/software.yaml`). */
+const software = defineCollection({
+  loader: file('./src/content/tech/software.yaml', { parser: (text) => ({ software: parse(text) ?? [] }) }),
+  schema: z
+    .array(
+      z.strictObject({
+        /** Its anchor: `/tech/#<id>`. */
+        id: slug,
+        name,
+        description: translated,
+        /** Its demo. */
+        video: youtube.optional(),
+        /** Articles about it, as chips: a page or a PDF. The first is where its name links to. */
+        articles: z.array(reference('articles')).optional(),
+        /** Where its name links to without articles. */
+        code: z.url().optional(),
+      }),
+    )
+    .refine((all) => new Set(all.map((s) => s.id)).size === all.length, 'two with the same id'),
+});
+
+/** `/tech` text, MDX: `src/content/tech/<part>-<lang>.mdx`, ids `<part>/<lang>`; parts `intro` and `how`, both languages. */
+const tech = defineCollection({
+  loader: glob({
+    base: './src/content/tech',
+    pattern: '*-{en,es}.mdx',
+    generateId: ({ entry }) => entry.replace(/-(en|es)\.mdx$/, '/$1'),
+  }),
   schema: z.strictObject({}),
 });
 
@@ -258,7 +292,8 @@ const cv = defineCollection({
     production: z.array(entry),
     /** Musician CV only: groups on `/playing`, by folder in `src/content/playing/`, in order. */
     performing: z.array(z.string().min(1)),
-    projects: z.array(translated.extend({ cvs, name: z.string().min(1), url: z.url().nullish() })),
+    /** `url`: a page elsewhere, or a path of this site ("/articles/imogen/"), linked in the CV's language. */
+    projects: z.array(translated.extend({ cvs, name: z.string().min(1), url: z.union([z.url(), z.string().startsWith('/')]).nullish() })),
     skills: perCv(z.array(translated.extend({ items: z.array(name).min(1) }))),
     languages: z.array(translated.extend({ level: translated })),
   }),
@@ -271,6 +306,8 @@ export const collections = {
   aboutNotes,
   articles,
   articleTexts,
+  software,
+  tech,
   homeListen,
   quotes,
   playing,

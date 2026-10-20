@@ -24,7 +24,7 @@ Víctor's music portfolio, `music.victorzinho.es`. Plan: `REVAMP.md`; tasks: `RO
   construction are listed in `unfinished` (`src/site.ts`): `noindex`, out of the sitemap. `npm run verify` checks the
   built result (`scripts/check-seo.mjs`).
 - Analytics: Umami Cloud script in `src/layouts/Base.astro`, counting on the live domain only. Link clicks as events:
-  `data-umami-event` (`cv` with `file`, `score` with `work`).
+  `data-umami-event` (`cv` with `file`, `score` with `work`, `article` with `file` for a PDF article).
 - Link preview image (Open Graph): `src/pages/og/[lang].astro`, screenshotted to `public/og-<lang>.jpg` by
   `node scripts/og-image.mjs`.
 - Audio: `src/components/Player.astro` plays a local file or a SoundCloud track (Widget API, loaded on first play)
@@ -54,7 +54,8 @@ Víctor's music portfolio, `music.victorzinho.es`. Plan: `REVAMP.md`; tasks: `RO
   source; `npm run verify` fails when one is out of date and names the script to rerun (`scripts/generated.mjs`).
 - Published images and PDFs carry no metadata beyond a photo's credit and a PDF's title: run
   `node scripts/strip-metadata.mjs` after adding one; `npm run verify` checks the built site.
-- Articles: `src/content/articles/<slug>/` with `article.yaml` and `en.mdx`, `es.mdx` (both required). MDX imports
+- Articles: `src/content/articles/<slug>/` with `article.yaml` and either `en.mdx`, `es.mdx` (both required) or
+  `article.pdf`, published as `/articles/<slug>.pdf` (`src/articles.ts`). MDX imports
   `Figure`, `Player` and `YouTube` from `src/components/`; `parked/articles/mixing-like-a-rehearsal` uses them all.
 - Home excerpts: `src/content/home-listen.yaml`, in the file's order (schema: `src/content.config.ts`); tags lead to
   sections via `tags` in `src/site.ts`.
@@ -65,5 +66,9 @@ Víctor's music portfolio, `music.victorzinho.es`. Plan: `REVAMP.md`; tasks: `RO
   best first), optional prose in `en.md` and `es.md` (both or neither), and its images. The musician CV lists the
   groups in `performing` (`cv.yaml`), with their facts from each `playing.yaml`. `/playing/#<group>` links to a
   group, `/playing/#<group>-<slug>` to one of its items; the slug is the image's file name, or the SoundCloud track's.
+- Engineer `/tech`: text in `src/content/tech/` (`intro`, `how`, MDX, both languages); tools in
+  `src/content/tech/software.yaml`, in the file's order (schema: `src/content.config.ts`).
+- Stand-in content to work on a layout carries `FAKE` in a comment; `npm run verify` fails while any is in `src/`.
 - `interviews/` (gitignored): Víctor's answers to content questions, one file per session; source for the site's text.
+- `research/` (gitignored): investigations behind roadmap decisions (gear, services), one file per topic.
 - Recordings live on YouTube/SoundCloud; only small files (scores, images, short excerpts) go in the repo.

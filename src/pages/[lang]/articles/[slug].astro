@@ -12,7 +12,8 @@ import { person } from '../../../structured-data';
 
 export const getStaticPaths = (async () => {
   const all = await articles();
-  return languages.flatMap((lang) => all.map((article) => ({ params: { lang, slug: article.id }, props: { article } })));
+  const pages = all.filter((article) => !article.pdf);
+  return languages.flatMap((lang) => pages.map((article) => ({ params: { lang, slug: article.id }, props: { article } })));
 }) satisfies GetStaticPaths;
 
 const lang = Astro.currentLocale as Lang;
