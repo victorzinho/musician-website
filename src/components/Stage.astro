@@ -17,9 +17,11 @@ interface Props {
   /** Best first: the first item is the one on stage. */
   items: StageItem[];
   lang: Lang;
+  /** Its thumbnails are title cards on the page's colours: framed, with the play button in the corner, off the title. */
+  cards?: boolean;
 }
 
-const { id, items, lang } = Astro.props;
+const { id, items, lang, cards = false } = Astro.props;
 const t = strings[lang];
 const sizes = '(max-width: 48rem) 100vw, 48rem';
 /** The full-size photo the lightbox (`Lightbox.astro`) opens. */
@@ -34,7 +36,7 @@ const thumbnail = (item: StageItem) => (item.kind === 'photo' ? item.photo : ite
   /* One item on stage, the rest as thumbnails below it. Without JavaScript every item is shown, one after another, and
      videos and photos are links. */
 }
-<div class="stage" data-stage>
+<div class:list={['stage', { cards }]} data-stage>
   {
     panels.map((item) => (
       <figure class="panel" id={`${id}-${item.slug}`} data-panel>
@@ -151,6 +153,7 @@ const thumbnail = (item: StageItem) => (item.kind === 'photo' ? item.photo : ite
         stopVideo();
         pauseOthers();
         const iframe = document.createElement('iframe');
+        iframe.className = 'youtube';
         // Started by the click, so it plays at once.
         iframe.src = `${youtubeEmbed(facade.dataset.video!)}?autoplay=1`;
         iframe.title = facade.getAttribute('aria-label')!;
@@ -219,8 +222,7 @@ const thumbnail = (item: StageItem) => (item.kind === 'photo' ? item.photo : ite
     overflow: hidden;
     background: var(--color-surface);
   }
-  .screen img,
-  .screen :global(iframe) {
+  .screen img {
     display: block;
     width: 100%;
     height: 100%;
@@ -255,6 +257,27 @@ const thumbnail = (item: StageItem) => (item.kind === 'photo' ? item.photo : ite
   .facade:hover .play,
   .facade:focus-visible .play {
     transform: translate(-50%, -50%) scale(1.08);
+  }
+  /* Over the picture, so it doesn't change the 16:9 frame. */
+  .cards .screen::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid var(--color-rule);
+    pointer-events: none;
+  }
+  .cards .play {
+    inset: auto 1rem 1rem auto;
+    width: 3rem;
+    height: 3rem;
+    transform: none;
+  }
+  .cards .facade:hover .play,
+  .cards .facade:focus-visible .play {
+    transform: scale(1.08);
+  }
+  .cards .strip button:not([aria-current]) {
+    border-color: var(--color-rule);
   }
   /* An audio track plays from a card in the middle of its picture. */
   .overlay {

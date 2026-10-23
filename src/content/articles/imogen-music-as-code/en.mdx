@@ -1,0 +1,99 @@
+import YouTube from '../../../components/YouTube.astro';
+
+**imogen** is a prototype that lets AI agents edit musical scores. Musicians talk to it about music; underneath, the agent
+is writing code. That is the whole trick, and the reason it works.
+
+[Orchestrate by prompt](/en/articles/imogen-orchestrate-by-prompt/) is the musician's side: what it's for, in their terms, with
+both demos. This one is about the engineering, and where it could go.
+
+The parts a real product would stand on are robust and carefully built; what's missing is missing only because this
+is a demo. [Which are which](#what-it-takes-to-build) is at the end.
+
+## What it looks like today
+
+A chat with Claude (or your LLM of choice), with the score beside it. You write in plain musical language;
+seconds or minutes later the score changes and plays. Here a MIDI export of a mockup becomes a score ready
+for a recording session:
+
+<YouTube id="aLkBQTP9S1o" title="imogen: from a DAW mockup to a session score">From a Cubase mockup to a score for the session</YouTube>
+
+## Agents that write code
+
+Behind the musical conversation, Claude Opus 5.5 is editing a text file, sometimes writing a small program to make one
+change across many bars. To the agent, orchestrating is a programming task. That matters because programming is what
+AI agents are being pushed hard to do well right now, and every step the industry takes there, imogen takes too.
+
+The first results feel familiar to anyone who has asked an AI to write code. A dozen lines of style rules for
+Debussy were enough for the [demo](/en/articles/imogen-orchestrate-by-prompt/#a-melody-orchestrated): it did what I
+asked, but it wasn't what I would have written and definitely not good enough for a professional score.
+Code written without guidance starts the same way: it works, it looks good, but if you spend enough time reviewing it
+you notice it might start taking the codebase in a direction you don't want.
+
+Like many of us, I write software with agents under strict and structured rules for coding (how a project is laid out,
+how code is named, tested and documented), written once and loaded every time; today, with little effort from my side,
+you can't tell my code from the agent's. A business with a house style can do the same: write its rules once,
+and "orchestrate it like Debussy" ends up meaning exactly what it means to them.
+
+## Why not MusicXML
+
+The obvious thing to hand an agent is MusicXML, which every notation program reads and writes. It's the wrong thing.
+It has to carry whatever any notation program needs to redraw its pages (positions, fonts, spacing, system breaks), all
+mixed in with the notes. Every program reads and writes it a little differently: a study at McGill (2019) found that
+converting between score formats introduced discrepancies **every** time. And it's huge. A movement of a Beethoven string
+quartet takes 1.4 MB of MusicXML; the same music as plain text is about 60 KB, over twenty times smaller. The melody
+in the first demo went from 32 KB to about 1 KB.
+
+So imogen gives the agent a text that holds the music and nothing else: notes, rhythms, dynamics, articulations, slurs,
+text, instruments and their transpositions, one part after another. It's as terse as it can be while still holding
+everything a musician means by "the music". When the agent is done, it goes back to MusicXML; whatever imogen can't
+read, it reports by part and bar.
+
+## The music apart from the score
+
+Under the text is a model of the music in Python: notes, bars, keys, instruments with their ranges and transpositions,
+slurs and dynamics, and nothing about how a page looks. Because it holds the music in a musician's terms, operations
+on it are short programs:
+
+- write a B♭ clarinet part from concert pitch, or move a passage to another key;
+- check every note against its instrument's range before a player ever sees it;
+- flag parallel fifths, voice crossings, or a bassoon above a given note in quiet passages.
+
+Checks like these matter because the agent can't hear, and models are still weak at rhythm: a 2025 study found them
+answering none of its rhythm questions right, in any format. So the work splits: hard rules run as code on every edit,
+the agent reviews the softer ones against stricter instructions, and a musician's ear has the last word.
+
+None of this is a new idea. SMDL, an ISO standard from the 1990s, already separated the logical music, which it called
+the *cantus*, from its engraving, its performance and its analysis; it was hardly ever implemented. Wiggins, Miranda,
+Smaill and Harris (1993) compared music representations by how much they can express and how general they are.
+imogen's model is that logical layer for one tradition: Western notated music.
+
+## What it takes to build
+
+The honest answer: the hard part works, and the product around it is still to be built.
+
+**The foundations are solid.** The format and the model of the music are the part I'd defend in any review. Every
+element of MusicXML 4.0 (and there are **a lot**) is classified, one by one, as music to keep, music to add later,
+or layout to drop. A score exported and imported again comes back unchanged, and every export validates against the
+MusicXML schema. And the question the whole project hinged on has its answer: AI can work on music by writing code.
+As a musician, I'm happy with what it does today; as an engineer, I know what more rules will do to it, because
+I've seen them do it to code.
+
+**The product needs work.**
+
+- **Paying for it.** Every request to the agent costs AI tokens. Someone has to pay for them, and a musician should see
+  that as a subscription or a price, with accounts and limits around it.
+- **No hands on the controls.** Today I start each agent session myself, by hand.
+- **Agents on their own.** An agent that edits files, and writes and runs small programs to do it, needs serious
+  security once nobody is watching it: sealed off from everything but the score it's working on, with limits on what
+  it can run. Today I watch every session.
+- **The notation it doesn't cover yet.** Lyrics, chord symbols, tremolos, harmonics, pedalling, percussion and octave
+  lines, among others. Nothing in the model is in their way: the demos didn't need them, so they aren't built yet.
+- **Where it lives.** Its own web app, or inside a notation program, a DAW or a publisher's platform: a product
+  decision that shapes everything else.
+
+How long that takes depends on what the product is, and deciding that comes first. What I can say is that the risky
+part, whether AI can work on music at all, is behind us.
+
+For the journey so far, I'm glad to be both a senior engineer and a musician: here it meant knowing what counts as
+"musical intent" across the whole MusicXML schema, or why a band director wants a transcription, as well as how to
+build the thing.

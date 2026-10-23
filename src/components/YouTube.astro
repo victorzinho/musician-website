@@ -13,21 +13,22 @@ const caption = Astro.slots.has('default') ? (await Astro.slots.render('default'
 ---
 
 <figure>
-  <iframe
-    src={youtubeEmbed(id)}
-    title={title}
-    loading="lazy"
-    allow="encrypted-media; picture-in-picture; fullscreen"
-    referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  <div class="screen">
+    <iframe
+      class="youtube"
+      src={youtubeEmbed(id)}
+      title={title}
+      loading="lazy"
+      allow="encrypted-media; picture-in-picture; fullscreen"
+      referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  </div>
   {caption && <figcaption set:html={caption} />}
 </figure>
 
 <style>
-  iframe {
-    display: block;
-    width: 100%;
+  .screen {
     aspect-ratio: 16 / 9;
-    border: 0;
+    overflow: hidden;
     background: var(--color-surface);
   }
 </style>

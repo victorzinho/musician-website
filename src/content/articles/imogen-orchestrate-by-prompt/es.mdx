@@ -1,0 +1,146 @@
+import Prompt from '../../../components/Prompt.astro';
+import YouTube from '../../../components/YouTube.astro';
+
+**imogen** lleva la potencia de la IA a la notación musical: le hablas a un agente sobre una partitura, en compases,
+instrumentos y dinámicas, y la ves y la oyes cambiar. Le vais dando forma juntos, ronda tras ronda, todo el tiempo que
+quieras; cuando está como la quieres, pasa a tu propio programa de notación.
+
+Lo podemos ver en dos sesiones: una orquesta una melodía mía, la otra convierte una maqueta de DAW en una partitura
+para una sesión de grabación.
+
+## Una melodía, orquestada
+
+<YouTube id="fVJupgX-QQI" title="imogen: una melodía orquestada a golpe de prompt">Una melodía mía, orquestada a golpe de prompt</YouTube>
+
+Escribí una melodía corta, la exporté como MusicXML (el archivo que cualquier programa de notación sabe guardar) y la
+pedí al estilo de Debussy. Todo lo que el agente sabía de Debussy era lo que recordaba por sí mismo y esto (traducido
+del original en inglés, como todas las instrucciones de este artículo):
+
+<Prompt>
+
+- Instrumentos: dos flautas, dos oboes, un corno inglés, dos clarinetes, dos fagots, cuatro trompas, un arpa, glockenspiel (opcional) y cuerda.
+- La melodía:
+  - Para las maderas, usa un pentagrama (con dos voces y/o indicaciones «a 2») o dos si las voces son demasiado distintas. Las trompas, siempre en dos pentagramas.
+  - Aparece a menudo en las maderas: flauta en el registro grave, corno inglés, clarinete.
+  - Puede pasarla de un instrumento a otro, pero no doblarla.
+  - Puede ajustarla en ritmo y articulación (no en altura) para que encaje mejor con el estilo.
+- Cuerda:
+  - En los pasajes suaves, a menudo con sordina.
+  - Puede usar divisi.
+- Armonía:
+  - Apóyate *muchísimo* en acordes construidos por cuartas superpuestas.
+  - Evita la armonía funcional: los acordes aparecen por su color y no por su función (nada de IV-V-I).
+  - Los acordes de dominante, si llegan a aparecer, no resuelven.
+  - El primer y el último acorde no tienen por qué ser la tónica.
+- Mucha atención al detalle de la articulación, escrita como texto de expresión en la partitura.
+
+</Prompt>
+
+Después, al estilo de Mozart, con estas reglas:
+
+<Prompt>
+
+- Instrumentos: dos flautas, dos oboes, dos fagots, dos trompas, dos trompetas, timbales y cuerda.
+  - Para los vientos, usa un pentagrama (con dos voces y/o indicaciones «a 2»).
+  - La cuerda es la pieza central de la orquestación.
+  - Las maderas suelen añadir color a la cuerda.
+  - Las trompas suelen hacer de enlace entre la cuerda y las maderas.
+  - Las trompetas suelen reservarse para pasajes enérgicos concretos.
+- La melodía:
+  - Siempre en los violines. Puede doblarse con instrumentos de madera.
+- Armonía:
+  - Solo armonía funcional.
+  - Tiene que haber acordes de dominante, y deben resolver a la tónica.
+  - El primer y el último acorde son la tónica.
+  - Las notas fuera de la tonalidad son solo dominantes secundarias, sextas napolitanas u ornamentos.
+
+</Prompt>
+
+Luego pedí cambios más pequeños, por compás y por instrumento, hasta quedar contento con el resultado.
+
+## Una maqueta de DAW, lista para la sesión
+
+Las maquetas se producen generalmente a mano en un DAW, con claqueta. Si exportas una como MIDI, obtienes una partitura que nadie puede
+leer: pistas llamadas «Track 3», sin dinámicas, tresillos convertidos en otra cosa, notas con ritmos rarísimos.
+Convertir eso en particellas limpias para una sesión de grabación son horas de copista, normalmente para ayer.
+
+<YouTube id="aLkBQTP9S1o" title="imogen: de una maqueta de DAW a una partitura para la sesión">De una maqueta en Cubase a una partitura para la sesión</YouTube>
+
+Aquí el agente trabaja como asistente del productor: devuelve los ritmos a su sitio y arregla problemas compás a
+compás, según se lo pido. Todo lo que sabía de la música era esto:
+
+<Prompt>
+
+Recibirás mensajes de un músico sobre la partitura. La partitura se ha transcrito de un archivo MIDI exportado desde Cubase.
+
+</Prompt>
+
+## Primero se habla, luego te la llevas
+
+Trabajar con imogen tiene dos fases. Primero, tú y el agente: ves la partitura y la oyes, pero no la editas
+directamente. Dices lo que quieres, el agente la cambia, y repetís tantas veces como quieras. Después la descargas como
+MusicXML y la abres en Dorico, Sibelius o MuseScore, con instrumentos, particellas y transposiciones reales: vuelve a
+ser una partitura normal, tuya para editar, imprimir y repartir.
+
+## Cómo funciona
+
+El agente de las demos es [Claude Opus 5.5](https://platform.claude.com/docs/en/models/opus-5-5/overview). imogen
+hace el resto:
+
+1. Lee tu archivo MusicXML o MIDI y se queda solo con la música: notas, ritmos, dinámicas, articulaciones, ligaduras,
+   texto, instrumentos. La maquetación de la página, las fuentes y las posiciones se quedan fuera.
+2. Escribe esa música como un fichero de texto muy pequeño, tan pequeño como se puede sin dejar de tener todo lo que
+   un músico llamaría *la música*. Ese texto es lo que el agente lee y cambia.
+3. Cada vez que el agente lo cambia, imogen lo vuelve a convertir en partitura, la muestra y la reproduce.
+
+El agente nunca ve un archivo MusicXML. Por qué importa, y qué más hay debajo, está en [Escribir música como
+código](/es/articles/imogen-music-as-code/).
+
+imogen es un prototipo hecho para estos vídeos, no un producto (todavía). Algunos pasos son manuales: yo mismo abro cada
+sesión del agente, y el navegador le pasa mis mensajes. Por desgracia no hay nada que probar en línea, y no lo habrá
+hasta que esté bien construido ([lo que eso
+supone](/es/articles/imogen-music-as-code/#lo-que-hace-falta-para-construirlo)).
+
+### Qué se le dijo al agente
+
+Aparte de las reglas de arriba, al agente solo se le indicó qué tenía que leer y cómo hablar (también traducido):
+
+<Prompt>
+
+Háblale al músico solo en inglés, usando únicamente terminología musical. No menciones nunca archivos, herramientas, código, reglas ni el entorno.
+
+Sé colaborativo:
+- Cuando una instrucción tenga una ambigüedad musical relevante, haz una única pregunta musical concisa u ofrece una o dos alternativas musicales concretas.
+- Haz como mucho dos rondas seguidas de aclaraciones.
+- Si tras la segunda ronda sigue habiendo ambigüedad, toma una decisión musical conservadora, edita la partitura y explica la decisión, con alguna breve pregunta de seguimiento opcional.
+- Esto es iterativo: escribe una realización plausible que se ajuste a la intención del compositor y luego refínala con las siguientes peticiones; no hace falta que sea perfecta a la primera.
+
+</Prompt>
+
+## Para quién es
+
+- **Orquestación.** Una melodía o un boceto orquestados para la agrupación para la que escribes, en el estilo que
+  quieres. O una obra orquestal entera transcrita para banda, algo muy nuestro en Valencia, donde casi cada pueblo
+  tiene la suya.
+- **Productores y copistas.** De la maqueta del DAW a las particellas de la sesión, como en el segundo vídeo.
+- **Los músicos que tienes.** Una orquesta escolar sin oboe, una cantante que la necesita una tercera más baja, lo que
+  cambia cosas en otros instrumentos, segundos clarinetes que aún no pueden subir por encima del pentagrama: la misma
+  obra, reescrita para la gente que está en la sala.
+- **Reducciones.** Una reducción para piano de una partitura orquestal, para ensayos de coro o de musical.
+- **Estudiantes con ganas de escribir.** Para músicos jóvenes con ganas de escribir antes de haber estudiado
+  composición: una forma lúdica de probar una idea, oírla tocada por una orquesta y cambiarla al momento. No sustituye
+  escribir a mano ni aprender el oficio; quizá sea lo que les haga querer aprenderlo.
+- **Clases de composición y armonía.** Las reglas mecánicas (tesituras de los instrumentos, quintas paralelas, voces
+  fuera de su registro) pueden comprobarse antes de que un ejercicio llegue al profesor. Alumno y profesor dedican
+  menos tiempo juntos a lo que sencillamente no puede ser, y más a la música.
+- **Musicología.** Las partituras como datos: buscar en todo un corpus una progresión, una disposición de acorde o el
+  registro de un instrumento, o comparar dos ediciones de una obra solo como música, [sin leer una
+  página](/es/articles/imogen-music-as-code/#la-música-aparte-de-la-partitura).
+- **Agrupaciones para bodas y eventos.** Un cuarteto de cuerda necesita un arreglo de una canción para el sábado. Saben
+  distinguir un buen arreglo de uno malo, pero escribirlo no es su trabajo y no hay tiempo.
+
+## Si compones
+
+Entonces nunca escribirá lo que tú habrías escrito, y no pretende hacerlo. Hay quien compone directamente en Dorico y
+quien no toca un ordenador nunca, y las dos cosas están bien. Esta es una opción más para quien le encuentre utilidad:
+un borrador para empezar, o algo que escribe lo que prefieres no hacer tú a mano.

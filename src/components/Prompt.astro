@@ -1,0 +1,90 @@
+---
+import { strings, type Lang } from '../i18n';
+
+const t = strings[Astro.currentLocale as Lang].prompt;
+---
+
+{/* A prompt as the agent got it, in Markdown. Past four lines, collapsed until opened; without JavaScript, always open. */}
+<div class="prompt" data-prompt>
+  <p class="label">{t.label}</p>
+  <div class="text"><slot /></div>
+  <button type="button" hidden data-more={t.more} data-less={t.less}>{t.more}</button>
+</div>
+
+<script>
+  for (const prompt of document.querySelectorAll<HTMLElement>('[data-prompt]')) {
+    const text = prompt.querySelector<HTMLElement>('.text')!;
+    const button = prompt.querySelector('button')!;
+    prompt.classList.add('collapsed');
+    if (text.scrollHeight <= text.clientHeight) {
+      prompt.classList.remove('collapsed');
+      continue;
+    }
+    const label = () => {
+      const collapsed = prompt.classList.contains('collapsed');
+      button.textContent = (collapsed ? button.dataset.more : button.dataset.less)!;
+      button.setAttribute('aria-expanded', String(!collapsed));
+    };
+    label();
+    button.hidden = false;
+    button.addEventListener('click', () => {
+      prompt.classList.toggle('collapsed');
+      label();
+    });
+  }
+</script>
+
+<style>
+  /* Someone else's words: the surface colour, a terracotta rule, a small caps label. */
+  .prompt {
+    margin-block: 1.5rem;
+    padding: 0.75rem 1rem;
+    border-left: 2px solid var(--color-accent-mark);
+    background: var(--color-surface);
+  }
+  .label {
+    margin: 0 0 0.4rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .text {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  .text :global(p),
+  .text :global(ul) {
+    margin: 0 0 0.75rem;
+  }
+  .text :global(li ul) {
+    margin-bottom: 0;
+  }
+  .text > :global(:last-child) {
+    margin-bottom: 0;
+  }
+  /* Emphasis in a prompt is the writer's stress: bold. */
+  .text :global(em) {
+    font-style: normal;
+    font-weight: 700;
+  }
+  .collapsed .text {
+    max-height: 5.4rem; /* four lines */
+    overflow: hidden;
+    mask-image: linear-gradient(to bottom, #000 55%, transparent);
+  }
+  button {
+    margin-top: 0.4rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-size: 0.85rem;
+    color: var(--color-blue);
+    cursor: pointer;
+  }
+  button:hover {
+    color: var(--color-accent-text);
+  }
+</style>

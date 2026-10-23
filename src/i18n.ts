@@ -52,6 +52,8 @@ export const strings = {
     },
     theme: { toDark: 'Switch to dark theme', toLight: 'Switch to light theme' },
     lightbox: { open: 'Open full size', close: 'Close' },
+    /** A prompt quoted in an article (`src/components/Prompt.astro`). */
+    prompt: { label: 'To the agent', more: 'Show more', less: 'Show less' },
     home: {
       identity: 'Musician, engineer.',
       intro:
@@ -169,6 +171,7 @@ export const strings = {
     },
     theme: { toDark: 'Cambiar al tema oscuro', toLight: 'Cambiar al tema claro' },
     lightbox: { open: 'Ver a tamaño completo', close: 'Cerrar' },
+    prompt: { label: 'Al agente', more: 'Ver más', less: 'Ver menos' },
     home: {
       identity: 'Músico, ingeniero.',
       intro:
@@ -210,7 +213,7 @@ export const strings = {
     tech: {
       title: 'Ingeniero de software sénior, y compositor.',
       availability: 'Autónomo, abierto a puestos y proyectos en remoto, sobre todo en tecnología musical.',
-      software: { title: 'Software para músicos', intro: 'Construyo herramientas al servicio de los músicos, no para sustituirlos.' },
+      software: { title: 'Software para músicos', intro: 'Construyo herramientas para músicos, no en su lugar.' },
       cv: 'CV',
       labels: { article: 'Artículo', code: 'Código' },
       how: 'Cómo trabajo',

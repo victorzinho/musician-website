@@ -10,3 +10,6 @@ usarla.
 
 Mi última etapa ha sido en [**geomatico**](https://geomatico.es), una cooperativa donde las personas importan por encima de todo.
 A partir de noviembre de 2026, vuelvo a trabajar como autónomo.
+
+Junto a mi trabajo como autónomo, construyo mis propias herramientas para músicos, empezando por
+[**imogen**](/es/tech/#imogen), que convierte editar una partitura en una conversación.

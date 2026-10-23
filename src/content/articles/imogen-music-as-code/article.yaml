@@ -1,0 +1,11 @@
+title:
+  en: Writing music as code
+  es: Escribir música como código
+description:
+  en: "How imogen gets AI agents to edit scores by writing code, why that works, and what it takes to turn the prototype into a tool for musicians."
+  es: "Cómo imogen hace que agentes de IA editen partituras escribiendo código, por qué funciona y qué hace falta para convertir el prototipo en una herramienta."
+date: 2026-10-23
+roles: [engineer]
+closing:
+  en: Building tools for musicians?
+  es: ¿Haces herramientas para músicos?

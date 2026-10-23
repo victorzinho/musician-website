@@ -6,11 +6,10 @@ import AccentList from '../../components/AccentList.astro';
 import ArticleList from '../../components/ArticleList.astro';
 import LinkChips, { type LinkChip } from '../../components/LinkChips.astro';
 import Quote from '../../components/Quote.astro';
-import YouTube from '../../components/YouTube.astro';
+import Stage, { type StageItem } from '../../components/Stage.astro';
 import { articleHref, articles, pdfChip } from '../../articles';
 import { codas, langPaths, languages, localize, strings, type Lang } from '../../i18n';
 import { cvs, profiles } from '../../site';
-import { youtubeId } from '../../youtube';
 
 const parts = ['intro', 'how'] as const;
 for (const part of parts) {
@@ -23,7 +22,8 @@ export const getStaticPaths = (() => langPaths()) satisfies GetStaticPaths;
 
 const lang = Astro.currentLocale as Lang;
 const t = strings[lang];
-const text = async (part: (typeof parts)[number]) => (await render((await getEntry('tech', `${part}/${lang}`))!)).Content;
+const text = async (part: (typeof parts)[number]) =>
+  (await render((await getEntry('tech', `${part}/${lang}`))!)).Content;
 const Intro = await text('intro');
 const How = await text('how');
 
@@ -36,15 +36,21 @@ const all = await articles();
 const byId = new Map(all.map((article) => [article.id, article]));
 const list = (await getEntry('software', 'software'))!.data.map((tool) => {
   const links: LinkChip[] = [
-    ...(tool.articles ?? []).map(({ id }): LinkChip => {
+    // With more than one article, each chip is named by its title.
+    ...(tool.articles ?? []).map(({ id }, _, all): LinkChip => {
       const article = byId.get(id)!;
       if (!article.text) return pdfChip(article, lang);
-      return { label: t.tech.labels.article, href: articleHref(article, lang), title: article.data.title[lang] };
+      const title = article.data.title[lang];
+      return { label: all.length > 1 ? title : t.tech.labels.article, href: articleHref(article, lang), title };
     }),
     ...(tool.code ? [{ label: t.tech.labels.code, href: tool.code, external: true }] : []),
   ];
+  const videos = (tool.videos ?? []).map(
+    ({ slug, url, thumbnail, title }): StageItem => ({ kind: 'video', slug, url, thumbnail, caption: title[lang] }),
+  );
+  const name = typeof tool.name === 'string' ? tool.name : tool.name[lang];
   /** Its first article, else its code, else nothing. */
-  return { ...tool, name: typeof tool.name === 'string' ? tool.name : tool.name[lang], links, link: links[0] };
+  return { ...tool, name, videos, links, link: links[0] };
 });
 const engineering = all.filter((article) => article.data.roles.includes('engineer'));
 ---
@@ -57,7 +63,14 @@ const engineering = all.filter((article) => article.data.roles.includes('enginee
     </div>
     <p class="availability">{t.tech.availability}</p>
     <p class="links">
-      <a class="chip" href={cv} hreflang={lang} target="_blank" data-umami-event="cv" data-umami-event-file={cv.split('/').pop()}>
+      <a
+        class="chip"
+        href={cv}
+        hreflang={lang}
+        target="_blank"
+        data-umami-event="cv"
+        data-umami-event-file={cv.split('/').pop()}
+      >
         {t.tech.cv} <span aria-hidden="true">↗</span>
         <span class="visually-hidden">{t.works.labels.newTab}</span>
       </a>
@@ -74,7 +87,7 @@ const engineering = all.filter((article) => article.data.roles.includes('enginee
         <section aria-labelledby="software">
           <h2 id="software">{t.tech.software.title}</h2>
           <p class="lead">{t.tech.software.intro}</p>
-          {list.map(({ id, name, description, video, links, link }) => (
+          {list.map(({ id, name, description, videos, links, link }) => (
             <section class="tool" id={id} aria-label={name}>
               <p class="line">
                 <span class="name">
@@ -88,7 +101,7 @@ const engineering = all.filter((article) => article.data.roles.includes('enginee
                 </span>{' '}
                 <span aria-hidden="true">·</span> {description[lang]} <LinkChips links={links} lang={lang} />
               </p>
-              {video && <YouTube id={youtubeId(video)!} title={name} />}
+              {videos.length > 0 && <Stage id={id} items={videos} lang={lang} cards />}
             </section>
           ))}
         </section>
@@ -158,11 +171,11 @@ const engineering = all.filter((article) => article.data.roles.includes('enginee
     margin: 0;
     font-style: italic;
   }
-  /* One per tool: a line with its name, what it is and its chips, then its demo. */
+  /* One per tool: a line with its name, what it is and its chips, then its demos. */
   .tool {
     margin-top: 2rem;
   }
-  .tool :global(figure) {
+  .tool :global(.stage) {
     margin: 0.75rem 0 0;
   }
   .line {

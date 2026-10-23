@@ -1,0 +1,142 @@
+import Prompt from '../../../components/Prompt.astro';
+import YouTube from '../../../components/YouTube.astro';
+
+**imogen** brings the power of AI to music notation: you talk to an
+agent about a score, in bars, instruments and dynamics, and you see and hear it change. You shape it together, round
+after round, for as long as you want; when it's where you want it, it goes into your own notation software.
+
+Two sessions show it: one orchestrates a melody of mine, the other turns a DAW mockup into a score for a recording
+session.
+
+## A melody, orchestrated
+
+<YouTube id="fVJupgX-QQI" title="imogen: a melody orchestrated by prompt">A melody of mine, orchestrated by prompt</YouTube>
+
+I wrote a short melody, exported it as MusicXML (the file every notation program can save) and asked for it like
+Debussy. All the agent knew about Debussy was its own memory and this:
+
+<Prompt>
+
+- Instruments: two flutes, two oboes, one English horn, two clarinets, two bassoons, four horns, a harp, glockenspiel (optional) and strings.
+- The melody:
+  - For woodwinds use one staff (with two voices and/or "a 2" indications) or two staves if the voices are too different. French horns always in two staves.
+  - Appears often in woodwinds: flute in the low register, cor anglais, clarinet.
+  - Might pass it between instruments but not double it.
+  - Might adjust it in terms of rhythm and articulation (not pitch) to suit the style better.
+- Strings:
+  - For soft passages, often muted (sordino).
+  - Might use divisi.
+- Harmony:
+  - Lean *a lot* into chords built by stacked fourths.
+  - Avoid functional harmony: chords happen because of their colour and not
+    their function (no IV-V-I).
+  - Dominant chords, if they ever appear, don't resolve.
+  - The first and last chords don't necessarily have to be the tonic.
+- A lot of attention to articulation detail, written as expression text in the score.
+
+</Prompt>
+
+Then like Mozart, with these rules:
+
+<Prompt>
+
+- Instruments: two flutes, two oboes, two bassoons, two horns, two trumpets, timpani and strings.
+  - For winds use one staff (with two voices and/or "a 2" indications).
+  - Strings are the centrepiece of the orchestration.
+  - Woodwinds often add colour to the strings.
+  - Horns usually play a blending role between strings and woodwinds.
+  - Trumpets are often reserved for specific energetic passages.
+- The melody:
+  - Always in violins. Might double it with woodwind instruments.
+- Harmony:
+  - Functional harmony only.
+  - Dominant chords must happen and resolve to the tonic.
+  - First and last chords are the tonic.
+  - Notes outside the key are only secondary dominants, Neapolitan sixths or ornaments.
+
+</Prompt>
+
+Then I asked for smaller changes, by bar and by instrument, until I was happy with the result.
+
+## A DAW mockup, ready for the session
+
+Mockups are played into a DAW by hand, against a click. Export one as MIDI and you get a score nobody can read: tracks
+called "Track 3", no dynamics, triplets turned into something else, notes a hair off the beat. Turning that into clean
+parts for a recording session is hours of copying, usually on a deadline.
+
+<YouTube id="aLkBQTP9S1o" title="imogen: from a DAW mockup to a session score">From a Cubase mockup to a score for the session</YouTube>
+
+Here the agent works as the producer's assistant: putting the rhythms back where they belong and fixing problems bar by bar,
+as I dictate them. All it knew about the music was this:
+
+<Prompt>
+
+You will receive messages from a musician about the score. The score has been transcribed from a MIDI file exported from Cubase.
+
+</Prompt>
+
+## Talk it through, then take it home
+
+Working with imogen has two phases. First, you and the agent: you see the score and hear it, but you don't edit it directly.
+You say what you want, the agent changes it, and you go round as many times as you like. Then you download it as
+MusicXML and open it in Dorico, Sibelius or MuseScore, with real instruments, parts and transpositions: an ordinary
+score again, yours to edit, print and hand out.
+
+## How it works
+
+The agent in the demos is [Claude Opus 5.5](https://platform.claude.com/docs/en/models/opus-5-5/overview). imogen does the rest:
+
+1. It reads your MusicXML or MIDI file and keeps only the music: notes, rhythms, dynamics, articulations, slurs, text,
+   instruments. Page layout, fonts and positions stay out.
+2. It writes that music as a short text, as terse as it can be while still holding everything a musician would call
+   *the music*. That text is what the agent reads and changes.
+3. Every time the agent changes it, imogen turns it back into a score, shows it and plays it.
+
+The agent never sees a MusicXML file. Why that matters, and what else is under the hood, is in [Writing music as
+code](/en/articles/imogen-music-as-code/).
+
+imogen is a prototype built for these videos, not a product (yet). Some steps are manual: I start each agent session myself,
+and the browser hands my messages over to it. Unfortunately there is nothing to try online, and there won't be until it's
+built properly ([what that takes](/en/articles/imogen-music-as-code/#what-it-takes-to-build)).
+
+### What the agent was told
+
+Apart from the rules above, the agent was only pointed to what it had to read and told how to talk:
+
+<Prompt>
+
+Speak to the musician only in English, using musical terminology only. Never mention files, tools, code, rules or the environment.
+
+Be collaborative:
+- When an instruction has a meaningful musical ambiguity, ask one concise musical question or offer one or two concrete musical alternatives.
+- Ask at most two consecutive clarification rounds.
+- If ambiguity remains after the second round, make a conservative musical choice, edit the score, and state the choice plus optional brief follow-up questions.
+- This is iterative: write a plausible realization matching the composer’s intent, then refine it through later requests; perfection on the first pass is not required.
+
+</Prompt>
+
+## Who it's for
+
+- **Orchestration.** A melody or a sketch orchestrated for the ensemble you write for, in the style you describe. Or a
+  whole orchestral work transcribed for concert band, a staple in Valencia, where nearly every town has one.
+- **Producers and copyists.** From the DAW mockup to parts for the session, as in the second video.
+- **The players you have.** A school orchestra without an oboe, a singer who needs it a third lower, which changes
+  things for other instruments, second clarinets who can't go above the staff yet: the same piece, rewritten for the
+  people in the room.
+- **Reductions.** A piano reduction of an orchestral score for choir or musical rehearsals.
+- **Students who want to write.** For young musicians itching to write before they've studied composition: a playful
+  way to try an idea, hear it played by an orchestra and change it on the spot. It doesn't replace writing by hand or
+  learning the craft; it might be what makes them want to.
+- **Composition and harmony classes.** The mechanical rules (instrument ranges, parallel fifths, voices out of their
+  register) can be checked before an exercise reaches the teacher. Student and teacher spend less of their time
+  together on what simply can't be, and more on the music.
+- **Musicology.** Scores as data: search a whole corpus for a progression, a voicing or an instrument's register, or
+  compare two editions of a work as music alone, [without reading a page](/en/articles/imogen-music-as-code/#the-music-apart-from-the-score).
+- **Ensembles for weddings and events.** A string quartet needs an arrangement of a melody by Saturday. They can tell a
+  good arrangement from a bad one, but writing one isn't their job and there's no time.
+
+## If you're a composer
+
+Then it will never write what you would have written, and it isn't meant to. Some composers
+write straight into Dorico, some never touch a computer, and both are fine. This is one more option for whoever finds
+it useful: a first pass to react to, or an extra pair of hands for what you'd rather not type.

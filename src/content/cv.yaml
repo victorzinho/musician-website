@@ -215,7 +215,7 @@ performing:
 projects:
   - cvs: [engineer, musician]
     name: imogen
-    url: # TODO WEB-34
+    url: /tech/#imogen
     en: plain-text scores editable by voice or language models, round-tripping MusicXML
     es: partituras en texto editables por voz o con IA, de ida y vuelta con MusicXML
   - cvs: [engineer, musician]

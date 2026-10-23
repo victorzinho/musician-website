@@ -1,0 +1,15 @@
+- id: imogen
+  name: imogen
+  description:
+    en: scores edited by talking to an AI agent, from a melody or a DAW export to an editable score
+    es: partituras editadas hablando con un agente de IA, de una melodía o un MIDI de DAW a una partitura editable
+  videos:
+    - url: https://www.youtube.com/watch?v=fVJupgX-QQI
+      thumbnail: ./imogen/orchestrate-by-prompt.png
+      title: { en: "A melody orchestrated by an AI agent", es: "Una melodía orquestada por un agente de IA" }
+    - url: https://www.youtube.com/watch?v=aLkBQTP9S1o
+      thumbnail: ./imogen/daw-mockup-to-score.png
+      title:
+        en: "An AI agent fixing a MIDI export from a DAW into a session score"
+        es: "Un agente de IA pasa a limpio un MIDI de DAW para la sesión"
+  articles: [imogen-music-as-code, imogen-orchestrate-by-prompt]

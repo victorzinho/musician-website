@@ -2,22 +2,22 @@
   "public/cv/engineer-en.pdf": {
     "script": "scripts/cv-pdfs.mjs",
     "source": "dist/cv/engineer-en/index.html",
-    "hash": "144520d8e13e39417f3f080912364c9e2ce9825dad99e331e2a0e25d518a11f2"
+    "hash": "1cd3f8923d4e54711a05fad080daf96b51115c50d2e9e921dfb2c9cc9f194857"
   },
   "public/cv/engineer-es.pdf": {
     "script": "scripts/cv-pdfs.mjs",
     "source": "dist/cv/engineer-es/index.html",
-    "hash": "298ddf0f7661448da7faf278f500726dd53c8fb14427f0579e750660cb92769d"
+    "hash": "3ddb1a6348ee777605de056102d1a110dfb7a55d6406a5ab0b787b861b558ad6"
   },
   "public/cv/musician-en.pdf": {
     "script": "scripts/cv-pdfs.mjs",
     "source": "dist/cv/musician-en/index.html",
-    "hash": "2b405778571c9f5f053f6915c8b752e446d63524cf38b2da0248a6256346f7e8"
+    "hash": "6393ae63a4b7a9002b79f91456954657574213f2fcdbf156b5c8d18f057c8a74"
   },
   "public/cv/musician-es.pdf": {
     "script": "scripts/cv-pdfs.mjs",
     "source": "dist/cv/musician-es/index.html",
-    "hash": "00ba6e820b4602c7ce03e1e27fbe6ff1c96d8840cf9d59b07db5670a12ebd1c7"
+    "hash": "8363565a54ad946c26a334afad682557d64c5cb30b9c5a5164f4a965035f94cf"
   },
   "public/og-en.jpg": {
     "script": "scripts/og-image.mjs",

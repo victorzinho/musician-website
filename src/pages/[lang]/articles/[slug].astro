@@ -22,7 +22,7 @@ export const getStaticPaths = (async () => {
 const lang = Astro.currentLocale as Lang;
 const t = strings[lang];
 const { article } = Astro.props;
-const { title, description, date, roles: sections } = article.data;
+const { title, description, date, roles: sections, closing } = article.data;
 const { Content } = await render((await getEntry('articleTexts', `${article.id}/${lang}`))!);
 const structured: Article = {
   '@type': 'Article',
@@ -60,7 +60,7 @@ const published = date.toLocaleDateString(lang, { dateStyle: 'long', timeZone: '
         <RoleChips roles={sections} lang={lang} />
       </p>
       <p>
-        {t.contact.closing.text} <a href={localize(lang, '/contact/')}>{t.contact.closing.link} →</a>
+        {closing?.[lang] ?? t.contact.closing.text} <a href={localize(lang, '/contact/')}>{t.contact.closing.link} →</a>
       </p>
     </footer>
   </article>

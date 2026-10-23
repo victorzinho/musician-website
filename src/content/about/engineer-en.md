@@ -8,3 +8,6 @@ forestry specialists across Latin America publish their own monitoring data, and
 
 Most recently I was at [**geomatico**](https://geomatico.es), a cooperative where people matter above everything else.
 From November 2026, I'm freelance again.
+
+Alongside my freelance work, I'm building my own tools for musicians, starting with [**imogen**](/en/tech/#imogen),
+which turns editing a score into a conversation.

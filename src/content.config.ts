@@ -100,12 +100,16 @@ const homeListen = defineCollection({
   ),
 });
 
-/** An item's part of its link, `/playing/#<group>-<slug>`: its image's file name, else its SoundCloud track's name. */
+/** An item's part of its link on a stage, `#<stage>-<slug>`: its image's file name, else its SoundCloud track's name. */
 const mediaSlug = (raw: Record<string, unknown>) => {
   const path = raw.photo ?? raw.thumbnail ?? (typeof raw.audio === 'string' ? new URL(raw.audio).pathname : '');
   return String(path).split('/').filter(Boolean).pop()?.replace(/\.[^.]+$/, '') ?? '';
 };
 const slug = z.string().regex(/^[a-z0-9-]+$/, 'lowercase letters, digits and hyphens: rename the file, or set `slug`');
+/** A stage item, given `slug` from its files (`mediaSlug`) unless it sets one. */
+const stageItem = <T extends z.ZodType>(schema: T) =>
+  z.preprocess((raw) => (raw && typeof raw === 'object' ? { slug: mediaSlug(raw as Record<string, unknown>), ...raw } : raw), schema);
+const uniqueSlugs = (items: { slug: string }[]) => new Set(items.map((m) => m.slug)).size === items.length;
 
 /** Groups on `/playing`: `src/content/playing/<group>/playing.yaml`, id `<group>`; images relative to it. */
 const playing = defineCollection({
@@ -130,8 +134,7 @@ const playing = defineCollection({
       /** Best first: the first is the one on stage. `slug`, unless given, comes from the files (`mediaSlug`). */
       media: z
         .array(
-          z.preprocess(
-            (raw) => (raw && typeof raw === 'object' ? { slug: mediaSlug(raw as Record<string, unknown>), ...raw } : raw),
+          stageItem(
             z.union([
               z.strictObject({ slug, video: youtube, thumbnail: image(), caption: translated }),
               z.strictObject({ slug, audio: soundcloud, thumbnail: image().optional(), caption: translated }),
@@ -140,7 +143,7 @@ const playing = defineCollection({
           ),
         )
         .min(1)
-        .refine((media) => new Set(media.map((m) => m.slug)).size === media.length, 'two items with the same slug'),
+        .refine(uniqueSlugs, 'two items with the same slug'),
     }),
 });
 
@@ -201,27 +204,34 @@ const articles = defineCollection({
     date: z.coerce.date(),
     /** The sections it belongs to, as chips in the index and at the top and end of the article. */
     roles: z.array(z.enum(Object.keys(roles) as [Role, ...Role[]])).min(1),
+    /** The closing question before "Let’s talk", instead of the site's ("Want to work together?"). */
+    closing: translated.optional(),
   }),
 });
 
-/** Article text: MDX, so it can use the components in `src/components/` (Figure, Player, YouTube). */
+/** Article text: MDX, so it can use the components in `src/components/` (Figure, Player, Prompt, YouTube). */
 const articleTexts = defineCollection({
   loader: glob({ base: './src/content/articles', pattern: '*/{en,es}.mdx', generateId: ({ entry }) => entry.replace(/\.mdx$/, '') }),
   schema: z.strictObject({}),
 });
 
-/** Software on `/tech`, in the file's order: a single entry, `software` (`src/content/tech/software.yaml`). */
+/** Software on `/tech`, in the file's order: a single entry, `software` (`src/content/tech/software.yaml`); images relative
+    to it. */
 const software = defineCollection({
   loader: file('./src/content/tech/software.yaml', { parser: (text) => ({ software: parse(text) ?? [] }) }),
-  schema: z
-    .array(
+  schema: ({ image }) =>
+    z.array(
       z.strictObject({
         /** Its anchor: `/tech/#<id>`. */
         id: slug,
         name,
         description: translated,
-        /** Its demo. */
-        video: youtube.optional(),
+        /** Its demos on a stage, best first, each at `/tech/#<id>-<slug>`; the title names it for screen readers. */
+        videos: z
+          .array(stageItem(z.strictObject({ slug, url: youtube, thumbnail: image(), title: translated })))
+          .min(1)
+          .refine(uniqueSlugs, 'two videos with the same slug')
+          .optional(),
         /** Articles about it, as chips: a page or a PDF. The first is where its name links to. */
         articles: z.array(reference('articles')).optional(),
         /** Where its name links to without articles. */

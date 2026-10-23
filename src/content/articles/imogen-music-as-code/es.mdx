@@ -1,0 +1,104 @@
+import YouTube from '../../../components/YouTube.astro';
+
+**imogen** es un prototipo que permite a agentes de IA editar partituras. Los músicos le hablan de música; por debajo, el
+agente está escribiendo código. Ese es todo el truco, y la razón de que funcione.
+
+[Orquestar a golpe de prompt](/es/articles/imogen-orchestrate-by-prompt/) es el punto de vista del músico: para qué sirve,
+en sus términos, con las dos demos. Este artículo va de la ingeniería, y de hacia dónde podría ir.
+
+La parte sobre la que se apoyaría un producto real es robusta y está hecha con cuidado; lo que falta, falta solo
+porque esto es una demo. [Cuál es cuál](#lo-que-hace-falta-para-construirlo) está al final.
+
+## Cómo se ve hoy
+
+Un chat con Claude (o el modelo que prefieras), con la partitura al lado. Escribes en lenguaje musical
+llano; segundos o minutos después la partitura cambia y suena. Aquí, un MIDI exportado de una maqueta se convierte en
+una partitura lista para una sesión de grabación:
+
+<YouTube id="aLkBQTP9S1o" title="imogen: de una maqueta de DAW a una partitura para la sesión">De una maqueta en Cubase a una partitura para la sesión</YouTube>
+
+## Agentes que escriben código
+
+Detrás de la conversación musical, Claude Opus 5.5 está editando un archivo de texto, y a veces escribe un pequeño
+programa para aplicar un cambio en muchos compases. Para el agente, orquestar es una tarea de programación. Eso importa
+porque programar es de lo que más se está empujando a que los agentes de IA hagan bien ahora mismo, y cada paso que
+da la industria ahí, lo da también imogen.
+
+Los primeros resultados le sonarán a cualquiera que le haya pedido a una IA que escriba código. Una docena
+de líneas de reglas de estilo para Debussy bastaron para la
+[demo](/es/articles/imogen-orchestrate-by-prompt/#una-melodía-orquestada): hizo lo que le pedí, pero no era lo que yo
+habría escrito, y desde luego no al nivel de una partitura profesional. El código escrito sin guías empieza igual:
+funciona, tiene buena pinta, pero si dedicas tiempo suficiente a revisarlo, notas que puede empezar a llevar el
+proyecto en una dirección que no quieres.
+
+Como muchos, escribo software con agentes bajo reglas estrictas y estructuradas para programar (cómo se organiza un
+proyecto, cómo se nombra, se prueba y se documenta el código), escritas una vez y cargadas en cada sesión; hoy, con poco
+esfuerzo por mi parte, no se distingue mi código del del agente. Un negocio con unos ficheros de estilo (musical)
+puede hacer lo mismo: escribir sus reglas una vez, y que «orquéstalo como Debussy» acabe significando exactamente lo
+que significa para ellos.
+
+## Por qué no MusicXML
+
+Lo obvio sería darle al agente MusicXML, que todos los programas de notación leen y escriben. No funciona bien. Tiene
+que llevar todo lo que cualquier programa de notación necesite para redibujar sus páginas (posiciones, fuentes,
+espaciado, saltos de sistema), todo mezclado con las notas. Cada programa lo lee y lo escribe de forma un poco
+distinta: un estudio de McGill (2019) encontró que convertir entre formatos de partitura introducía discrepancias en
+**todos** los casos. Y es enorme. Un movimiento de un cuarteto de cuerda de Beethoven ocupa 1,4 MB en MusicXML; la misma
+música como texto plano ocupa unos 60 KB, más de veinte veces menos. La melodía de la primera demo pasó de 32 KB a
+alrededor de 1 KB.
+
+Así que imogen le da al agente un texto que contiene la música y nada más: notas, ritmos, dinámicas, articulaciones,
+ligaduras, texto, instrumentos y sus transposiciones, una parte detrás de otra. Es tan conciso como puede sin dejar de
+contener todo lo que un músico entiende por «la música». Cuando el agente termina, vuelve a MusicXML; lo que imogen no
+sabe leer, lo indica por parte y compás.
+
+## La música, aparte de la partitura
+
+Detrás de todo esto hay un modelo de la música en Python: notas, compases, tonalidades, instrumentos con sus tesituras y
+transposiciones, ligaduras y dinámicas, y nada sobre el aspecto de una página. Como contiene la música en los términos
+de un músico, las operaciones sobre ella son programas cortos:
+
+- escribir la parte de un clarinete en si♭ a partir de los sonidos reales, o llevar un pasaje a otra tonalidad;
+- comprobar cada nota contra la tesitura de su instrumento antes de que la vea ningún intérprete;
+- señalar quintas paralelas, cruces de voces o un fagot por encima de cierta nota en los pasajes suaves.
+
+Comprobaciones así importan porque el agente no oye, y los modelos siguen flojos en ritmo: un estudio de 2025 vio que
+no acertaban ninguna de sus preguntas de ritmo, en ningún formato. Así que el trabajo se reparte: las reglas estrictas
+se ejecutan como código en cada edición, el agente revisa las más flexibles con instrucciones más estrictas, y el oído
+de un músico tiene la última palabra.
+
+Nada de esto es una idea nueva. SMDL, un estándar ISO de los años noventa, ya separaba la música lógica, que llamaba
+*cantus*, de su grabado, su interpretación y su análisis; casi nunca llegó a implementarse. Wiggins, Miranda, Smaill y
+Harris (1993) compararon representaciones musicales según cuánto pueden expresar y lo generales que son. El modelo de
+imogen es esa capa lógica para una tradición: la música occidental escrita.
+
+## Lo que hace falta para construirlo
+
+La respuesta honesta: lo difícil funciona, y el producto a su alrededor está por hacer.
+
+**Los cimientos son sólidos.** El formato y el modelo de la música son la parte que defendería en cualquier revisión.
+Cada elemento de MusicXML 4.0 (y son **un montón**) está clasificado, uno a uno, como música que se conserva, música
+que se añadirá más adelante o maquetación que se descarta. Una partitura exportada e importada de nuevo vuelve
+idéntica, y cada exportación se valida contra el esquema de MusicXML. Y la pregunta de la que dependía todo el
+proyecto ya tiene respuesta: la IA puede trabajar con música escribiendo código. Como músico, estoy contento con lo que
+hace hoy; como ingeniero, sé lo que pueden hacer más reglas escritas, porque he visto lo que hacen con el código.
+
+**El producto necesita trabajo.**
+
+- **Pagarlo.** Cada petición al agente cuesta tokens de IA. Alguien tiene que pagarlos, y un músico debería verlo como
+  una suscripción o un precio, con cuentas y límites.
+- **Sin nadie a los mandos.** Hoy abro yo mismo cada sesión del agente, a mano.
+- **Agentes por su cuenta.** Un agente que edita archivos, y que escribe y ejecuta pequeños programas para hacerlo,
+  necesita una seguridad seria en cuanto nadie lo vigila: aislado de todo salvo la partitura en la que trabaja, con
+  límites sobre lo que puede ejecutar. Hoy vigilo cada sesión.
+- **La notación que aún no cubre.** Letras, cifrado de acordes, trémolos, armónicos, pedales, percusión y líneas de
+  octava, entre otras cosas. Nada en el modelo se lo impide: las demos no las necesitaban, así que aún no están hechas.
+- **Dónde vive.** Una aplicación web propia, o dentro de un programa de notación, un DAW o la plataforma de una
+  editorial: una decisión de producto que condiciona todo lo demás.
+
+Cuánto lleva eso depende de qué producto sea, y decidirlo es lo primero. Lo que sí puedo decir es que la parte
+difícil, si la IA puede trabajar con música y cómo, ya está superada.
+
+En el camino de este proyecto me alegro de ser a la vez ingeniero y músico: aquí ha significado saber qué cuenta como
+«intención musical» en todo el esquema de MusicXML, o por qué un director de banda quiere una transcripción, además de
+cómo construirlo.
