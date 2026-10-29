@@ -92,6 +92,9 @@ Víctor's music portfolio, `music.victorzinho.es`. Tasks: Jira project `WEB`.
   group, `/playing/#<group>-<slug>` to one of its items; the slug is the image's file name, or the SoundCloud track's.
 - Engineer `/tech`: text in `src/content/tech/` (`intro`, `how`, MDX, both languages); tools in
   `src/content/tech/software.yaml`, in the file's order (schema: `src/content.config.ts`).
+- Producer `/studio`: text in `src/content/studio/` (`intro`, `services`, `how`, MDX, both languages); what it plays in
+  `src/content/studio/work.yaml`: videos on a stage (reel first, each with a thumbnail), then audio, each linking its
+  work's score when it's one of Víctor's.
 - Stand-in content to work on a layout carries `FAKE` in a comment; `npm run verify` fails while any is in `src/`.
 - `interviews/` (gitignored): Víctor's answers to content questions, one file per session; source for the site's text.
 - `research/` (gitignored): investigations behind roadmap decisions (gear, services), one file per topic.

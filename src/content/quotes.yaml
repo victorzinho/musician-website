@@ -17,3 +17,13 @@
   role:
     en: the stage is yours
     es: el escenario es tuyo
+# FAKE: stand-in to see the producer quote on /studio (WEB-25)
+- id: producer
+  lang: es
+  text: "Le pasé las partituras un viernes con el estreno a tres semanas. El lunes ya tenía la primera versión, y cuando algo no sonaba como yo lo oía, me preguntaba qué quería decir la música antes de tocar nada."
+  translations:
+    en: "I handed him the scores on a Friday, three weeks before opening night. By Monday I had a first version, and whenever something didn't sound the way I heard it, he asked what the music meant before touching anything."
+  name: "..."
+  role:
+    en: Composer of Yo mataré miedos por ti
+    es: Compositor de Yo mataré miedos por ti

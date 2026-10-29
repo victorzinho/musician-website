@@ -1,0 +1,38 @@
+videos:
+  # FAKE: Kissed by God's video and a /playing photo standing in for the reel (WEB-28)
+  - id: reel
+    title: Reel
+    about: { en: Rescores and mockups, es: Nuevas bandas sonoras y maquetas }
+    credits: { en: "Music, programming, mix", es: "Música, programación, mezcla" }
+    video: https://www.youtube.com/watch?v=O06FQ8ONp9s
+    thumbnail: ../playing/guitar/hells-kitchen.jpg
+  # FAKE: Ese Mi parece un Mi♭'s video and a /playing photo standing in for rescore 1 (WEB-13)
+  - id: rescore-1
+    title: Rescore 1
+    about: { en: Rescore of a Blender Studio short film, es: Nueva música para un cortometraje de Blender Studio }
+    music: Víctor González
+    credits: { en: "Music, programming, mix", es: "Música, programación, mezcla" }
+    video: https://www.youtube.com/watch?v=q6tZGH8PJuI
+    thumbnail: ../playing/guitar/crying-machine.webp
+  # FAKE: Gravitational Kook's video and a /playing photo standing in for rescore 2 (WEB-17)
+  - id: rescore-2
+    title: Rescore 2
+    about: { en: Rescore of a scoring-competition clip, es: Nueva música para un clip de un concurso de composición }
+    music: Víctor González
+    credits: { en: "Music, programming, mix", es: "Música, programación, mezcla" }
+    video: https://www.youtube.com/watch?v=Kc40gazYqr4
+    thumbnail: ../playing/guitar/vivaldi-rv93.jpg
+audio:
+  - title: Turbulence in Circles
+    about: { en: Orchestra, es: Orquesta }
+    music: Víctor González
+    credits: { en: "Orchestral mockup, mix", es: "Maqueta orquestal, mezcla" }
+    file: works/turbulence-in-circles/excerpt.mp3
+    work: turbulence-in-circles
+  # FAKE: the Turbulence in Circles excerpt standing in for We Fade Away's (WEB-41)
+  - title: We Fade Away
+    about: { en: Orchestra, es: Orquesta }
+    music: Víctor González
+    credits: { en: "Orchestral mockup, mix", es: "Maqueta orquestal, mezcla" }
+    file: works/turbulence-in-circles/excerpt.mp3
+    work: we-fade-away

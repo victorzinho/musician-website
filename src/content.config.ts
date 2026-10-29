@@ -241,6 +241,47 @@ const tech = defineCollection({
   schema: z.strictObject({}),
 });
 
+/** `/studio` text, MDX: `src/content/studio/<part>-<lang>.mdx`, ids `<part>/<lang>`; parts `intro`, `services` and `how`. */
+const studio = defineCollection({
+  loader: glob({
+    base: './src/content/studio',
+    pattern: '*-{en,es}.mdx',
+    generateId: ({ entry }) => entry.replace(/-(en|es)\.mdx$/, '/$1'),
+  }),
+  schema: z.strictObject({}),
+});
+
+/** `/studio` Some of my work: a single entry, `work` (`src/content/studio/work.yaml`); images relative to it. */
+const credits = {
+  title: z.string().min(1),
+  /** What it is: "Musical", "Rescore of a short film". */
+  about: translated,
+  /** Whose music it is; none when it's more than one composer's (the reel). */
+  music: name.optional(),
+  /** What Víctor did on it. */
+  credits: translated,
+};
+const studioWork = defineCollection({
+  loader: file('./src/content/studio/work.yaml', { parser: (text) => ({ work: parse(text) }) }),
+  schema: ({ image }) =>
+    z.strictObject({
+      /** The stage, best first: the first is the one on stage. `/studio/#work-<id>` links to one. */
+      videos: z
+        .array(z.strictObject({ id: slug, ...credits, video: youtube, thumbnail: image() }))
+        .refine((all) => new Set(all.map((v) => v.id)).size === all.length, 'two with the same id'),
+      /** Under the stage, best first. */
+      audio: z.array(
+        z.strictObject({
+          ...credits,
+          /** Relative to `src/content/`. */
+          file: z.string().regex(/\.mp3$/),
+          /** One of Víctor's works: its title links to the work's page, its score's first page to the PDF. */
+          work: reference('works').optional(),
+        }),
+      ),
+    }),
+});
+
 const cvKind = z.enum(['engineer', 'musician']);
 const cvs = z.array(cvKind).min(1);
 const highlight = translated.extend({ cvs: cvs.optional() });
@@ -311,6 +352,8 @@ export const collections = {
   articleTexts,
   software,
   tech,
+  studio,
+  studioWork,
   homeListen,
   quotes,
   playing,

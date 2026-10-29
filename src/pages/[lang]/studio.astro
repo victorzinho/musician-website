@@ -1,11 +1,234 @@
 ---
 import type { GetStaticPaths } from 'astro';
-import UnderConstruction from '../../components/UnderConstruction.astro';
-import { codas, langPaths, strings, type Lang } from '../../i18n';
+import { getCollection, getEntry, render } from 'astro:content';
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import AccentList from '../../components/AccentList.astro';
+import Player from '../../components/Player.astro';
+import Quote from '../../components/Quote.astro';
+import Stage, { type StageItem } from '../../components/Stage.astro';
+import { codas, langPaths, languages, localize, strings, type Lang } from '../../i18n';
+import { hasScore, scorePath } from '../../scores';
+import { cvs } from '../../site';
+
+const parts = ['intro', 'services', 'how'] as const;
+for (const part of parts) {
+  for (const l of languages) {
+    if (!(await getEntry('studio', `${part}/${l}`))) throw new Error(`no src/content/studio/${part}-${l}.mdx`);
+  }
+}
 
 export const getStaticPaths = (() => langPaths()) satisfies GetStaticPaths;
 
 const lang = Astro.currentLocale as Lang;
+const t = strings[lang];
+const text = async (part: (typeof parts)[number]) => (await render((await getEntry('studio', `${part}/${lang}`))!)).Content;
+const Intro = await text('intro');
+const Services = await text('services');
+const How = await text('how');
+
+const cv = cvs.find((c) => c.kind === 'musician')!.pdf[lang];
+/** Shown only once there is one: no placeholder here. */
+const quote = (await getCollection('quotes')).find((q) => q.id === 'producer');
+
+const previews = import.meta.glob<{ default: ImageMetadata }>('/src/content/works/*/score-preview.png', { eager: true });
+const audio = import.meta.glob<string>('/src/content/**/*.mp3', { query: '?url', import: 'default', eager: true });
+const work = (await getEntry('studioWork', 'work'))!.data;
+/** "Music by <composer>", if it's one composer's. */
+const musicBy = (music: (typeof work.audio)[number]['music']) =>
+  music && `${t.studio.music} ${typeof music === 'string' ? music : music[lang]}`;
+const videos = work.videos.map(
+  (v): StageItem => ({
+    slug: v.id,
+    kind: 'video',
+    url: v.video,
+    thumbnail: v.thumbnail,
+    caption: `${v.title} · ${v.about[lang]}`,
+    details: [musicBy(v.music), v.credits[lang]].filter((line) => line !== undefined),
+  }),
+);
+const tracks = work.audio.map((track) => {
+  const src = audio[`/src/content/${track.file}`];
+  if (!src) throw new Error(`studio/work.yaml, ${track.title}: audio ${track.file} not found`);
+  const work = track.work?.id;
+  const score = work && hasScore(work) ? { href: scorePath(work), preview: previews[`/src/content/works/${work}/score-preview.png`]!.default } : undefined;
+  return { ...track, src, work, score, music: musicBy(track.music) };
+});
 ---
 
-<UnderConstruction lang={lang} title={strings[lang].nav.roles.producer} description={strings[lang].meta.description.studio} coda={codas.studio} />
+<Base lang={lang} title={t.nav.roles.producer} description={t.meta.description.studio} coda={codas.studio}>
+  <div class="opening">
+    <h1>{t.studio.title}</h1>
+    <div class="text">
+      <Intro />
+    </div>
+    {quote && <Quote id="producer" lang={lang} />}
+    <p class="availability">{t.studio.availability}</p>
+    <p class="links">
+      <a class="chip" href={cv} hreflang={lang} target="_blank" data-umami-event="cv" data-umami-event-file={cv.split('/').pop()}>
+        {t.studio.cv} <span aria-hidden="true">↗</span>
+        <span class="visually-hidden">{t.works.labels.newTab}</span>
+      </a>
+      <a class="chip" href={localize(lang, '/contact/')}>{t.nav.contact}</a>
+    </p>
+  </div>
+
+  <hr />
+
+  <section aria-labelledby="work">
+    <h2 id="work">{t.studio.work}</h2>
+    {videos.length > 0 && <Stage id="work" items={videos} lang={lang} />}
+    {
+      tracks.map(({ title, about, music, credits, src, work, score }) => (
+        <article class="track">
+          <Player title={title} lang={lang} src={src}>
+            <h3>{work ? <a href={localize(lang, `/works/${work}/`)}>{title}</a> : title}</h3>
+            <p class="meta">
+              {about[lang]}
+              {music && (
+                <>
+                  {' '}
+                  <span aria-hidden="true">·</span> {music}
+                </>
+              )}
+            </p>
+            <p class="credits">{credits[lang]}</p>
+          </Player>
+          {
+            score && (
+              <a class="peek" href={score.href} target="_blank" data-umami-event="score" data-umami-event-work={work}>
+                <Image src={score.preview} alt={`${t.works.page.score}: ${title}`} widths={[240, 480]} sizes="12rem" />
+                <span class="visually-hidden">{t.works.labels.newTab}</span>
+              </a>
+            )
+          }
+        </article>
+      ))
+    }
+  </section>
+
+  <hr class="rule" />
+
+  <section aria-labelledby="services" class="services">
+    <h2 id="services">{t.studio.services}</h2>
+    <Services components={{ ul: AccentList }} />
+  </section>
+
+  <hr class="rule" />
+
+  <section aria-labelledby="how" class="how">
+    <h2 id="how">{t.studio.how}</h2>
+    <How components={{ ul: AccentList }} />
+  </section>
+
+  <hr class="rule" />
+  <p class="contact">
+    {t.studio.contact.text} <a href={localize(lang, '/contact/')}>{t.studio.contact.link} →</a>
+  </p>
+</Base>
+
+<style>
+  /* The claim, the story behind it and, once there is one, the quote under it; then what to do with it:
+     availability, the CV and contact. */
+  .opening h1 {
+    margin: 1rem 0 1rem;
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
+    line-height: 1.15;
+  }
+  .opening .text :global(p) {
+    margin: 0 0 0.9rem;
+  }
+  .opening :global(.quote) {
+    max-width: 34rem;
+    margin: 1.5rem auto 0;
+  }
+  .availability {
+    margin: 1.25rem 0 0;
+    font-style: italic;
+    color: var(--color-muted);
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin: 0.6rem 0 0;
+  }
+  h2 {
+    margin: 0 0 0.75rem;
+    font-size: 1.5rem;
+  }
+  /* The videos on stage, then one track per mockup: its title, what it is and whose music, what I did; the score's
+     page beside the player, none on narrow screens. */
+  .track {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    padding: 1.25rem 0;
+  }
+  .track :global(.player) {
+    flex: 1;
+  }
+  /* The score's first page, as on the work's page: a glimpse that opens the PDF; the paper's tone in light mode, as
+     printed in dark. */
+  .peek {
+    flex: 0 0 12rem;
+    display: block;
+    border: 1px solid var(--color-rule);
+    box-shadow: 0 2px 10px light-dark(rgb(0 0 0 / 0.08), rgb(0 0 0 / 0.5));
+    transition: box-shadow 0.2s;
+  }
+  .peek:hover {
+    box-shadow: 0 4px 18px light-dark(rgb(0 0 0 / 0.16), rgb(0 0 0 / 0.7));
+  }
+  .peek img {
+    display: block;
+    width: 100%;
+    height: 6.5rem;
+    object-fit: cover;
+    object-position: top left;
+    mix-blend-mode: multiply;
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme='light'])) .peek img {
+      mix-blend-mode: normal;
+    }
+  }
+  :global(:root[data-theme='dark']) .peek img {
+    mix-blend-mode: normal;
+  }
+  .track + .track {
+    border-top: 1px solid var(--color-rule);
+  }
+  .track:last-of-type {
+    padding-bottom: 0;
+  }
+  h3 {
+    margin: 0 0 0.3rem;
+    font-size: 1.3rem;
+  }
+  h3 a {
+    text-decoration: none;
+  }
+  .meta,
+  .credits {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--color-muted);
+  }
+  .credits {
+    font-style: italic;
+  }
+  .services :global(ul),
+  .how :global(ul) {
+    margin: 0;
+  }
+  .contact {
+    margin: 0;
+  }
+  @media (max-width: 40rem) {
+    .peek {
+      display: none;
+    }
+  }
+</style>

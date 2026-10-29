@@ -5,7 +5,13 @@ import Player from './Player.astro';
 import { strings, type Lang } from '../i18n';
 import { youtubeId } from '../youtube';
 
-export type StageItem = { /** Unique in the stage: its panel is `#<id>-<slug>`. */ slug: string; caption: string } & (
+export type StageItem = {
+  /** Unique in the stage: its panel is `#<id>-<slug>`. */
+  slug: string;
+  caption: string;
+  /** Lines under the caption. */
+  details?: string[];
+} & (
   | { kind: 'video'; url: string; thumbnail: ImageMetadata }
   | { kind: 'photo'; photo: ImageMetadata }
   | { kind: 'audio'; soundcloud: string; thumbnail?: ImageMetadata; title: string }
@@ -72,7 +78,10 @@ const thumbnail = (item: StageItem) => (item.kind === 'photo' ? item.photo : ite
             </>
           )}
         </div>
-        <figcaption>{item.caption}</figcaption>
+        <figcaption>
+          {item.caption}
+          {item.details?.map((line) => <span class="detail">{line}</span>)}
+        </figcaption>
       </figure>
     ))
   }
@@ -208,6 +217,11 @@ const thumbnail = (item: StageItem) => (item.kind === 'photo' ? item.photo : ite
   /* Stacked only without JavaScript; with it, one panel shows at a time. */
   .stage:not([data-js]) .panel + .panel {
     margin-top: 2.5rem;
+  }
+  .detail {
+    display: block;
+    font-size: 0.85rem;
+    font-style: italic;
   }
   .panel[hidden] {
     display: none;
