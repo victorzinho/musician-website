@@ -112,11 +112,6 @@ export const loadCv = async (kind: CvKind, lang: Lang): Promise<Cv> => {
 
   /** A section of the site, in this CV's language. */
   const section = (role: Role) => `${person.links.site}/${lang}${roles[role]}`;
-  /** Without a premiere, what kind of recording there is. */
-  const recording = (work: CollectionEntry<'works'>) => {
-    const kind = work.data.recordings?.[0]?.kind;
-    return kind && (kind === 'performance' ? t.recordedLive : strings[lang].works.labels[kind]);
-  };
   const groups = await getCollection('playing');
   const performing = data.performing.map((id): Source => {
     const group = groups.find((g) => g.id === id)?.data;
@@ -143,7 +138,7 @@ export const loadCv = async (kind: CvKind, lang: Lang): Promise<Cv> => {
               url: `${person.links.site}/${lang}/works/${work.id}/`,
               about: `${work.data.forces[lang]} (${work.data.duration}')`,
               dates: String(work.data.year),
-              bullets: [performance(work, lang) ?? recording(work)].filter((p): p is string => !!p),
+              bullets: [performance(work, lang)].filter((p): p is string => !!p),
             })),
           },
           { title: t.production, url: section('producer'), entries: data.production.map(entry) },

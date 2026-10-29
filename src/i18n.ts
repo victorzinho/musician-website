@@ -124,8 +124,6 @@ export const strings = {
       skills: 'Skills',
       languages: 'Languages',
       thesis: 'Thesis',
-      /** A work with a live recording but no premiere. */
-      recordedLive: 'Recorded performance',
       stack: 'Stack',
       present: 'present',
     },
@@ -234,7 +232,6 @@ export const strings = {
       skills: 'Competencias',
       languages: 'Idiomas',
       thesis: 'Trabajo final',
-      recordedLive: 'Grabación en directo',
       stack: 'Tecnologías',
       present: 'actualidad',
     },
