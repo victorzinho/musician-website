@@ -1,0 +1,28 @@
+videos:
+  # TODO WEB-28
+  #- id: reel
+  #  caption: { en: "Reel: rescores and mockups", es: "Reel: nuevas bandas sonoras y maquetas" }
+  #  video: https://www.youtube.com/watch?v=O06FQ8ONp9s
+  #  thumbnail: ../playing/guitar/hells-kitchen.jpg
+  # TODO WEB-13
+  #- id: rescore-1
+  #  caption: { en: Rescore of a Blender Studio short film, es: Nueva música para un cortometraje de Blender Studio }
+  #  video: https://www.youtube.com/watch?v=q6tZGH8PJuI
+  #  thumbnail: ../playing/guitar/crying-machine.webp
+  # TODO WEB-17
+  #- id: rescore-2
+  #  caption: { en: Rescore of a scoring-competition clip, es: Nueva música para un clip de un concurso de composición }
+  #  video: https://www.youtube.com/watch?v=Kc40gazYqr4
+  #  thumbnail: ../playing/guitar/vivaldi-rv93.jpg
+audio:
+  - title: Turbulence in Circles
+    caption:
+      en: Orchestral mockup and mix · Music by Víctor González
+      es: Maqueta orquestal y mezcla · Música de Víctor González
+    file: works/turbulence-in-circles/excerpt.mp3
+    work: turbulence-in-circles
+  # TODO WEB-41
+  #- title: We Fade Away
+  #  caption: { en: Orchestral mockup and mix, es: Maqueta orquestal y mezcla }
+  #  file: works/turbulence-in-circles/excerpt.mp3
+  #  work: we-fade-away

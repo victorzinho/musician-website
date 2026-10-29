@@ -36,7 +36,7 @@ export const roles = {
 export type Role = keyof typeof roles;
 
 /** Pages that render `UnderConstruction`, without language: `noindex` and out of the sitemap. */
-export const unfinished = ['/studio/'];
+export const unfinished: string[] = [];
 
 /** Tags on listen excerpts, each leading to a section. */
 export const tags = {
