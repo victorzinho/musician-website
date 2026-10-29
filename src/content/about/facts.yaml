@@ -1,7 +1,7 @@
 # Facts listed under each About movement title, in order:
 # `cv:` an id in src/content/cv.yaml
 # `work:` the work's premiere
-# or text in both languages (`*text*` is italic).
+# or text in both languages, in inline Markdown.
 composer:
   - work: ancho-es-el-mar
   - work: gravitational-kook
