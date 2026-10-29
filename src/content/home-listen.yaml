@@ -1,10 +1,10 @@
-#- title: Turbulence in Circles
-#  context:
-#    en: Orchestral mockup, excerpt
-#    es: Maqueta orquestal, extracto
-#  audio: works/turbulence-in-circles/excerpt.mp3
-#  href: /works/turbulence-in-circles/
-#  tags: [composer, producer, mockup]
+- title: Turbulence in Circles
+  context:
+    en: Orchestral mockup, excerpt
+    es: Maqueta orquestal, extracto
+  audio: works/turbulence-in-circles/excerpt.mp3
+  href: /works/turbulence-in-circles/
+  tags: [composer, producer, mockup]
 - title: Gravitational Kook
   context:
     en: Antara Ensemble

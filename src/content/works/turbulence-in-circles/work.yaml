@@ -5,3 +5,12 @@ forces:
   es: Orquesta
 duration: 8
 license: CC-BY-SA-4.0
+recordings:
+  - file: excerpt.mp3
+    kind: mockup
+    title:
+      en: Excerpt
+      es: Fragmento
+  - file: excerpt.mp3
+    kind: mockup
+    excerpt: true
