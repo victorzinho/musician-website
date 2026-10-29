@@ -2,6 +2,9 @@ Estoy produciendo la grabación del musical *Yo mataré miedos por ti* para que 
 orquesta. El compositor me pasó sus partituras; mantuve los sonidos que ya funcionaban y luego programé el piano,
 la percusión y los solos; edité y mezclé todo hasta tenerlo listo para un teatro.
 
+También hago maquetas de mis propias obras, como un fragmento de
+[*Turbulence in Circles*](/es/works/turbulence-in-circles/), para orquesta: ahí la partitura y cada sonido son míos.
+
 He aprendido a mezclar como se dirige un ensayo. Editar es estudiar en casa: cada parte tiene que sonar bien por
 sí misma; mezclar es ensayar: escuchar el conjunto, encontrar los problemas y corregirlos, tomar decisiones de
 balances. La parte difícil es escuchar y saber lo que se necesita, y esa parte la he ido aprendiendo en 
