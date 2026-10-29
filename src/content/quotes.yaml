@@ -1,13 +1,13 @@
 # Placeholders until real quotes arrive, with permission (WEB-6, WEB-7); live on purpose, as an invitation.
 - id: composer
-  lang: en
-  text: An empty space beside the stand, the score open at the first page. Whoever played it hasn't sat down yet.
+  lang: es
+  text: "Un encargo para un coro profesional no siempre es sinónimo de libertad compositiva. Limitaciones de plantilla, la filosofía y temática del programa, instrumentación, son condicionantes directos para la creatividad. **Ancho es el mar** resultó ser aire fresco, una idea que tejió a la perfección todos y cada uno de los flecos que la concibieron."
   translations:
-    es: Un espacio vacío junto al atril, la partitura abierta por la primera página. Quien la tocó aún no ha llegado.
-  name: "..."
+    en: "A commission for a professional choir doesn't always come with compositional freedom. The limits of the forces, the program's philosophy and theme, the instrumentation: all of them directly shape creativity. **Ancho es el mar** turned out to be a breath of fresh air, an idea that perfectly wove together every last thread it was conceived from."
+  name: "Jordi Blanch"
   role:
-    en: the score is on the stand
-    es: la partitura está en el atril
+    en: Conductor of the Cor de la Generalitat Valenciana
+    es: Director del Cor de la Generalitat Valenciana
 - id: performer
   lang: en
   text: Open mic at the front of the stage. The band waits for whoever played with him to step up.
