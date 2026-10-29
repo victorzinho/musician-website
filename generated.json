@@ -12,12 +12,12 @@
   "public/cv/musician-en.pdf": {
     "script": "scripts/cv-pdfs.mjs",
     "source": "dist/cv/musician-en/index.html",
-    "hash": "d88ec80be866acd98af8d05fb8ccb51991c15a032e8a3e5c6c14ce7e260ed258"
+    "hash": "b7b32e16b187304d81be53ede09a05dbe3ba9dea2999828fa7af07960df0992a"
   },
   "public/cv/musician-es.pdf": {
     "script": "scripts/cv-pdfs.mjs",
     "source": "dist/cv/musician-es/index.html",
-    "hash": "b55ed26a6ecffcf56f6faa63955379a65a905f1274040b33f7056529806fdbaa"
+    "hash": "deeac2f1577c03c3100fc2daf1026fb3303c4aa1b548595f8ac13c67141e6d0c"
   },
   "public/og-en.jpg": {
     "script": "scripts/og-image.mjs",
