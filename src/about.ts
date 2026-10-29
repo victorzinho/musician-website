@@ -35,7 +35,7 @@ const cvFacts = async () => {
   return facts;
 };
 
-/** The facts under an About movement (`src/content/about/facts.yaml`), each a line where `*text*` is italic. */
+/** The facts under an About movement (`src/content/about/facts.yaml`), each a line of inline Markdown (`src/markdown.ts`). */
 export const aboutFacts = async (role: Role, lang: Lang) => {
   const items = (await getEntry('aboutNotes', role))?.data ?? [];
   const facts = await cvFacts();

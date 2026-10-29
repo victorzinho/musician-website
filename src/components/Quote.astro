@@ -1,6 +1,7 @@
 ---
 import { getEntry } from 'astro:content';
 import { strings, type Lang } from '../i18n';
+import { inlineMarkdown } from '../markdown';
 
 interface Props {
   id: string;
@@ -18,7 +19,7 @@ if (!shown) throw new Error(`quote ${id}: no ${lang} translation`);
 
 <figure class="quote">
   <blockquote lang={original ? quote.data.lang : lang}>
-    <p>{shown}</p>
+    <p set:html={inlineMarkdown(shown)} />
   </blockquote>
   <figcaption>
     — {name}, {role[lang]}

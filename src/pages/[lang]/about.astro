@@ -6,6 +6,7 @@ import Base from '../../layouts/Base.astro';
 import Portrait from '../../components/Portrait.astro';
 import ScoreTitle from '../../components/ScoreTitle.astro';
 import { codas, langPaths, languages, localize, strings, type Lang } from '../../i18n';
+import { inlineMarkdown } from '../../markdown';
 import { cvs, roles, type Role } from '../../site';
 import { personNode } from '../../structured-data';
 
@@ -58,11 +59,10 @@ const numerals = ['I', 'II', 'III', 'IV'];
             {numerals[i]}. {t.nav.roles[role]}
           </a>
         </h2>
-        {/* `*text*` in a fact is italic. */}
         {notes.length > 0 && (
           <ul class="notes accents">
             {notes.map((note) => (
-              <li>{note.split('*').map((part, j) => (j % 2 ? <em>{part}</em> : part))}</li>
+              <li set:html={inlineMarkdown(note)} />
             ))}
           </ul>
         )}

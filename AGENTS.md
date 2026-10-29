@@ -41,7 +41,8 @@ Víctor's music portfolio, `music.victorzinho.es`. Plan: `REVAMP.md`; tasks: Jir
 - Works: `src/content/works/<slug>/` with `work.yaml` (schema: `src/content.config.ts`), one Markdown note per language
   (`en.md`, `es.md`), `score.pdf` (published as `/works/<slug>-score.pdf`, `src/scores.ts`) and any other files of the
   work. `score-preview.png` is exported from Sibelius at 600 dpi.
-- Metadata in YAML, text in Markdown; no frontmatter.
+- Metadata in YAML, text in Markdown; no frontmatter. Some YAML text fields take inline Markdown, rendered by
+  `src/markdown.ts`.
 - About: `src/content/about/<part>-{en,es}.md` (`intro` and the four roles, all required); facts per movement in
   `src/content/about/facts.yaml`, citing `cv.yaml` ids and works' premieres (`src/about.ts`). `cv.yaml` states facts only, never
   where the site shows them.

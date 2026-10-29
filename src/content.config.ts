@@ -150,7 +150,10 @@ const playingTexts = defineCollection({
   schema: z.strictObject({}),
 });
 
-/** Quotes from people Víctor worked with, at most one per section; shown in the original language or translated. */
+/**
+ * Quotes from people Víctor worked with, at most one per section; shown in the original language or translated.
+ * `text` and `translations` are inline Markdown (`src/markdown.ts`).
+ */
 const quotes = defineCollection({
   loader: file('./src/content/quotes.yaml'),
   schema: z.strictObject({
