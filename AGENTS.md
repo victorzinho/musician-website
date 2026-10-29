@@ -1,6 +1,29 @@
 # AGENTS.md — website
 
-Víctor's music portfolio, `music.victorzinho.es`. Plan: `REVAMP.md`; tasks: Jira project `WEB`.
+Víctor's music portfolio, `music.victorzinho.es`. Tasks: Jira project `WEB`.
+
+## Brief
+
+- Goal: the link Víctor sends after first contact, to start a conversation; search is hygiene.
+- Identity: composer, mockup producer, guitarist and software engineer; the edge is the combination. Ethics line:
+  tools that serve musicians, not replace them.
+- Audiences, by priority: media composers' teams (`/studio`); music-tech and tech companies (`/tech`); local live and
+  community projects (`/playing`, `/works`). Out of scope: session work, academia, generative-music companies.
+- "Víctor González" on every page. Plain, confident, specific; first person.
+
+## Editorial rules
+
+- No skill bars, influences or interests.
+- Mockups and unperformed works labelled as such; student performances stated plainly.
+- Every work has a note in both languages. Only items with audio or video in Listen and in selected works.
+- Quotes: only specific ones (a situation, what happened), else the person stays a reference; at most one per
+  section, beside Víctor's text; original language, translated otherwise. References go on the CV, with permission.
+
+## Design
+
+- Blue for links, terracotta for what plays and accents.
+- Five-line staves mark the footer and changes of content; single lines separate parts of the same content.
+- Codas: one per page, unattributed, ambiguous.
 
 ## Stack
 
