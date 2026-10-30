@@ -12,7 +12,8 @@ interface Props {
 }
 
 const { list, lang, roles = true } = Astro.props;
-const month = (d: Date) => d.toLocaleDateString(lang, { month: 'short', year: 'numeric', timeZone: 'UTC' });
+/** As on the article's page. */
+const published = (d: Date) => d.toLocaleDateString(lang, { dateStyle: 'long', timeZone: 'UTC' });
 ---
 
 <ul class="articles">
@@ -35,7 +36,7 @@ const month = (d: Date) => d.toLocaleDateString(lang, { month: 'short', year: 'n
         <p class="description">
           {article.data.description[lang]}
           <span class="dash" aria-hidden="true">—</span>
-          <time datetime={article.data.date.toISOString().slice(0, 10)}>{month(article.data.date)}</time>
+          <time datetime={article.data.date.toISOString().slice(0, 10)}>{published(article.data.date)}</time>
         </p>
       </li>
     ))
