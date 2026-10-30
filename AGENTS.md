@@ -80,7 +80,7 @@ Víctor's music portfolio, `music.victorzinho.es`. Tasks: Jira project `WEB`.
   `node scripts/strip-metadata.mjs` after adding one; `npm run verify` checks the built site.
 - Articles: `src/content/articles/<slug>/` with `article.yaml` and `en.mdx`, `es.mdx` (both), `article.pdf`
   (published as `/articles/<slug>.pdf`, `src/articles.ts`), or all three. MDX imports
-  `Figure`, `Player` and `YouTube` from `src/components/`; `parked/articles/mixing-like-a-rehearsal` uses them all.
+  `Figure`, `Player` and `YouTube` from `src/components/`; `parked/articles/formatting-template` uses them all.
 - Home excerpts: `src/content/home-listen.yaml`, in the file's order (schema: `src/content.config.ts`); tags lead to
   sections via `tags` in `src/site.ts`.
 - `parked/`: content not on the site and not schema-checked. Works keep the same layout, any file may be missing;

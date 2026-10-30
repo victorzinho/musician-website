@@ -5,7 +5,7 @@ la percusión y los solos; edité y mezclé todo hasta tenerlo listo para un tea
 También hago maquetas de mis propias obras, como un fragmento de
 [*Turbulence in Circles*](/es/works/turbulence-in-circles/), para orquesta: ahí la partitura y cada sonido son míos.
 
-He aprendido a mezclar como se dirige un ensayo. Editar es estudiar en casa: cada parte tiene que sonar bien por
-sí misma; mezclar es ensayar: escuchar el conjunto, encontrar los problemas y corregirlos, tomar decisiones de
-balances. La parte difícil es escuchar y saber lo que se necesita, y esa parte la he ido aprendiendo en 
-salas de ensayo (y en alguna revisión de código).
+He aprendido a [mezclar como se dirige un ensayo](/es/articles/mixing-like-a-rehearsal/). Editar es estudiar en casa:
+cada parte tiene que sonar bien por sí misma; mezclar es ensayar: escuchar el conjunto, encontrar los problemas y
+corregirlos, tomar decisiones de balances. La parte difícil es escuchar y saber lo que se necesita, y esa parte la he
+ido aprendiendo en salas de ensayo (y en alguna revisión de código).
