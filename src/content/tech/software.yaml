@@ -13,3 +13,13 @@
         en: "An AI agent fixing a MIDI export from a DAW into a session score"
         es: "Un agente de IA pasa a limpio un MIDI de DAW para la sesión"
   articles: [imogen-music-as-code, imogen-orchestrate-by-prompt]
+- id: page-break
+  name: Page Break
+  description:
+    en: score PDFs and images into MusicXML, built around the Audiveris recognition engine
+    es: PDFs e imágenes de partituras convertidos en MusicXML, sobre el motor de reconocimiento Audiveris
+  videos:
+    - url: https://www.youtube.com/watch?v=rkRvMwI88Nc
+      thumbnail: ./page-break/imslp-to-musescore.png
+      title: { en: "Page Break: an IMSLP PDF, opened in MuseScore", es: "Page Break: un PDF de IMSLP, abierto en MuseScore" }
+  articles: [page-break]

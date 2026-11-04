@@ -1,0 +1,8 @@
+title:
+  en: "Page Break: reading printed scores"
+  es: "Page Break: leyendo partituras impresas"
+description:
+  en: "Page Break turns the PDF or photo of a score into a MusicXML file you can open in MuseScore, Sibelius or Dorico: how to use it, its limits and what's left to do."
+  es: "Page Break convierte el PDF o la foto de una partitura en un MusicXML que se abre en MuseScore, Sibelius o Dorico: cómo se usa, sus límites y lo que falta."
+date: 2026-11-04
+roles: [engineer]

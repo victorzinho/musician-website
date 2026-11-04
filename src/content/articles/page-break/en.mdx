@@ -1,0 +1,60 @@
+import YouTube from '../../../components/YouTube.astro';
+
+[Page Break](https://github.com/victorzinho/page-break) is a tool I built to turn the PDF or photo of a score into a
+MusicXML file you can open in MuseScore, Sibelius or Dorico.
+
+I built it because I often work on scores that only exist on paper or as a PDF: writing an easier second viola part for
+students who have just started, the band parts for a choir score, or redoing a score at another size and with other
+page breaks. All of that started with copying the whole thing by hand; and that's boring.
+
+<YouTube id="rkRvMwI88Nc" title="Page Break: an IMSLP PDF, opened in MuseScore">An IMSLP PDF, converted with Page Break and opened in MuseScore</YouTube>
+
+## Using it
+
+The recognition is done by [Audiveris](https://github.com/Audiveris/audiveris), an optical music recognition engine: it
+finds the staves, clefs, notes, etc. in the image and writes them out as MusicXML. Page Break is what goes around it.
+
+You give it the whole PDF in the browser (or in the console, if that's your thing) and it gives you back a score. If
+Audiveris can't handle a page, the rest still comes out and Page Break tells you which one is missing.
+
+Under the hood, Page Break turns each page into an image and runs one Audiveris per page, in parallel: it's faster that
+way, and one failing page doesn't bring everything down. Each page comes back on its own, starting at bar 1 and with its
+own parts; Page Break joins the parts by name and fills the ones missing from a page with empty bars, so they all stay
+aligned.
+
+The two settings that change the result the most are the resolution the page is read at and how ink is told apart from
+paper. In Audiveris they're internal engine parameters; in Page Break they're options on screen. If you don't know
+which to pick, you tick several at once and get a ZIP with one score per combination, to open them and keep whichever
+came out best.
+
+## What depends on Audiveris
+
+Page Break doesn't recognise anything by itself: everything it reads, Audiveris reads, so Audiveris's strengths and
+limits are Page Break's too. How well it reads depends on the state of the score. Clean scores, printed or exported
+from a program, come out well. Scans of photocopies of photocopies, pages full of pencil annotations, or phone photos
+and low-resolution images make it worse quickly. Even in the worst case it gets something right, and that already beats
+starting from scratch.
+
+Improving the recognition is Audiveris's job. What Page Break can do is work before and after it. Before, by preparing
+the images so they reach it in better shape: straightened, with more contrast, with a clean background. After, by
+correcting what it returns, and that's where [imogen](/en/articles/imogen-orchestrate-by-prompt/) fits.
+
+imogen is another tool of mine: you edit a score by talking to an AI agent, in musical terms, and you see and hear it
+change. Underneath, it has a [model of the music in Python](/en/articles/imogen-music-as-code/#the-music-apart-from-the-score)
+that holds only the music, nothing about how the page looks, and checks on it are short programs. A misread tuplet, for
+example, leaves a bar that doesn't add up: you can write code that finds it, and even fixes it when the fix can be
+programmed. Whatever can't be fixed in a general, automatic way can be asked of the agent, which can write that second
+viola part while it's at it.
+
+Neither step is built yet.
+
+## Where it stands
+
+It's a prototype. Today it runs on your own computer: you need to install Audiveris and launch it with a command, as
+the [README](https://github.com/victorzinho/page-break#readme) explains.
+
+There's work left: from what's mentioned above to improve the results, to usability, with preset or smart settings
+depending on the image quality, for example. It could even be published as a web service, so it can be used directly
+without installing anything.
+
+The code is Python, MIT-licensed, with tests and continuous integration.

@@ -12,4 +12,5 @@ Mi última etapa ha sido en [**geomatico**](https://geomatico.es), una cooperati
 A partir de noviembre de 2026, vuelvo a trabajar como autónomo.
 
 Junto a mi trabajo como autónomo, construyo mis propias herramientas para músicos, empezando por
-[**imogen**](/es/tech/#imogen), que convierte editar una partitura en una conversación.
+[**imogen**](/es/tech/#imogen), que convierte editar una partitura en una conversación, y
+[**Page Break**](/es/tech/#page-break), que convierte PDFs de partituras en MusicXML.

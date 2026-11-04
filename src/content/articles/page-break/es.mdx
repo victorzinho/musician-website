@@ -1,0 +1,62 @@
+import YouTube from '../../../components/YouTube.astro';
+
+[Page Break](https://github.com/victorzinho/page-break) es una herramienta que he hecho para convertir el PDF o la
+foto de una partitura en un archivo MusicXML, que se abre en MuseScore, Sibelius o Dorico.
+
+Lo he hecho porque a menudo trabajo sobre partituras que existen solo en papel o PDF: escribir una viola segunda
+más sencilla para alumnos que acaban de empezar, las partes de la banda para una partitura de coro, o rehacer una
+partitura con otro tamaño y otros saltos de página. Todo eso empezaba copiándola entera a mano; y es aburrido.
+
+<YouTube id="rkRvMwI88Nc" title="Page Break: un PDF de IMSLP, abierto en MuseScore">Un PDF de IMSLP, convertido con Page Break y abierto en MuseScore</YouTube>
+
+## Cómo se usa
+
+El reconocimiento lo hace [Audiveris](https://github.com/Audiveris/audiveris), un motor de reconocimiento óptico de
+música: encuentra en la imagen los pentagramas, las claves, las notas, etc., y los escribe como MusicXML.
+Page Break es lo que hay alrededor.
+
+Le das el PDF entero desde el navegador (o desde la consola, si es lo tuyo) y te devuelve una partitura.
+Si Audiveris no puede con alguna página, el resto sale igualmente y Page Break te dice cuál falta.
+
+Por dentro, Page Break pasa cada página a imagen y lanza un Audiveris por página, en paralelo: así va más rápido,
+y si una página falla no se va todo al traste. Cada página vuelve por separado, empezando en el compás 1 y con
+sus propias partes; Page Break junta las partes por nombre y rellena con compases vacíos las que faltan en alguna
+página, para que todas sigan alineadas.
+
+Lo que más cambia el resultado son dos ajustes: la resolución a la que se lee la página y cómo se separa la tinta del
+papel. En Audiveris son parámetros internos del motor; en Page Break son opciones en pantalla. Si no sabes cuáles
+elegir, marcas varias a la vez y recibes un ZIP con una partitura por combinación, para abrirlas y quedarte con la que
+mejor ha salido.
+
+## Lo que depende de Audiveris
+
+Page Break no reconoce nada por sí mismo: todo lo que lee, lo lee Audiveris, así que sus virtudes y sus límites son
+también los de Page Break. Cómo de bien o de mal se lee depende de cómo esté la partitura. Con partituras limpias, impresas o
+exportadas de un programa, el resultado es bueno. Los escaneos de fotocopias de fotocopias, las páginas llenas de
+anotaciones a lápiz, o las fotos con el móvil o con poca resolución lo empeoran rápido.
+Aun en el peor caso, algo acierta, y eso ya es mejor que empezar de cero.
+
+Mejorar el reconocimiento es trabajo de Audiveris. Lo que sí puede hacer Page Break es trabajar antes y después. Antes,
+preparando las imágenes para que le lleguen en mejores condiciones: enderezadas, con más contraste, con el fondo limpio.
+Después, corrigiendo lo que devuelve, y ahí encaja [imogen](/es/articles/imogen-orchestrate-by-prompt/).
+
+imogen es otra herramienta mía: editas una partitura hablando con un agente de IA, en términos musicales, y la ves y la
+oyes cambiar. Por debajo tiene un
+[modelo de la música en Python](/es/articles/imogen-music-as-code/#la-música-aparte-de-la-partitura) que contiene solo
+la música, nada de cómo se ve la página, y sobre él las comprobaciones son programas cortos. Un tresillo mal leído, por
+ejemplo, deja un compás que no suma lo que debería: se puede escribir código que lo encuentre, e incluso que lo arregle
+si se programa cómo. Lo que no se puede arreglar de manera general y automática se le puede pedir al agente,
+que de paso puede escribir esa viola segunda.
+
+Ninguno de los dos pasos está hecho todavía.
+
+## En qué punto está
+
+Es un prototipo. Hoy se ejecuta en tu ordenador: hay que instalar Audiveris y lanzarlo con un comando, como explica el
+[README](https://github.com/victorzinho/page-break#readme).
+
+Queda trabajo: desde lo que se menciona arriba para mejorar los resultados hasta la usabilidad, con ajustes
+predefinidos o inteligentes en función de la calidad de la imagen, por ejemplo. Incluso se podría plantear la
+publicación como servicio en una web para que se pueda utilizar directamente sin instalar nada.
+
+El código es Python, con licencia MIT, tests e integración continua.

@@ -10,4 +10,5 @@ Most recently I was at [**geomatico**](https://geomatico.es), a cooperative wher
 From November 2026, I'm freelance again.
 
 Alongside my freelance work, I'm building my own tools for musicians, starting with [**imogen**](/en/tech/#imogen),
-which turns editing a score into a conversation.
+which turns editing a score into a conversation, and [**Page Break**](/en/tech/#page-break), which converts score PDFs
+into MusicXML.

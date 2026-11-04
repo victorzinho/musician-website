@@ -219,8 +219,8 @@ projects:
     en: plain-text scores editable by voice or language models, round-tripping MusicXML
     es: partituras en texto editables por voz o con IA, de ida y vuelta con MusicXML
   - cvs: [engineer, musician]
-    name: scanterpoint
-    url: # TODO WEB-23
+    name: Page Break
+    url: /tech/#page-break
     en: "optical music recognition on Audiveris for real-world scans: PDF to MusicXML"
     es: "reconocimiento óptico con Audiveris para escaneos reales: de PDF a MusicXML"
   - cvs: [engineer]
