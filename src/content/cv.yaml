@@ -225,14 +225,21 @@ projects:
     es: "reconocimiento óptico con Audiveris para escaneos reales: de PDF a MusicXML"
   - cvs: [engineer]
     name: Google Summer of Code 2011
-    en: geoprocessing language GGL as an OGC WPS service, for 52°North
-    es: lenguaje de geoprocesado GGL como servicio WPS, para 52°North
+    en: geoprocessing language GGL in gvSIG, for OSGeo
+    es: lenguaje de geoprocesado GGL en gvSIG, para OSGeo
 
 skills:
   engineer:
     - { en: Backend, es: Backend, items: [Python, Django, FastAPI, Java, Spring, SQL, GraphQL, RabbitMQ] }
-    - { en: Infrastructure, es: Infraestructura, items: [Kubernetes, Docker, AWS] }
-    - { en: Observability, es: Observabilidad, items: [Grafana, Kibana, Datadog] }
+    - en: AI
+      es: IA
+      items:
+        - Claude Code
+        - pi
+        - MCP
+        - SDD (spec-driven development)
+        - {en: multi-agent review loops, es: bucles de revisión multiagente }
+    - { en: Infrastructure, es: Infraestructura, items: [Kubernetes, Docker, AWS, Grafana, Kibana, Datadog] }
     - { en: Geospatial, es: Geoespacial, items: [PostGIS, GeoServer, GeoTools, JTS, GDAL/OGR] }
     - { en: Frontend, es: Frontend, items: [React, TypeScript, MapLibre] }
   musician:

@@ -54,8 +54,10 @@ export const cvPaths = () =>
   cvKinds.flatMap((kind) => languages.map((lang) => ({ params: { id: `${kind}-${lang}` }, props: { kind, lang } })));
 
 /** The links each CV shows, in order. */
-// TODO WEB-35: 'linkedin' back in both (engineer after 'site', musician last); rerun scripts/cv-pdfs.mjs.
-const links: Record<CvKind, string[]> = { engineer: ['site', 'github'], musician: ['site', 'youtube'] };
+const links: Record<CvKind, string[]> = {
+    engineer: ['site', 'linkedin', 'github'],
+    musician: ['site', 'youtube', 'linkedin']
+};
 
 export const loadCv = async (kind: CvKind, lang: Lang): Promise<Cv> => {
   const data = (await getEntry('cv', 'cv'))!.data;
