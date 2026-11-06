@@ -51,8 +51,16 @@ const works = defineCollection({
     forces: translated,
     /** Minutes, rounded up. */
     duration: z.number().int().positive(),
+    /** The music's; the text's is `text.rights`. */
     license: z.enum(['CC-BY-SA-4.0']),
-    text: z.strictObject({ author: z.string().min(1), title: z.string().min(1) }).optional(),
+    text: z
+      .strictObject({
+        author: z.string().min(1),
+        title: z.string().min(1),
+        /** The copyright holder ("heirs of …"), all rights reserved; omitted when in the public domain. */
+        rights: translated.optional(),
+      })
+      .optional(),
     premiere: z
       .strictObject({
         /** A day (2022-01-01) or, when that's all that's known, a month ("2024-06"). */

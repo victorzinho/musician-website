@@ -66,7 +66,16 @@ const composition: MusicComposition = {
   composer: person,
   dateCreated: String(year),
   license: licenses[license].url,
-  ...(text && { lyricist: { '@type': 'Person', name: text.author } }),
+  ...(text && {
+    lyricist: { '@type': 'Person', name: text.author },
+    ...(text.rights && {
+      lyrics: {
+        '@type': 'CreativeWork',
+        name: text.title,
+        copyrightNotice: `© ${text.rights[lang]}. ${t.works.page.allRightsReserved}.`,
+      },
+    }),
+  }),
   ...(premiere && {
     firstPerformance: {
       '@type': 'Event',
@@ -224,10 +233,18 @@ const date = (d: Date | string) =>
 
     {/* The small print at the foot of a score's title page. */}
     <footer class="colophon">
+      {/* Music and text labelled only when their rights differ. */}
       <p class="license">
-        © {year} Víctor González ·{' '}
+        {text?.rights && `${t.works.page.music} `}© {year} Víctor González ·{' '}
         <a href={licenses[license].url} rel="license">{licenses[license].name}</a>
       </p>
+      {
+        text?.rights && (
+          <p class="license">
+            {t.works.page.text} © {text.rights[lang]} · {t.works.page.allRightsReserved}
+          </p>
+        )
+      }
     </footer>
   </article>
 </Base>
@@ -380,5 +397,8 @@ const date = (d: Date | string) =>
     margin-top: 1rem;
     font-style: normal;
     font-variant-numeric: tabular-nums;
+  }
+  .license + .license {
+    margin-top: 0;
   }
 </style>
