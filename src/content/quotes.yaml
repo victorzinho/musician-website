@@ -9,14 +9,23 @@
     en: Conductor of the Cor de la Generalitat Valenciana
     es: Director del Cor de la Generalitat Valenciana
 - id: performer
-  lang: en
-  text: Open mic at the front of the stage. The band waits for whoever played with him to step up.
+  lang: es
+  text: "He tenido la suerte de conocer a Víctor en muchas facetas: como alumno, técnico de sonido, compositor, arreglista, guitarrista, amigo... En absolutamente todas, destaca. Es de esas personas polifacéticas que hacen que uno se relaje trabajando con él, porque sabes que todo estará bien hecho, y además con un sello propio y de gran calidad."
   translations:
-    es: Micro abierto al borde del escenario. La banda espera a que suba quien tocó con él.
-  name: "..."
+    en: "I've been lucky enough to know Víctor in many roles: as a student, sound engineer, composer, arranger, guitarist, friend... He stands out in absolutely every one of them. He's one of those multifaceted people who put you at ease when you work with them, because you know everything will be done well, and with a high-quality stamp all his own."
+  name: "César Cabedo"
   role:
-    en: the stage is yours
-    es: el escenario es tuyo
+    en: Deputy Director of the Conservatorio Profesional de Música de Torrent
+    es: Vicedirector del Conservatorio Profesional de Música de Torrent
+- id: playing/desluthiers
+  lang: es
+  text: "Con Víctor en Desluthiers nunca sabías si estabas en un concierto o en un número de magia: a mitad del bolo te ajustaba la mezcla desde la mesa de sonido, bajaba corriendo a marcarse un solazo con la guitarra con un arreglo propio y volvía a la mesa sin despeinarse."
+  translations:
+    en: "With Víctor in Desluthiers you never knew whether you were at a concert or watching a magic act: halfway through the gig he'd be adjusting the mix from the sound desk, then run down to nail a killer guitar solo on an arrangement of his own, and be back at the desk without breaking a sweat."
+  name: "César Cabedo"
+  role:
+    en: Member of Desluthiers
+    es: Miembro de Desluthiers
 # TODO WEB-25
 #- id: producer
 #  lang: es

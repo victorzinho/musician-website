@@ -13,6 +13,9 @@ export const getStaticPaths = (() => langPaths()) satisfies GetStaticPaths;
 const lang = Astro.currentLocale as Lang;
 const t = strings[lang];
 
+/** A group's quote has the id `playing/<group>`. */
+const quoteIds = new Set((await getCollection('quotes')).map((q) => q.id));
+
 const groups = await Promise.all(
   (await getCollection('playing'))
     .sort((a, b) => a.data.position - b.data.position)
@@ -28,6 +31,7 @@ const groups = await Promise.all(
         role: [data.role?.[lang], yearSpan(data.start, data.end)].filter(Boolean).join(' · '),
         highlights: (data.highlights ?? []).map((h) => h[lang]),
         Text: text && (await render(text)).Content,
+        quoted: quoteIds.has(`playing/${id}`),
         items: data.media.map((m): StageItem => {
           const shared = { slug: m.slug, caption: m.caption[lang] };
           if ('video' in m) return { ...shared, kind: 'video', url: m.video, thumbnail: m.thumbnail };
@@ -47,7 +51,7 @@ const groups = await Promise.all(
   </div>
 
   {
-    groups.map(({ id, name, about, role, highlights, Text, items }, i) => (
+    groups.map(({ id, name, about, role, highlights, Text, quoted, items }, i) => (
       <>
         {i === 0 ? <hr /> : <hr class="rule" />}
         <section aria-labelledby={id}>
@@ -60,9 +64,14 @@ const groups = await Promise.all(
               {highlights.map((h) => <li>{h}</li>)}
             </ul>
           )}
-          {Text && (
-            <div class="text">
-              <Text />
+          {(Text || quoted) && (
+            <div class:list={['body', { quoted }]}>
+              {Text && (
+                <div class="text">
+                  <Text />
+                </div>
+              )}
+              {quoted && <Quote id={`playing/${id}`} lang={lang} />}
             </div>
           )}
         </section>
@@ -102,7 +111,20 @@ const groups = await Promise.all(
   section :global([data-panel]) {
     scroll-margin-top: 7rem;
   }
+  /* The text and, if there is one, the group's quote beside it as a note; under it on narrow screens. */
+  .body.quoted {
+    display: grid;
+    grid-template-columns: 1fr 15rem;
+    gap: 0 2rem;
+    align-items: start;
+  }
   .contact {
     margin: 0;
+  }
+  @media (max-width: 40rem) {
+    .body.quoted {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
   }
 </style>

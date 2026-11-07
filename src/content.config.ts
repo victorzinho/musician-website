@@ -162,7 +162,8 @@ const playingTexts = defineCollection({
 });
 
 /**
- * Quotes from people Víctor worked with, at most one per section; shown in the original language or translated.
+ * Quotes from people Víctor worked with, at most one per section (a Playing group's has id `playing/<group>`); shown in
+ * the original language or translated.
  * `text` and `translations` are inline Markdown (`src/markdown.ts`).
  */
 const quotes = defineCollection({
