@@ -1,4 +1,6 @@
-export const email = 'victorzinho@gmail.com';
+import type { Lang } from './i18n';
+
+export const email: Record<Lang, string> = { es: 'contacto@victorzinho.es', en: 'contact@victorzinho.es' };
 
 /** Icons: Simple Icons (CC0), 24×24 viewBox. */
 export const profiles = [

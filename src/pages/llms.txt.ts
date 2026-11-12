@@ -39,7 +39,7 @@ export const GET: APIRoute = async ({ site }) => {
     Works: works.map(work),
     Articles: (await articles()).map((a) => `- [${a.data.title.en}](${url(articleHref(a, 'en'))}): ${a.data.description.en}`),
     CVs: cvs.map((cv) => `- [${cv.title.en} CV](${url(cv.pdf.en.replace(/\.pdf$/, '.md'))}): plain text; PDF: ${url(cv.pdf.en)}`),
-    Contact: [`- Email: ${email}`, ...profiles.map((p) => `- [${p.name}](${p.url})`)],
+    Contact: [`- Email: ${email.en}`, ...profiles.map((p) => `- [${p.name}](${p.url})`)],
   };
 
   const text = [

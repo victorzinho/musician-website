@@ -1,8 +1,13 @@
 ---
 import { email, profiles } from '../site';
+import { type Lang } from '../i18n';
+
+interface Props { lang: Lang }
+
+const { lang } = Astro.props;
 ---
 
-<p class="email"><a href={`mailto:${email}`}>{email}</a></p>
+<p class="email"><a href={`mailto:${email[lang]}`}>{email[lang]}</a></p>
 <ul class="profiles">
   {
     profiles.map((profile) => (

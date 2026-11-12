@@ -57,7 +57,7 @@ const listen = (await getEntry('homeListen', 'homeListen'))!.data;
 
   <section id="contact" aria-labelledby="contact-heading">
     <h2 id="contact-heading" class="label">{strings[lang].nav.contact}</h2>
-    <ContactLinks />
+    <ContactLinks lang={lang} />
   </section>
 </Base>
 
