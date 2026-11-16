@@ -10,8 +10,10 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
-    "verify": "node scripts/verify.mjs",
+    "lint": "node scripts/check-fake.mjs && node scripts/check-contrast.mjs",
+    "typecheck": "astro check",
+    "build": "node scripts/build.mjs",
+    "test-build": "node scripts/test-build.mjs",
     "links": "astro build && linkinator dist --recurse",
     "cv": "node scripts/cv-pdfs.mjs",
     "docs": "rm -rf .docs/astro && git clone --quiet --filter=blob:none --no-checkout https://github.com/withastro/docs.git .docs/astro && git -C .docs/astro checkout --quiet $npm_package_config_astroDocsCommit"

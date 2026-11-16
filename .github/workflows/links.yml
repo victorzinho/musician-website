@@ -1,0 +1,24 @@
+name: Check external links
+
+# Other sites' links break on their own; checked weekly, never blocking a deploy.
+on:
+  schedule:
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - uses: astral-sh/setup-uv@v7
+      - run: uv tool install rust-just
+      - run: git clone --quiet --depth 1 --branch v0.1.0 https://github.com/victorzinho/bosun ~/.config/bosun
+      - run: just check-external-links

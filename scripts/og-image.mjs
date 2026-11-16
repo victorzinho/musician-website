@@ -1,6 +1,6 @@
-// Screenshots the link preview page (src/pages/og/[lang].astro) to `public/og-<lang>.jpg`, 1200×630; `npm run verify`
-// says when to rerun. Builds the site and serves it with `astro preview`; renders with the devbox's headless Chromium,
-// `$CHROMIUM_HEADLESS`.
+// Screenshots the link preview page (src/pages/og/[lang].astro) to `public/og-<lang>.jpg`, 1200×630; `npm run build`
+// reruns it when out of date. Builds the site and serves it with `astro preview`; renders with the devbox's headless
+// Chromium, `$CHROMIUM_HEADLESS`.
 import { execFileSync } from 'node:child_process';
 import { chromium } from 'playwright-core';
 import { record } from './generated.mjs';

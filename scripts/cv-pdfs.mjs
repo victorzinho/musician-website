@@ -1,5 +1,6 @@
-// Prints every CV page (src/pages/cv/[id].astro) to `public/cv/<id>.pdf`; `npm run verify` says when to rerun. Builds
-// the site and serves it with `astro preview`; prints with the devbox's headless Chromium, `$CHROMIUM_HEADLESS`.
+// Prints every CV page (src/pages/cv/[id].astro) to `public/cv/<id>.pdf`; `npm run build` reruns it when out of
+// date. Builds the site and serves it with `astro preview`; prints with the devbox's headless Chromium,
+// `$CHROMIUM_HEADLESS`.
 import { execFileSync } from 'node:child_process';
 import { readdirSync } from 'node:fs';
 import { chromium } from 'playwright-core';
