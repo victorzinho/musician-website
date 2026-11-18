@@ -1,7 +1,7 @@
 import '~/.config/bosun/recipes/npm.just'
 
-# The dev server, after the checks.
-start: check
+# The dev server.
+start:
     npm run dev
 
 # Every link, other sites' too; weekly in CI (.github/workflows/links.yml).

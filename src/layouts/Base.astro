@@ -5,7 +5,7 @@ import type { BreadcrumbList, Graph, Thing } from 'schema-dts';
 import LinkPreview from '../components/LinkPreview.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
 import { languageNames, languages, localize, strings, type Lang } from '../i18n';
-import { roles, unfinished, type Role } from '../site';
+import { roles, unfinished, unlisted, type Role } from '../site';
 import '../styles/theme.css';
 import '../styles/base.css';
 
@@ -73,7 +73,7 @@ const graph: Graph = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
-    {isUnfinished && <meta name="robots" content="noindex" />}
+    {(isUnfinished || unlisted.includes(page)) && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
     {languages.map((l) => <link rel="alternate" hreflang={l} href={getAbsoluteLocaleUrl(l, page)} />)}
     <link rel="alternate" hreflang="x-default" href={getAbsoluteLocaleUrl('en', page)} />
@@ -157,7 +157,10 @@ const graph: Graph = {
     </main>
     <footer class="site-footer">
       <p class="coda">{coda}</p>
-      <ThemeToggle lang={lang} />
+      <div class="footer-end">
+        <a href={localize(lang, '/legal/')} aria-current={current('/legal/')}>{t.nav.legal}</a>
+        <ThemeToggle lang={lang} />
+      </div>
     </footer>
   </body>
 </html>
@@ -313,6 +316,7 @@ const graph: Graph = {
   .site-footer {
     position: relative;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
@@ -335,5 +339,18 @@ const graph: Graph = {
     margin: 0;
     font-family: var(--font-heading);
     font-style: italic;
+  }
+  .footer-end {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-left: auto;
+    font-size: 0.85rem;
+  }
+  .footer-end a {
+    color: var(--color-muted);
+  }
+  .footer-end a:hover {
+    color: var(--color-accent-text);
   }
 </style>

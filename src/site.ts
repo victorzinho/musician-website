@@ -2,6 +2,14 @@ import type { Lang } from './i18n';
 
 export const email: Record<Lang, string> = { es: 'contacto@victorzinho.es', en: 'contact@victorzinho.es' };
 
+/** Who runs the site, for the legal notice (`/legal/`). */
+export const holder = {
+  name: 'Víctor González',
+  nif: '45634206K',
+  postcode: '46014',
+  city: 'Valencia',
+};
+
 /** Icons: Simple Icons (CC0), 24×24 viewBox. */
 export const profiles = [
   {
@@ -38,6 +46,9 @@ export type Role = keyof typeof roles;
 
 /** Pages that render `UnderConstruction`, without language: `noindex` and out of the sitemap. */
 export const unfinished: string[] = [];
+
+/** Finished pages kept out of search engines, without language: `noindex` and out of the sitemap. */
+export const unlisted = ['/legal/'];
 
 /** Tags on listen excerpts, each leading to a section. */
 export const tags = {

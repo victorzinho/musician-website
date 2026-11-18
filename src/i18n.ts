@@ -38,6 +38,7 @@ export const strings = {
         articles: 'Articles by Víctor González on composing, producing, playing and software engineering.',
         about: 'Víctor González: a guitar at fourteen, software at eighteen, and composition studied while working full time. Musician and engineer CVs.',
         contact: 'Contact Víctor González for a new piece or a guitarist for your concert: email, LinkedIn, YouTube, SoundCloud and GitHub.',
+        legal: 'Legal notice and privacy policy of music.victorzinho.es: who runs the site, what data a visit or an email shares, and your rights.',
       },
       /** A work page: "<title> (<year>), for <forces>, <by>: <what the page has>." */
       work: { by: 'a work by composer Víctor González', note: 'programme note', score: 'score', recordings: 'recordings' },
@@ -48,6 +49,8 @@ export const strings = {
       articles: 'Articles',
       about: 'About',
       contact: 'Contact',
+      /** The footer link, and that page's title. */
+      legal: 'Legal notice and privacy',
     },
     theme: { toDark: 'Switch to dark theme', toLight: 'Switch to light theme' },
     lightbox: { open: 'Open full size', close: 'Close' },
@@ -169,6 +172,7 @@ export const strings = {
         articles: 'Artículos de Víctor González sobre composición, producción, interpretación e ingeniería de software.',
         about: 'Víctor González: una guitarra a los catorce, el software a los dieciocho y composición estudiada trabajando a jornada completa. CV de músico e ingeniero.',
         contact: 'Contacta con Víctor González para una obra nueva o un guitarrista para tu concierto: correo, LinkedIn, YouTube, SoundCloud y GitHub.',
+        legal: 'Aviso legal y política de privacidad de music.victorzinho.es: quién está detrás, qué datos comparte una visita o un correo y tus derechos.',
       },
       work: { by: 'obra del compositor Víctor González', note: 'notas al programa', score: 'partitura', recordings: 'grabaciones' },
     },
@@ -178,6 +182,7 @@ export const strings = {
       articles: 'Artículos',
       about: 'Sobre mí',
       contact: 'Contacto',
+      legal: 'Aviso legal y privacidad',
     },
     theme: { toDark: 'Cambiar al tema oscuro', toLight: 'Cambiar al tema claro' },
     lightbox: { open: 'Ver a tamaño completo', close: 'Cerrar' },
@@ -289,4 +294,5 @@ export const codas = {
   articles: 'Thought I\'d something more to say.',
   about: '...watches and thoughtfully smiles.',
   contact: 'Let us cling together.',
+  legal: '',
 };

@@ -270,6 +270,12 @@ const studio = defineCollection({
   schema: z.strictObject({}),
 });
 
+/** `/legal` text, MDX: `src/content/legal/<lang>.mdx`, ids `<lang>`; both languages. */
+const legal = defineCollection({
+  loader: glob({ base: './src/content/legal', pattern: '{en,es}.mdx', generateId: ({ entry }) => entry.replace(/\.mdx$/, '') }),
+  schema: z.strictObject({}),
+});
+
 /** `/studio` Some of my work: a single entry, `work` (`src/content/studio/work.yaml`); images relative to it. */
 const studioWork = defineCollection({
   loader: file('./src/content/studio/work.yaml', { parser: (text) => ({ work: parse(text) }) }),
@@ -366,6 +372,7 @@ export const collections = {
   tech,
   studio,
   studioWork,
+  legal,
   homeListen,
   quotes,
   playing,

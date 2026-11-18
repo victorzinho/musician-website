@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { defineConfig, fontProviders } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
-import { unfinished } from './src/site.ts';
+import { unfinished, unlisted } from './src/site.ts';
 
 const latin =
   'U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD';
@@ -34,10 +34,11 @@ export default defineConfig({
   server: { host: true, port: 6006 },
   integrations: [
     sitemap({
-      // Out: `/`, unfinished pages, and the CV and link preview pages (sources of PDFs and images).
+      // Out: `/`, unfinished and unlisted pages, and the CV and link preview pages (sources of PDFs and images).
       filter: (page) => {
         const path = new URL(page).pathname;
-        return path !== '/' && !/^\/(cv|og)\//.test(path) && !unfinished.includes(path.slice('/en'.length));
+        const unlocalized = path.slice('/en'.length);
+        return path !== '/' && !/^\/(cv|og)\//.test(path) && ![...unfinished, ...unlisted].includes(unlocalized);
       },
       // Each page's other language, as in its `hreflang` links.
       i18n: { defaultLocale: 'en', locales: { en: 'en', es: 'es' } },

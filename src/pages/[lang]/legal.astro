@@ -1,0 +1,29 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getEntry, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { codas, langPaths, languages, strings, type Lang } from '../../i18n';
+
+for (const l of languages) {
+  if (!(await getEntry('legal', l))) throw new Error(`no src/content/legal/${l}.mdx`);
+}
+
+export const getStaticPaths = (() => langPaths()) satisfies GetStaticPaths;
+
+const lang = Astro.currentLocale as Lang;
+const t = strings[lang];
+const { Content } = await render((await getEntry('legal', lang))!);
+---
+
+<Base lang={lang} title={t.nav.legal} description={t.meta.description.legal} coda={codas.legal}>
+  <h1>{t.nav.legal}</h1>
+  <Content />
+</Base>
+
+<style>
+  h1 {
+    margin: 0 0 1rem;
+    font-size: clamp(1.9rem, 6vw, 2.6rem);
+    color: var(--color-blue);
+  }
+</style>
