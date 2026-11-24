@@ -31,7 +31,7 @@ jobs:
           cache: npm
       - uses: astral-sh/setup-uv@v7
       - run: uv tool install rust-just
-      - run: git clone --quiet --depth 1 --branch v0.1.0rc1 https://github.com/victorzinho/bosun ~/.config/bosun
+      - run: git clone --quiet --depth 1 --branch v0.1.0rc3 https://github.com/victorzinho/bosun ~/.config/bosun
       # Checks, builds dist/ and checks it; any failure stops the deploy.
       - run: just package
       - uses: actions/upload-pages-artifact@v5
