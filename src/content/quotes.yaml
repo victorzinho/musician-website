@@ -26,6 +26,15 @@
   role:
     en: Member of Desluthiers
     es: Miembro de Desluthiers
+- id: engineer
+  lang: en
+  text: "Whenever checking with Víctor on progress of his tasks in the daily, the response was ‘It is already in PR’, even if it was just started the day before… The productivity and quality of Víctor’s output impressed me on a daily basis."
+  translations:
+    es: "Cada vez que le preguntaba a Víctor por el avance de sus tareas en la reunión diaria, la respuesta era \"Ya está en PR\", incluso cuando las había empezado el día anterior... La productividad y la calidad del trabajo de Víctor me impresionaban a diario."
+  name: "Gerrit Hentschel"
+  role:
+    en: Senior Software Engineer & Team Lead at xarvio™
+    es: Ingeniero de software sénior y líder de equipo en xarvio™
 # TODO WEB-25
 #- id: producer
 #  lang: es
